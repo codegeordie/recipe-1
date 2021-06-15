@@ -1,63 +1,44 @@
-import { GetStaticProps } from 'next'
+import { GetStaticProps, GetStaticPaths } from 'next'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+//import { useRouter } from 'next/router'
+//import { useEffect, useState } from 'react'
 import { Ingredients } from '../../components/Ingredients'
 import { populateIngredients } from '../../server/functions'
+import { RecipePageProps } from '../../server/interfaces'
 
 
-// export const getStaticProps: GetStaticProps = async (context) => {
-//   const recipeId = context?.params?.recipeId
-// 	console.log(`this is the id` + recipeId)
-//   return {
-//     props: { recipeId }, // will be passed to the page component as props
-//   }
-// }
-
-// export async function getStaticPaths() {
-//   return {
-//     paths: [
-// 			'/recipes/91',
-// 			'/recipes/92',
-// 			'/recipes/93',
-// 		],
-//     // Enable statically generating additional pages
-//     // For example: `/posts/3`
-//     fallback: true,
-//   }
-// }
-
-
-export default function RecipeId() {
-	const router = useRouter()
-	const { recipeId } = router.query
-	console.log(router);
-	console.log(typeof window)
-
-	useEffect(() => {
-		if(recipeId) {
-			const getIngredients = async () => {
-				if (typeof(recipeId) !== "string") {
-					throw new Error(`Bad ID from server`)
-				}
-	
-				const ingredients = await populateIngredients(recipeId);
-
-				console.log('ingredients :>> ', ingredients);
-			}
-			
-			getIngredients();
-			
-		}
-	}, [recipeId])
-
-	// if (typeof(recipeId) !== "string") 
-	
-	// 
-
+export default function RecipeId({ ingredientArray }:RecipePageProps) {
 	return (
 		<>
-			<p>Hey</p>
+			<Ingredients populatedIngredients={ingredientArray}/>
+			<h2>
+				<Link href={`/`}>Back</Link>
+			</h2>
   	</>
   )
 }
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const recipeId = context?.params?.recipeId
+	if (typeof(recipeId) !== "string") throw new Error(`getStaticProps ID failed`)
+	
+	const ingredientArray = await populateIngredients(recipeId)
+  
+	return {
+    props: { ingredientArray, recipeId },
+  }
+}
+
+export async function getStaticPaths() {
+  return {
+    paths: [
+			'/recipes/91',
+			'/recipes/92',
+			'/recipes/93',
+			'/recipes/94',
+			'/recipes/95',
+		],
+    fallback: true,
+  }
+}
+

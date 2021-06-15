@@ -38,3 +38,7 @@ export interface RecipeCardProps {
 export interface IngredientsProps {
 	populatedIngredients: ingredientPopulated[]
 }
+
+export interface RecipePageProps {
+	ingredientArray: ingredientPopulated[]
+}
