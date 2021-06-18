@@ -1,9 +1,13 @@
 import Head from 'next/head'
-//import Image from 'next/image'
+import Image from 'next/image'
+import React from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+
 import { Searchbar } from '../components/Searchbar'
 import { RecipeList } from '../components/RecipeList'
-import { populateRecipeData } from '../server/functions'
+import { getRecipes } from '../server/functions'
+
 
 const Main = styled.main`
   min-height: 100vh;
@@ -16,14 +20,18 @@ const Main = styled.main`
 `;
 
 export default function Home() {
+  const [recipeArray, setRecipeArray] = useState([])
 
-  //hardcoded search result id's
-  const searchResults = ["91","92","93","94","95"]
+  const SearchObj = {type: 'id', terms:["91","92","93","94","95"]}
 
-  //returns array of recipe objects from search results
-  const populatedSearchResults = searchResults.map((id) => {
-    return populateRecipeData(id)
-  })
+  const fetchRecipes = async () => {
+    const mongoResponse = await getRecipes(SearchObj)
+    setRecipeArray(mongoResponse)
+  }
+
+  useEffect(() => {
+    fetchRecipes()
+  }, [])
 
   return (
     <>
@@ -34,8 +42,8 @@ export default function Home() {
       </Head>
 
       <Main>
-      	<Searchbar searchExecute={()=>{}}/>
-      	<RecipeList recipesToRender={populatedSearchResults}/>
+      	<Searchbar />
+        {recipeArray && <RecipeList recipesToRender={recipeArray}/>}
       </Main>
 
     </>

@@ -18,7 +18,7 @@ export default function RecipeId({ ingredientArray }:RecipePageProps) {
   )
 }
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps:GetStaticProps = async (context) => {
   const recipeId = context?.params?.recipeId
 	if (typeof(recipeId) !== "string") throw new Error(`getStaticProps ID failed`)
 	

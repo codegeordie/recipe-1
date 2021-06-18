@@ -27,6 +27,12 @@ export interface ingredientPopulated {
 	};
 }
 
+export interface QueryObject {
+	type: string;
+	terms: string[]; 
+}
+
+
 export interface RecipeListProps {
 	recipesToRender: RecipePopulated[]
 }
