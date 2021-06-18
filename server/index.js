@@ -6,8 +6,6 @@ const server = http.createServer(async (req, res) => {
 	const query = new URLSearchParams(req.url.substr(1))
 	const mongoResponse = await queryMongo(query)
 
-	console.log('mongoResponse :>> ', mongoResponse);
-
 	await updateMongo()
 	res.writeHead(200, { 
 		'Content-Type': 'application/json',
@@ -27,8 +25,8 @@ async function queryMongo(query) {
 			{useNewUrlParser: true, useUnifiedTopology: true}
 		)
 		db = client.db('recipe')
-		let recipes = db.collection('recipes')
-		let ingredients = db.collection('ingredients')
+		const recipes = db.collection('recipes')
+		const ingredients = db.collection('ingredients')
 		const qtype = query.get('type')
 		const qterms = query.getAll('terms')
 
@@ -38,29 +36,25 @@ async function queryMongo(query) {
 				break
 			case 'name':
 				result = await recipes.find({ name:{$in:qterms} })
-				break;
-			case 'ingr':
+				break
+			case 'ingr_rec':
 				let recipeIngredients = await recipes.find({ id:{$in:qterms} })
 															.project({_id:0, ingredients:1})
 															.toArray()
-				let ingrIds = []
-				recipeIngredients[0].ingredients.map(i => {
-					ingrIds.push(i.ingredientId)
-				})
+				let ingrIds = recipeIngredients[0].ingredients.map(i => i.ingredientId)
 				result = await ingredients.find({ id:{$in:ingrIds} })
-				break;
+				break
 			case 'ingr_id':
 				result = await ingredients.find({ _id:{$in:qterms} })
-				break;
+				break
 			default:
-				console.log("default")
+				console.log("switch: default!")
 				result = await db.recipes.find()
 		}
 		return result.toArray()
 	}
-	catch(err){ console.error(err); }
+	catch(err){ console.error(err) }
 }
-
 
 
 async function updateMongo() {
@@ -76,8 +70,8 @@ async function updateMongo() {
 		let collectionIngredients = db.collection('ingredients')
 
 		let ingredientTruth = await collectionIngredients.find().toArray()
-		let currentCost = 0;
-		let currentCalories = 0;
+		let currentCost = 0
+		let currentCalories = 0
 		collectionRecipes.find().forEach(recipe => {
 			recipe.ingredients.map(ingredient => {
 				for (let i of ingredientTruth) {
@@ -101,5 +95,5 @@ async function updateMongo() {
 		})
 		console.log('mongo recipes updated to current price')
 	}
-	catch(err){ console.error(err); }
+	catch(err){ console.error(err) }
 }

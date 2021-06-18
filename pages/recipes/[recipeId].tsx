@@ -3,8 +3,8 @@ import Link from 'next/link'
 //import { useRouter } from 'next/router'
 //import { useEffect, useState } from 'react'
 import { Ingredients } from '../../components/Ingredients'
-import { populateIngredients } from '../../server/functions'
-import { RecipePageProps } from '../../server/interfaces'
+import { getRecipes } from '../../server/functions'
+import { QueryObject, RecipePageProps } from '../../server/interfaces'
 
 
 export default function RecipeId({ ingredientArray }:RecipePageProps) {
@@ -22,8 +22,15 @@ export const getStaticProps:GetStaticProps = async (context) => {
   const recipeId = context?.params?.recipeId
 	if (typeof(recipeId) !== "string") throw new Error(`getStaticProps ID failed`)
 	
-	const ingredientArray = await populateIngredients(recipeId)
-  
+	const SearchObj = {type: 'ingr_rec', terms: [recipeId]}
+
+  const fetchIngredients = async (query:QueryObject) => {
+    const mongoResponse = await getRecipes(query)
+    return mongoResponse
+	}
+
+	const ingredientArray = await fetchIngredients(SearchObj)
+ 
 	return {
     props: { ingredientArray, recipeId },
   }

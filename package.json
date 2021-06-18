@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "dinero.js": "^1.8.1",
+    "formik": "^2.2.9",
     "mongodb": "^3.6.9",
     "next": "10.2.3",
     "react": "17.0.2",
