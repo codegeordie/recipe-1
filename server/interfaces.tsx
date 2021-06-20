@@ -16,7 +16,7 @@ export interface RecipePopulated extends RecipeBase {
 	calories: number;
 }
 
-export interface ingredientPopulated {
+export interface Ingredient {
 	id: string;
 	name: string;
 	quantity: number;
@@ -42,9 +42,9 @@ export interface RecipeCardProps {
 }
 
 export interface IngredientsProps {
-	populatedIngredients: ingredientPopulated[]
+	ingrArray: Ingredient[]
 }
 
 export interface RecipePageProps {
-	ingredientArray: ingredientPopulated[]
+	ingrArray: Ingredient[]
 }

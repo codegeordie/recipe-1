@@ -21,8 +21,8 @@ const StyledTd = styled.td<{ isName?: boolean }>`
 	text-align: ${props => props.isName ? "left" : "center"};
 `;
 
-export const Ingredients = ({populatedIngredients}:IngredientsProps) => {
-	const ingredientTable = populatedIngredients.map((ingredient) => {
+export const Ingredients = ({ingrArray}:IngredientsProps) => {
+	const ingredientTable = ingrArray.map((ingredient) => {
 		return (
 			<IngredientItem key={ingredient.id}>
 				<StyledTd isName>{ingredient.name}</StyledTd>

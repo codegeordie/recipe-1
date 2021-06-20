@@ -1,16 +1,18 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
 import Link from 'next/link'
 //import { useRouter } from 'next/router'
-//import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Ingredients } from '../../components/Ingredients'
+import { useGetIngredients } from '../../hooks/useGetRecipes'
 import { getRecipes } from '../../server/functions'
 import { QueryObject, RecipePageProps } from '../../server/interfaces'
 
 
-export default function RecipeId({ ingredientArray }:RecipePageProps) {
+export default function RecipeId({ ingrArray }:RecipePageProps) {
+
 	return (
 		<>
-			<Ingredients populatedIngredients={ingredientArray}/>
+			<Ingredients ingrArray={ingrArray}/>
 			<h2>
 				<Link href={`/`}>Back</Link>
 			</h2>
@@ -18,21 +20,16 @@ export default function RecipeId({ ingredientArray }:RecipePageProps) {
   )
 }
 
+
 export const getStaticProps:GetStaticProps = async (context) => {
   const recipeId = context?.params?.recipeId
 	if (typeof(recipeId) !== "string") throw new Error(`getStaticProps ID failed`)
-	
-	const SearchObj = {type: 'ingr_rec', terms: [recipeId]}
 
-  const fetchIngredients = async (query:QueryObject) => {
-    const mongoResponse = await getRecipes(query)
-    return mongoResponse
-	}
+	const { getIngredients } = useGetIngredients()
+	const ingrArray = await getIngredients({type: 'ingr_rec', terms: [recipeId]})
 
-	const ingredientArray = await fetchIngredients(SearchObj)
- 
 	return {
-    props: { ingredientArray, recipeId },
+    props: { ingrArray, recipeId },
   }
 }
 

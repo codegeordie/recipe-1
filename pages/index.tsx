@@ -6,8 +6,9 @@ import styled from 'styled-components'
 
 import { Searchbar } from '../components/Searchbar'
 import { RecipeList } from '../components/RecipeList'
-import { getRecipes } from '../server/functions'
-import { QueryObject } from '../server/interfaces'
+//import { getRecipes } from '../server/functions'
+import { QueryObject, RecipePopulated } from '../server/interfaces'
+import { useGetRecipes } from '../hooks/useGetRecipes'
 
 
 const Main = styled.main`
@@ -21,17 +22,14 @@ const Main = styled.main`
 `;
 
 export default function Home() {
-  const [recipeArray, setRecipeArray] = useState([])
-
-  let searchObj = {type:'id', terms:["91","92","93","94","95"]}
-  
-  const fetchRecipes = async (query:QueryObject) => {
-    const mongoResponse = await getRecipes(query)
-    setRecipeArray(mongoResponse)
-  }
+  const [recipeArray, setRecipeArray] = useState<RecipePopulated[]>([])
+  const { getRecipes } = useGetRecipes()
+  const searchterms:QueryObject = {type:'id', terms:["91","92","93","94","95"]}
 
   useEffect(() => {
-    fetchRecipes(searchObj)
+    getRecipes(searchterms).then((recipes) => {
+      setRecipeArray(recipes)
+    })
   }, [])
 
   return (
