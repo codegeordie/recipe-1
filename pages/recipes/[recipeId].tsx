@@ -13,9 +13,7 @@ export default function RecipeId({ recipe }: RecipeAsProps) {
 			<RecipeDetail recipe={recipe} />
 			<RecipeDesc>{recipe.description}</RecipeDesc>
 			<Ingredients ingrArray={recipe.ingredients_full} />
-			<h2>
-				<Link href={`/`}>Back</Link>
-			</h2>
+			<h3><Link href={`/`}>Back</Link></h3>
 		</Container>
 	)
 }

@@ -26,19 +26,21 @@ export interface Ingredient {
 	}
 }
 
-export interface GRQ_Name {
+export interface MongoQ_Name {
 	name: string;
 }
 
-interface GRQ_Id {
+interface MongoQ_Id {
 	id: string;
 }
 
-interface GRQ_IdMany {
+interface MongoQ_IdMany {
 	id: string[];
 }
 
-export type GetRecipesQuery = GRQ_Name | GRQ_Id | GRQ_IdMany | undefined;
+export type GetRecipesQuery = MongoQ_Name | MongoQ_Id | MongoQ_IdMany | undefined;
+
+export type GetIngredientsQuery = MongoQ_Name | MongoQ_Id | MongoQ_IdMany | undefined;
 
 
 

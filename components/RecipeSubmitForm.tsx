@@ -1,132 +1,141 @@
-import { FormikHelpers, Field, Form, Formik, FormikProps } from "formik"
-import React from "react";
+import React from 'react'
+import styled from 'styled-components'
+import { Formik, Field, Form, ErrorMessage, FieldArray } from 'formik'
+import { IngredientsProps } from '../server/interfaces'
+import { useSubmitRecipe } from '../hooks/useSubmitRecipe'
+
+export const RecipeSubmitForm = ({ ingrArray }:IngredientsProps) => {
+	const { submitRecipe } = useSubmitRecipe()
+
+	const ingredientSelect = ingrArray.map(i => {
+		return <option key={i._id} value={i._id}>{i.name}</option>
+	})
+
+	const initialValues = {
+		name: '',
+		description: '',
+		image: '',
+		ingredients: [
+			{
+				ingredient_id: ingrArray[0]._id,
+				quantity: 1,
+			},
+		],
+	};
 
 
-
-interface Values {
-  firstName: string;
-  description: string;
-  email: string;
-}
-
-export const RecipeSubmitForm = () => {
 	return (
-		<>
-			<h3>Create Recipe</h3>
-			<Formik
-				initialValues={{
-					name: '',
-					description: '',
-					ingredients: '',
-				}}
-				onSubmit={(
-					values: Values,
-					{ setSubmitting }: FormikHelpers<Values>
-				) => {
-					setTimeout(() => {
-						alert(JSON.stringify(values, null, 2));
-						setSubmitting(false);
-					}, 500);
-				}}
-			>
-				<Form>
-					<label htmlFor="name">Name</label>
-					<Field id="name" name="name" placeholder="John" />
-	
-					<label htmlFor="description">Description</label>
-					<Field id="description" name="description" placeholder="Doe" />
+	<>
+    <Formik
+      initialValues={initialValues}
+			//enableReinitialize={true}
+			onSubmit={values => {
+				submitRecipe(values)
+			}}
+    >
+      {({ values }) => (
+        <StyledForm>
+					<Wrapper>
+						<StyledLabel htmlFor="name">Name</StyledLabel>
+						<StyledInput id="name" name="name" placeholder="Chicken" autoComplete="off" required/>
+					</Wrapper>
+					<Wrapper>
+						<StyledLabel htmlFor="description">Description</StyledLabel>
+						<StyledInput id="description" name="description" placeholder="lorem" autoComplete="off" required/>
+					</Wrapper>
+					<Wrapper>
+						<StyledLabel htmlFor="image">Image</StyledLabel>
+						<StyledInput id="image" name="image" placeholder="img/chicken.jpg" autoComplete="off" required/>
+					</Wrapper>
+          <FieldArray name="ingredients">
+            {({ insert, remove, push }) => (
+              <div>
+                {values.ingredients.length > 0 &&
+                  values.ingredients.map((ingredient, index) => (
+                    <Wrapper className="row" key={index}>
+                        <StyledLabel htmlFor={`ingredients.${index}.ingredient_id`}>Ingredient</StyledLabel>
 
-					<label htmlFor="ingredients">Ingredients</label>
-					<Field
-						id="ingredients"
-						name="ingredients"
-						placeholder="john@acme.com"
-						as="select"
-					>
-					<option value="red">Red</option>
-					<option value="green">Green</option>
-					<option value="blue">Blue</option>
-					</Field>
-					<button type="submit">Submit</button>
-				</Form>
-			</Formik>
-		</>
+                        <StyledSelect
+                          name={`ingredients.${index}.ingredient_id`}
+                          component="select"
+												>
+														{ingredientSelect}
+												</StyledSelect>
+												{/* <ErrorMessage name={`ingredients.${index}.name`} component="div" className="field-error"/> */}
+												<StyledSelect
+                          name={`ingredients.${index}.quantity`}
+                          component="select"
+												>
+														<option value={1}>1</option>
+														<option value={2}>2</option>
+														<option value={3}>3</option>
+														<option value={4}>4</option>
+														<option value={5}>5</option>
+												</StyledSelect>
+                        {/* <ErrorMessage name={`ingredients.${index}.quantity`} component="div" className="field-error"/> */}
+                        <Button
+                          type="button"
+                          className="secondary"
+                          onClick={() => remove(index)}
+                        >
+                          X
+                        </Button>
+                    </Wrapper>
+                  ))}
+                <Button
+                  type="button"
+                  className="secondary"
+                  onClick={() => push({ ingredient_id: ingrArray[0]._id, quantity: 1 })}
+                >
+                  Another
+                </Button>
+              </div>
+            )}
+          </FieldArray>
+          <Button type="submit">Submit</Button>
+        </StyledForm>
+      )}
+    </Formik>
+  </>
 	)
 }
 
-// <div id="checkbox-group">Checked</div>
-//           <div role="group" aria-labelledby="checkbox-group">
-//             <label>
-//               <Field type="checkbox" name="checked" value="One" />
-//               One
-//             </label>
-//             <label>
-//               <Field type="checkbox" name="checked" value="Two" />
-//               Two
-//             </label>
-//             <label>
-//               <Field type="checkbox" name="checked" value="Three" />
-//               Three
-//             </label>
-//           </div>
 
+const StyledForm = styled(Form)`
+	max-width: 400px;
 
+	border: 1px solid green;
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+`
 
+const Wrapper = styled.div`
+	display: flex;
+	padding: .5rem;
+`
 
+const StyledLabel = styled.label`
+	flex: 1;
+	text-align: right;
+`
 
+const StyledInput = styled(Field)`
+	flex: 2;
+	border: 1px solid blue;
+`
 
-// export const RecipeSubmitForm = () => {
-// 	const formik = useFormik({
-// 		initialValues:{
-// 			recipeName: '',
-// 			description: '',
-// 			image: '',
-// 			ingredients: ''
-// 		},
-// 		onSubmit: values => {}
-// 	})
+const StyledSelect = styled(Field)`
+	border: 1px solid red;
+	//padding: .2rem 1rem;
+	font-size: 14px;
+`
 
+const Button = styled.button`
+	padding: .2rem 1rem;
+	font-size: 14px;
+	border: 1px solid black;
+	border-radius: 2px;
+	background-color: rgba(50,150,200,.2);
+`
 
-// 	return (
-// 		<>
-// 		<form onSubmit={formik.handleSubmit}>
-// 			<label htmlFor='recipeName'>Recipe Name</label>
-// 			<input
-// 				id='recipeName'
-// 				name='recipeName'
-// 				type='text'
-// 				onChange={formik.handleChange}
-// 				value={formik.values.recipeName}
-// 			/>
-
-// 			<label htmlFor='description'>Description</label>
-// 			<input
-// 				id='description'
-// 				name='description'
-// 				type='text'
-// 				onChange={formik.handleChange}
-// 				value={formik.values.description}
-// 			/>
-
-// 			<label htmlFor='image'>Image</label>
-// 			<input
-// 				id='image'
-// 				name='image'
-// 				type='text'
-// 				onChange={formik.handleChange}
-// 				value={formik.values.image}
-// 			/>
-
-// 			<label htmlFor='ingredients'>Ingredients</label>
-// 			<input
-// 				id='ingredients'
-// 				name='ingredients'
-// 				type='text'
-// 				onChange={formik.handleChange}
-// 				value={formik.values.ingredients}
-// 			/>
-// 			<button type="submit">Submit</button>
-// 		</form>
-// 		</>
-// 	)
-// }

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import qs from 'querystring'
-import { GetRecipesQuery, GRQ_Name, Recipe } from '../server/interfaces'
+import { GetRecipesQuery, Recipe } from '../server/interfaces'
 
 export const useGetRecipes = () => {
 	const getRecipes = async (query:GetRecipesQuery) => {

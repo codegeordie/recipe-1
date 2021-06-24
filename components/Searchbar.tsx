@@ -29,8 +29,10 @@ export const Searchbar = ({ onSearch }: SearchBarProps) => {
 
 const StyledSearchbar = styled.form`
 	position: relative;
-	width: 50%;
+	flex: 1;
+	/* width: 50%; */
 	max-width: 500px;
+	height: 2.2rem;
 `
 
 interface InputProps {
@@ -38,9 +40,9 @@ interface InputProps {
 }
 
 const StyledInput = styled.input<InputProps>`
-	height: 2rem;
+	height: 2.2rem;
 	width: 100%;
-	padding: 1rem;
+	padding: 0 1.5rem;
 	outline: none;
 	font: 20px sans-serif;
 	color: rgba(65, 65, 65, 1);

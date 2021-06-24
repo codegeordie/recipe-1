@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -33,7 +34,11 @@ export default function Home() {
 			</Head>
 
 			<Main>
-				<Searchbar onSearch={onSearch} />
+				<Wrapper>
+					<Searchbar onSearch={onSearch} />
+					<Button><Link href={`/newrecipe`}>Add New Recipe</Link></Button>
+				</Wrapper>
+
 				{recipeArray && <RecipeList recipesToRender={recipeArray} />}
 			</Main>
 		</>
@@ -51,6 +56,17 @@ const Main = styled.main`
 	background-image: linear-gradient(
 		to bottom right,
 		rgba(140, 140, 180, 0.2),
-		rgba(180, 140, 140, 0.5)
+		rgba(185, 137, 137, 0.5)
 	);
+`
+
+const Wrapper = styled.div`
+	display: flex;
+	justify-content: center;
+	width: 100%;
+`
+
+const Button = styled.button`
+	font-size: 14px;
+	border: 1px solid rgba(50,50,50,.5)
 `
