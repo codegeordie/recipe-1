@@ -1,48 +1,55 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
 import Link from 'next/link'
-//import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import styled from 'styled-components'
 import { Ingredients } from '../../components/Ingredients'
-import { useGetIngredients } from '../../hooks/useGetRecipes'
-import { getRecipes } from '../../server/functions'
-import { QueryObject, RecipePageProps } from '../../server/interfaces'
+import { RecipeDetail } from '../../components/RecipeDetail'
+import { useGetRecipes } from '../../hooks/useGetRecipes'
+import { RecipeAsProps } from '../../server/interfaces'
 
-
-export default function RecipeId({ ingrArray }:RecipePageProps) {
-
+export default function RecipeId({ recipe }: RecipeAsProps) {
 	return (
-		<>
-			<Ingredients ingrArray={ingrArray}/>
+		<Container>
+			<RecipeDetail recipe={recipe} />
+			<RecipeDesc>{recipe.description}</RecipeDesc>
+			<Ingredients ingrArray={recipe.ingredients_full} />
 			<h2>
 				<Link href={`/`}>Back</Link>
 			</h2>
-  	</>
-  )
+		</Container>
+	)
 }
 
+export const getStaticProps: GetStaticProps = async context => {
+	const recipeId = context?.params?.recipeId
+	if (typeof recipeId !== 'string') throw new Error(`getStaticProps ID failed`)
 
-export const getStaticProps:GetStaticProps = async (context) => {
-  const recipeId = context?.params?.recipeId
-	if (typeof(recipeId) !== "string") throw new Error(`getStaticProps ID failed`)
-
-	const { getIngredients } = useGetIngredients()
-	const ingrArray = await getIngredients({type: 'ingr_rec', terms: [recipeId]})
+	const { getRecipes } = useGetRecipes()
+	const recipeArr = await getRecipes({ id: [recipeId] })
+	const recipe = recipeArr[0]
 
 	return {
-    props: { ingrArray, recipeId },
-  }
+		props: { recipe },
+	}
 }
 
 export async function getStaticPaths() {
-  return {
-    paths: [
-			'/recipes/91',
-			'/recipes/92',
-			'/recipes/93',
-			'/recipes/94',
-			'/recipes/95',
-		],
-    fallback: true,
-  }
+	const { getRecipes } = useGetRecipes()
+	const recipe = await getRecipes({})
+	const paths = recipe.map(i => `/recipes/${i._id}`)
+
+	return { paths, fallback: true }
 }
 
+const Container = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`
+
+const RecipeDesc = styled.div`
+	width: 80%;
+	padding: 3rem;
+	font: 14px;
+	color: ${props => props.theme.colors.text};
+`

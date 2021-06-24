@@ -1,50 +1,59 @@
 import { Currency } from "dinero.js";
 
 export interface RecipeBase {
-	id: string;
+	_id: string;
 	name: string;
 	description: string;
 	image: string;
-	ingredients: {ingredientId: string, quantity: number}[]
+	tags: string[];
+	calories: number;
+	cost: {value: number, currency: Currency}
+	ingredients: {ingredient_id: string, quantity: number}[]
 }
 
-export interface RecipePopulated extends RecipeBase {
-	cost: {
-		currency: Currency;
-		value: number;
-	};
-	calories: number;
+export interface Recipe extends RecipeBase {
+	ingredients_full: Ingredient[]
 }
 
 export interface Ingredient {
-	id: string;
+	_id: string;
 	name: string;
 	quantity: number;
 	calories: number;
 	cost: {
 		currency: Currency;
 		value: number;
-	};
+	}
 }
 
-export interface QueryObject {
-	type: string;
-	terms: string[]; 
+export interface GRQ_Name {
+	name: string;
 }
 
-
-export interface RecipeListProps {
-	recipesToRender: RecipePopulated[]
+interface GRQ_Id {
+	id: string;
 }
 
-export interface RecipeCardProps {
-	recipeData: RecipePopulated
+interface GRQ_IdMany {
+	id: string[];
+}
+
+export type GetRecipesQuery = GRQ_Name | GRQ_Id | GRQ_IdMany | undefined;
+
+
+
+export interface RArrayAsProps {
+	recipesToRender: Recipe[]
+}
+
+export interface RecipeAsProps {
+	recipe: Recipe
 }
 
 export interface IngredientsProps {
 	ingrArray: Ingredient[]
 }
 
-export interface RecipePageProps {
-	ingrArray: Ingredient[]
-}
+// export interface RecipePageProps {
+// 	ingrArray: Ingredient[]
+// }
