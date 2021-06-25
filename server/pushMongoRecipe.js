@@ -1,5 +1,6 @@
 const { ObjectId } = require('mongodb')
 const { connectMongo } = require('../pages/api/mongo.js')
+const { updateMongo } = require('./updateMongo')
 
 exports.pushMongoRecipe = async recipe => {
 	const { client } = await connectMongo()
@@ -7,13 +8,8 @@ exports.pushMongoRecipe = async recipe => {
 	const recipes = db.collection('recipes')
 
 	recipeUpdate(recipe)
-
-	const result = await recipes.insertOne(recipe)
-
-	console.log('result :>> ', result);
-
+	recipes.insertOne(recipe).then(updateMongo())
 }
-
 
 const recipeUpdate = recipe => {
 

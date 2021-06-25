@@ -1,7 +1,7 @@
 const { ObjectId } = require('mongodb')
 const { connectMongo } = require('../pages/api/mongo.js')
 
-async function updateMongo() {
+exports.updateMongo = async () => {
 
 	const { client } = await connectMongo()
 	const db = client.db('recipe')
