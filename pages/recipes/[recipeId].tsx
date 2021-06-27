@@ -4,17 +4,24 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Ingredients } from '../../components/Ingredients'
 import { RecipeDetail } from '../../components/RecipeDetail'
+import { Nav } from '../../components/Nav'
 import { useGetRecipes } from '../../hooks/useGetRecipes'
 import { RecipeAsProps } from '../../server/interfaces'
 
 export default function RecipeId({ recipe }: RecipeAsProps) {
 	return (
-		<Container>
-			<RecipeDetail recipe={recipe} />
-			<RecipeDesc>{recipe.description}</RecipeDesc>
-			<Ingredients ingrArray={recipe.ingredients_full} />
-			<h3><Link href={`/`}>Back</Link></h3>
-		</Container>
+		<>
+			<Nav>
+				<Button><Link href={`/`}>{`\u2190 Back`}</Link></Button>
+				<FlexSpacer />
+				<Button><Link href={`/newrecipe`}>New Recipe</Link></Button>
+			</Nav>
+			<Main>
+				<RecipeDetail recipe={recipe} />
+				<StyledDescription>{recipe.description}</StyledDescription>
+				<Ingredients ingrArray={recipe.ingredients_full} />
+			</Main>
+		</>
 	)
 }
 
@@ -39,15 +46,38 @@ export async function getStaticPaths() {
 	return { paths, fallback: true }
 }
 
-const Container = styled.div`
+const Main = styled.main`
+	min-height: 100vh;
+	padding: 3rem 0;
+	flex: 1;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	//color: ${p => p.theme.text.dark09};
+	background-color: ${p => p.theme.color.gamma};
 `
 
-const RecipeDesc = styled.div`
+const FlexSpacer = styled.div`
+	flex: 1;
+`
+
+const StyledDescription = styled.div`
 	width: 80%;
 	padding: 3rem;
-	font: 14px;
-	color: ${props => props.theme.colors.text};
+	font: 1.8rem ${p => p.theme.font.body};
+	color: ${props => props.theme.text.dark07};
+`
+
+const Button = styled.button`
+	font: 700 2rem ${p => p.theme.font.title};
+	line-height: 2rem;
+	padding: .5rem 2rem;
+	color: ${p => p.theme.color.delta};
+	border: 2px solid ${p => p.theme.color.delta};
+	background-color: ${p => p.theme.color.white};
+	transition: .2s;
+	&:hover {
+		color: ${p => p.theme.color.white};
+		background-color: ${p => p.theme.color.delta};
+	}
 `

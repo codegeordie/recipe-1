@@ -102,9 +102,10 @@ export const RecipeSubmitForm = ({ ingrArray }:IngredientsProps) => {
 
 
 const StyledForm = styled(Form)`
-	max-width: 400px;
+	width: 500px;
+	max-width: 500px;
 
-	border: 1px solid green;
+	border: 1px solid ${p => p.theme.color.delta};
 	display: flex;
 	flex-direction: column;
 	align-content: center;
@@ -121,21 +122,24 @@ const StyledLabel = styled.label`
 `
 
 const StyledInput = styled(Field)`
-	flex: 2;
-	border: 1px solid blue;
+	flex: 1;
+	//border: 1px solid blue;
 `
 
 const StyledSelect = styled(Field)`
-	border: 1px solid red;
-	//padding: .2rem 1rem;
-	font-size: 14px;
+	//border: 1px solid red;
+	padding: .2rem;
+	//font-size: .8rem;
+	font: .8rem ${p => p.theme.font.body};
 `
 
 const Button = styled.button`
+	max-width: 150px;
 	padding: .2rem 1rem;
-	font-size: 14px;
-	border: 1px solid black;
-	border-radius: 2px;
-	background-color: rgba(50,150,200,.2);
+	font: 1rem ${p => p.theme.font.body};
+	color: ${p => p.theme.color.neutral};
+	border: 2px solid ${p => p.theme.color.beta};
+	//border-radius: .5rem;
+	background-color: ${p => p.theme.color.alpha};
 `
 

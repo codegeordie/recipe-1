@@ -33,16 +33,17 @@ const InfoWrapper = styled.div`
 	bottom: 0;
 	width: 100%;
 	height: 100%;
-	transform: translateY(65%);
-	transition: 0.4s;
-	background-color: rgba(255, 255, 255, 1);
+	transform: translateY(60%);
+	transition: 0.35s;
+	background-color: ${p => p.theme.color.white};
 `
 
 const FoodDesc = styled.p`
-	margin: 0;
 	padding: 0.5rem;
 	opacity: 0;
-	transition: 0.2s;
+	transition: 0.15s;
+	font: 400 1.6rem ${p => p.theme.font.body};
+	color: ${p => p.theme.text.dark09};
 `
 
 const StyledRecipeCard = styled.li`
@@ -50,15 +51,15 @@ const StyledRecipeCard = styled.li`
 	margin: 0.75rem;
 	width: 250px;
 	height: 300px;
-	background-color: rgba(255, 255, 255, 1);
-	box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.5);
+	background-color: ${p => p.theme.color.white};
+	border: 3px solid ${p => p.theme.color.white};
 	overflow: hidden;
-	transition: 0.4s;
+	transition: 0.3s;
 	&:hover {
-		box-shadow: 1px 1px 11px rgba(0, 0, 0, 0.6);
+		box-shadow: 1px 1px 9px ${p => p.theme.color.delta};
 	}
 	&:hover ${InfoWrapper} {
-		transform: translateY(25%);
+		transform: translateY(15%);
 	}
 	&:hover ${FoodDesc} {
 		opacity: 100%;
@@ -72,10 +73,11 @@ const StyledRecipeImage = styled.img`
 `
 
 const FoodTitle = styled.h4`
-	margin: 0;
-	padding: 0.5rem;
-	font-size: 1.3rem;
+	padding: 1rem;
 	text-align: center;
+	font: 700 2.2rem ${p => p.theme.font.title};
+	color: ${p => p.theme.text.dark07};
+	//color: ${p => p.theme.color.delta};
 `
 
 const StatsWrapper = styled.div`
@@ -83,15 +85,15 @@ const StatsWrapper = styled.div`
 	left: 0;
 	bottom: 0;
 	width: 100%;
-	padding: 0.5rem;
 	display: flex;
-	border-top: 1px solid grey;
-	background-color: rgba(255, 255, 255, 1);
+	padding: 0.5rem;
+	border-top: 1px solid ${p => p.theme.text.dark03};
+	background-color: ${p => p.theme.color.white};
 `
 
 const FoodStat = styled.p`
 	flex: 1;
-	margin: 0;
-	padding: 0;
 	text-align: center;
+	font: 200 1.6rem ${p => p.theme.font.body};
+	color: ${p => p.theme.text.dark07};
 `
