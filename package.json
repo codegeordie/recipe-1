@@ -10,7 +10,9 @@
   "dependencies": {
     "axios": "^0.21.1",
     "dinero.js": "^1.8.1",
+    "formidable": "^1.2.2",
     "formik": "^2.2.9",
+    "lodash": "^4.17.21",
     "mongodb": "^3.6.9",
     "next": "10.2.3",
     "qs": "^6.10.1",
@@ -23,6 +25,9 @@
   },
   "devDependencies": {
     "@types/dinero.js": "^1.8.0",
+    "@types/formidable": "^1.2.2",
+    "@types/lodash": "^4.14.170",
+    "@types/mongodb": "^3.6.18",
     "@types/react": "17.0.9",
     "@types/styled-components": "^5.1.10",
     "babel-plugin-styled-components": "^1.12.0",

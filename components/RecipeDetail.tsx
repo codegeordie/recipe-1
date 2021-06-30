@@ -4,9 +4,7 @@ import styled from 'styled-components'
 import Dinero from 'dinero.js'
 import { RecipeAsProps } from '../server/interfaces'
 
-
-export const RecipeDetail = ({ recipe }:RecipeAsProps) => {
-
+export const RecipeDetail = ({ recipe }: RecipeAsProps) => {
 	return (
 		<StyledRecipeDetail>
 			<StyledHeroWrapper>
@@ -21,14 +19,13 @@ export const RecipeDetail = ({ recipe }:RecipeAsProps) => {
 					{Dinero({
 						amount: recipe.cost.value,
 						currency: recipe.cost.currency,
-						}).toFormat('$0,0.00')}
+					}).toFormat('$0,0.00')}
 					{` per serving`}
 				</p>
 			</StyledStatsWrapper>
 		</StyledRecipeDetail>
 	)
 }
-
 
 const StyledRecipeDetail = styled.div`
 	width: 80%;

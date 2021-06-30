@@ -12,9 +12,13 @@ export default function RecipeId({ recipe }: RecipeAsProps) {
 	return (
 		<>
 			<Nav>
-				<Button><Link href={`/`}>{`\u2190 Back`}</Link></Button>
+				<Link href={`/`}>
+					<Button>{`\u2190 Back`}</Button>
+				</Link>
 				<FlexSpacer />
-				<Button><Link href={`/newrecipe`}>New Recipe</Link></Button>
+				<Link href={`/newrecipe`}>
+					<Button>New Recipe</Button>
+				</Link>
 			</Nav>
 			<Main>
 				<RecipeDetail recipe={recipe} />
@@ -40,7 +44,7 @@ export const getStaticProps: GetStaticProps = async context => {
 
 export async function getStaticPaths() {
 	const { getRecipes } = useGetRecipes()
-	const recipe = await getRecipes({})
+	const recipe = await getRecipes(undefined)
 	const paths = recipe.map(i => `/recipes/${i._id}`)
 
 	return { paths, fallback: true }
@@ -53,7 +57,6 @@ const Main = styled.main`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	//color: ${p => p.theme.text.dark09};
 	background-color: ${p => p.theme.color.gamma};
 `
 
@@ -69,6 +72,7 @@ const StyledDescription = styled.div`
 `
 
 const Button = styled.button`
+	cursor: pointer;
 	font: 700 2rem ${p => p.theme.font.title};
 	line-height: 2rem;
 	padding: .5rem 2rem;

@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb')
-const { connectMongo } = require('../pages/api/mongo.js')
+const { connectMongo } = require('./mongo.js')
 const { updateMongo } = require('./updateMongo')
 
 exports.pushMongoRecipe = async recipe => {

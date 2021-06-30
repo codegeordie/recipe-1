@@ -12,9 +12,11 @@ export const RecipeList = ({ recipesToRender }: RArrayAsProps) => {
 }
 
 const StyledRecipeList = styled.ul`
+	max-width: 85vw;
+
 	position: relative;
 	padding: 1rem;
-	max-width: 1200px;
+	//max-width: 1200px;
 	display: flex;
 	flex-wrap: wrap;
 	flex: 1;

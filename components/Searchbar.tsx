@@ -18,6 +18,7 @@ export const Searchbar = ({ onSearch }: SearchBarProps) => {
 				id='SearchBarInput'
 				type='text'
 				placeholder='Search'
+				autoComplete='off'
 				value={searchTerm}
 				onChange={e => setSearchTerm(e.target.value)}
 			/>

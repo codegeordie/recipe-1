@@ -3,7 +3,7 @@ import qs from 'querystring'
 import { GetRecipesQuery, Recipe } from '../server/interfaces'
 
 export const useGetRecipes = () => {
-	const getRecipes = async (query:GetRecipesQuery) => {
+	const getRecipes = async (query: GetRecipesQuery) => {
 		const search = qs.stringify(query)
 		// const search = query ? qs.stringify('name' in query ? {
 		// 	name: query.name

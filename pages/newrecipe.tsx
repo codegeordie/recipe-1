@@ -1,35 +1,67 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-//import SelectSearch from 'react-select-search'
 import styled from 'styled-components'
 import { useGetIngredients } from '../hooks/useGetIngredients'
 import { RecipeSubmitForm } from '../components/RecipeSubmitForm'
 import { GetIngredientsQuery, Ingredient } from '../server/interfaces'
-
+import { Nav } from '../components/Nav'
+// import { useGetTags } from '../hooks/useGetTags'
 
 export default function NewRecipe() {
 	const [ingrArray, setIngrArray] = useState<Ingredient[]>()
 	const [query, setQuery] = useState<GetIngredientsQuery>(undefined)
 	const { getIngredients } = useGetIngredients()
 
+	// const { getTags } = useGetTags()
+
 	useEffect(() => {
+		// getTags()
 		getIngredients(query).then(i => setIngrArray(i))
 	}, [])
 
 	return (
 		<Main>
-			{ingrArray && <RecipeSubmitForm ingrArray={ingrArray}/>}
-			<h3><Link href={`/`}>Back</Link></h3>
+			<Nav>
+				<Link href={`/`}>
+					<Button>{`\u2190 Back`}</Button>
+				</Link>
+				</Nav>
+			{ingrArray && <RecipeSubmitForm ingrArray={ingrArray} />}
 		</Main>
 	)
 }
 
 const Main = styled.main`
 	min-height: 100vh;
-	padding: 3rem 0;
 	flex: 1;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	color: ${p => p.theme.text.dark09};
+	background-color: ${p => p.theme.color.gamma};
+`
+
+// const Main = styled.main`
+// 	position: relative;
+// 	min-height: 100vh;
+// 	display: flex;
+// 	flex-direction: column;
+// 	align-items: center;
+// 	background-color: ${p => p.theme.color.gamma};
+// `
+
+const Button = styled.button`
+	cursor: pointer;
+	font: 700 2rem ${p => p.theme.font.title};
+	line-height: 2rem;
+	padding: .5rem 2rem;
+	color: ${p => p.theme.color.delta};
+	border: 2px solid ${p => p.theme.color.delta};
+	background-color: ${p => p.theme.color.white};
+	transition: .2s;
+	&:hover {
+		color: ${p => p.theme.color.white};
+		background-color: ${p => p.theme.color.delta};
+	}
 `

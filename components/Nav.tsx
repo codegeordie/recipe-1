@@ -1,13 +1,8 @@
 import styled from 'styled-components'
 import React from 'react'
-import Link from 'next/link'
 
-export const Nav = ({ children }) => {
-	return (
-			<StyledNav>
-				{children}
-			</StyledNav>
-	)
+export const Nav = ({ children }: { children?: React.ReactNode }) => {
+	return <StyledNav>{children}</StyledNav>
 }
 
 const StyledNav = styled.nav`
@@ -20,4 +15,3 @@ const StyledNav = styled.nav`
 	background-color: ${p => p.theme.color.white};
 	border-bottom: 2px solid ${p => p.theme.color.delta};
 `
-

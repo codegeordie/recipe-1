@@ -6,26 +6,35 @@ import styled from 'styled-components'
 import { Nav } from '../components/Nav'
 import { Searchbar } from '../components/Searchbar'
 import { RecipeList } from '../components/RecipeList'
-import { GetRecipesQuery, Recipe } from '../server/interfaces'
+import { FiltersWrapper } from '../components/FiltersWrapper'
+
+import { GetRecipesQuery, Recipe, Tag } from '../server/interfaces'
 import { useGetRecipes } from '../hooks/useGetRecipes'
 import { useDebounce } from '../hooks/useDebounce'
 
 export default function Home() {
 	const [recipeArray, setRecipeArray] = useState<Recipe[]>([])
 	const [query, setQuery] = useState<GetRecipesQuery>()
-	const { getRecipes } = useGetRecipes()
-	const debouncedsearch = useDebounce(setQuery, 200)
+	const [searchString, setSearchString] = useState()
+	//move down a layer?
+	const [filters, setFilters] = useState<Tag[]>([])
 
-	//const searchterms = {id:["91","92","93","94","95"]}
-	const onSearch = (searchTerm:string) => {
-		debouncedsearch({ name: searchTerm})
-	}
+	const { getRecipes } = useGetRecipes()
+	const searchbarOnSearch = useDebounce(setSearchString, 200)
 
 	useEffect(() => {
 		getRecipes(query).then(recipes => {
 			setRecipeArray(recipes)
 		})
 	}, [query])
+
+	useEffect(() => {
+		let filterString
+		if (filters) {
+			filterString = filters.map(tag => tag.tag_name)
+		}
+		setQuery({ name: searchString, filters: filterString })
+	}, [searchString, filters])
 
 	return (
 		<>
@@ -36,9 +45,12 @@ export default function Home() {
 			</Head>
 			<Main>
 				<Nav>
-					<Searchbar onSearch={onSearch} />
-					<Button><Link href={`/newrecipe`}>New Recipe</Link></Button>
+					<Searchbar onSearch={searchbarOnSearch} />
+					<Link href={`/newrecipe`}>
+						<Button>New Recipe</Button>
+					</Link>
 				</Nav>
+				<FiltersWrapper onSubmit={setFilters} />
 				{recipeArray && <RecipeList recipesToRender={recipeArray} />}
 			</Main>
 		</>
@@ -46,6 +58,7 @@ export default function Home() {
 }
 
 const Main = styled.main`
+	position: relative;
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
@@ -54,13 +67,14 @@ const Main = styled.main`
 `
 
 const Button = styled.button`
+	cursor: pointer;
 	font: 700 2rem ${p => p.theme.font.title};
 	line-height: 2rem;
-	padding: .5rem 2rem;
+	padding: 0.5rem 2rem;
 	color: ${p => p.theme.color.delta};
 	border: 2px solid ${p => p.theme.color.delta};
 	background-color: ${p => p.theme.color.white};
-	transition: .2s;
+	transition: 0.2s;
 	&:hover {
 		color: ${p => p.theme.color.white};
 		background-color: ${p => p.theme.color.delta};

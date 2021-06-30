@@ -47,6 +47,7 @@ const FoodDesc = styled.p`
 `
 
 const StyledRecipeCard = styled.li`
+	cursor: pointer;
 	position: relative;
 	margin: 0.75rem;
 	width: 250px;
@@ -56,7 +57,7 @@ const StyledRecipeCard = styled.li`
 	overflow: hidden;
 	transition: 0.3s;
 	&:hover {
-		box-shadow: 1px 1px 9px ${p => p.theme.color.delta};
+		box-shadow: 1px 1px 15px -5px ${p => p.theme.color.delta};
 	}
 	&:hover ${InfoWrapper} {
 		transform: translateY(15%);

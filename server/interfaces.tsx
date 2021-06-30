@@ -1,11 +1,22 @@
 import { Currency } from "dinero.js";
 
+export interface RecipeSubmittal {
+//	_id: string;
+	name: string;
+	description: string;
+	image: string;
+//	tags: string[];
+	servings: number;
+	ingredients: {ingredient_id: string, quantity: number}[]
+}
+
 export interface RecipeBase {
 	_id: string;
 	name: string;
 	description: string;
 	image: string;
 	tags: string[];
+	servings: number;
 	calories: number;
 	cost: {value: number, currency: Currency}
 	ingredients: {ingredient_id: string, quantity: number}[]
@@ -26,8 +37,13 @@ export interface Ingredient {
 	}
 }
 
+export interface Tag {
+	_id: string;
+	tag_name: string;
+}
+
 export interface MongoQ_Name {
-	name: string;
+	name: string | undefined;
 }
 
 interface MongoQ_Id {
@@ -38,7 +54,11 @@ interface MongoQ_IdMany {
 	id: string[];
 }
 
-export type GetRecipesQuery = MongoQ_Name | MongoQ_Id | MongoQ_IdMany | undefined;
+interface MongoQ_Filters {
+	filters: string[] | undefined
+}
+
+export type GetRecipesQuery = (MongoQ_Name & MongoQ_Filters) | undefined;
 
 export type GetIngredientsQuery = MongoQ_Name | MongoQ_Id | MongoQ_IdMany | undefined;
 
