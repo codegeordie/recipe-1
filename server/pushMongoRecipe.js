@@ -12,7 +12,6 @@ exports.pushMongoRecipe = async recipe => {
 }
 
 const recipeUpdate = recipe => {
-
 	recipe.ingredients.forEach(i => {
 		i.ingredient_id = new ObjectId(i.ingredient_id)
 		i.quantity = parseInt(i.quantity)
@@ -21,5 +20,4 @@ const recipeUpdate = recipe => {
 	recipe.tags = []
 	recipe.calories = 0
 	recipe.cost = { value: 0, currency: 'USD' }
-
 }

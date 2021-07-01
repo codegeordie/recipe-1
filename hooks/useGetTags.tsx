@@ -6,8 +6,8 @@ export const useGetTags = () => {
 	const getTags = async () => {
 		//const search = qs.stringify(query)
 		const { data } = await axios.get<Tag[]>(
-			// `http://localhost:5000/tags/?${search}`,
-			`http://localhost:3000/api/queryTags`
+			`http://localhost:5001/api/tags`
+			// `http://localhost:5001/api/tags/?${search}`
 		)
 
 		return data

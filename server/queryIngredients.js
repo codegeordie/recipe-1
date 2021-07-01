@@ -9,28 +9,27 @@ exports.queryIngredients = async query => {
 
 	if (Object.keys(query).length === 0) {
 		result = await ingredients
-			.aggregate([{ $match: { $and: [
-				{ _id: { $exists: true } },
-				{ tag_name: { $exists: false } },
-				{ tagIndex: { $exists: false } }
-			]}}])
+			.aggregate([
+				{
+					$match: {
+						$and: [
+							{ _id: { $exists: true } },
+							{ tag_name: { $exists: false } },
+							{ tagIndex: { $exists: false } },
+						],
+					},
+				},
+			])
 			.toArray()
 	} else if (query.hasOwnProperty('name')) {
 		const reggie = new RegExp(query.name, 'i')
 		result = await ingredients
 			.aggregate([
 				{ $match: { name: { $regex: reggie } } },
-				//OH SHIT WHAT IF LOOKUP GOT NAME MATCHES FROM RECIPES?!?
-				// {
-				// 	$lookup: {
-				// 		from: 'ingredients',
-				// 		localField: 'ingredients.ingredient_id',
-				// 		foreignField: '_id',
-				// 		as: 'ingredients_full',
-				// 	},
-				// },
+				//NAME MATCHES FROM RECIPES?!?
 			])
 			.toArray()
+
 		return result
 	} else if (query.hasOwnProperty('id')) {
 		result = await ingredients
@@ -39,6 +38,6 @@ exports.queryIngredients = async query => {
 	} else {
 		throw new Error('Unhandled mongo ingredient query case, shits broke')
 	}
-	//console.log('result :>> ', result)
+
 	return result
 }

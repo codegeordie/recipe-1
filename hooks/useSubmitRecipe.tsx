@@ -3,7 +3,10 @@ import { RecipeSubmittal } from '../server/interfaces'
 
 export const useSubmitRecipe = () => {
 	const submitRecipe = async (recipe: RecipeSubmittal) => {
-		let res = await axios.post(`http://localhost:5000/`, recipe)
+		const dbRes = await axios.post(
+			`http://localhost:5001/api/submitrecipe`,
+			recipe
+		)
 	}
 
 	return {

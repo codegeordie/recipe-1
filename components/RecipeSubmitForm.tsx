@@ -39,7 +39,6 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 	const initialValues = {
 		name: '',
 		description: '',
-		file: null,
 		image: '',
 		photo: '',
 		servings: 1,
@@ -56,26 +55,23 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 			<Formik
 				initialValues={initialValues}
 				//enableReinitialize={true}
-				// onSubmit={values => {
-				// 	submitRecipe(values)
-				// }}
-
 				onSubmit={async values => {
-					let data = new FormData()
-					data.append('photo', values.photo)
+					if (values.photo) {
+						let data = new FormData()
 
-					// for (var key of data.entries()) {
-					// 	console.log(key[0] + ', ' + key[1])
-					// }
-					const { url } = await fetch('http://localhost:3000/api/sendImage', {
-						method: 'post',
-						body: data,
-					}).then(res => res.json())
+						data.append('photo', values.photo)
 
-					console.log('url :>> ', url)
+						const { url } = await fetch(
+							'http://localhost:5001/api/imagesubmit',
+							{
+								method: 'post',
+								body: data,
+							}
+						).then(res => res.json())
 
-					// .then(response => response.json())
-					// .catch(error => console.log(error))
+						values.image = url
+					}
+					submitRecipe(values)
 				}}
 			>
 				{({ values }) => (
@@ -108,16 +104,6 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 								id='servings'
 								name='servings'
 								placeholder='2'
-								autoComplete='off'
-								required
-							/>
-						</Wrapper>
-						<Wrapper>
-							<StyledLabel htmlFor='image'>Image</StyledLabel>
-							<StyledInput
-								id='image'
-								name='image'
-								placeholder='img/chicken.jpg'
 								autoComplete='off'
 								required
 							/>

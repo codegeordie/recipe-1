@@ -6,6 +6,8 @@ exports.queryMongo = async query => {
 	const db = client.db('recipe')
 	const recipes = db.collection('recipes')
 
+	// console.log('query :>> ', query)
+
 	let result = []
 	let tagFilter = [].concat(query.filters)
 

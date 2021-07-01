@@ -5,13 +5,15 @@ import { GetRecipesQuery, Recipe } from '../server/interfaces'
 export const useGetRecipes = () => {
 	const getRecipes = async (query: GetRecipesQuery) => {
 		const search = qs.stringify(query)
-		// const search = query ? qs.stringify('name' in query ? {
-		// 	name: query.name
-		// } : {
-		// 	id: query.id
-		// }): null;
+
+		// const { body } = await fetch(
+		// 	`http://localhost:5001/api/recipes/?${search}`
+		// ).then(res => res.json())
+		// // return body
+		// console.log('body :>> ', body)
+
 		const { data } = await axios.get<Recipe[]>(
-			`http://localhost:5000/?${search}`
+			`http://localhost:5001/api/recipes/?${search}`
 		)
 
 		return data

@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "cors": "^2.8.5",
     "dinero.js": "^1.8.1",
+    "express": "^4.17.1",
     "formidable": "^1.2.2",
     "formik": "^2.2.9",
     "lodash": "^4.17.21",
@@ -24,7 +26,10 @@
     "styled-normalize": "^8.0.7"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.10",
     "@types/dinero.js": "^1.8.0",
+    "@types/express": "^4.17.12",
+    "@types/express-serve-static-core": "^4.17.22",
     "@types/formidable": "^1.2.2",
     "@types/lodash": "^4.14.170",
     "@types/mongodb": "^3.6.18",
