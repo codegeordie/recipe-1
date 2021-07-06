@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb')
-const { connectMongo } = require('./mongo.js')
 const _ = require('lodash')
+const { connectMongo } = require('./mongo.js')
 
 exports.updateMongo = async () => {
 	const { client } = await connectMongo()
@@ -8,12 +8,13 @@ exports.updateMongo = async () => {
 	const recipes = db.collection('recipes')
 	const ingredients = db.collection('ingredients')
 
-	//this function needs improvement
+	//this function needs serious improvement
 
 	let ingredientTruth = await ingredients.find().toArray()
 	let currentCost = 0
 	let currentCalories = 0
-	let currentTags = []
+	let allTags = ['vegan', 'vegetarian', 'paleo', 'gluten-free', 'no peanuts']
+	let currentTags = allTags
 
 	recipes.find().forEach(recipe => {
 		recipe.ingredients.map(ingredient => {
@@ -21,6 +22,7 @@ exports.updateMongo = async () => {
 				if (ingredient.ingredient_id.equals(i._id)) {
 					currentCost += (i.cost.value / i.quantity) * ingredient.quantity
 					currentCalories += (i.calories / i.quantity) * ingredient.quantity
+					currentTags = _.intersection(currentTags, i.tags)
 				}
 			}
 		})
@@ -30,6 +32,7 @@ exports.updateMongo = async () => {
 			{ _id: recipe._id },
 			{
 				$set: {
+					tags: currentTags,
 					cost: {
 						value: currentCost,
 						currency: 'USD',
@@ -40,6 +43,7 @@ exports.updateMongo = async () => {
 		)
 		currentCost = 0
 		currentCalories = 0
+		currentTags = allTags
 	})
 	console.log('mongo recipes updated to current price')
 }

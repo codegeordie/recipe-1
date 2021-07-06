@@ -10,7 +10,9 @@ export const Ingredients = ({ ingrArray, ingrRec }: IngredientsProps) => {
 		ingrRec?.forEach(i => {
 			if (i.ingredient_id === ingredient._id) {
 				iQuantity = i.quantity
-				iCost = (ingredient.cost.value / ingredient.quantity) * iQuantity
+				iCost = Math.round(
+					(ingredient.cost.value / ingredient.quantity) * iQuantity
+				)
 			}
 		})
 		return (

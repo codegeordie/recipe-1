@@ -2,10 +2,24 @@ const express = require('express')
 const cors = require('cors')
 const formidable = require('formidable')
 
+// const { connectMongo } = require('./mongo.js')
 const { queryMongo } = require('./queryMongo')
 const { queryIngredients } = require('./queryIngredients')
 const { queryTags } = require('./queryTags')
 const { pushMongoRecipe } = require('./pushMongoRecipe')
+
+// const middleMongo = async (req, res, next) => {
+// 	//const { connectMongo } = require('./mongo.js')
+// 	const { client } = await connectMongo()
+// 	const db = client.db('recipe')
+// 	const recipes = db.collection('recipes')
+// 	next()
+// }
+
+// connectMongo().then(({ client }) => {
+// 	const db = client.db('recipe')
+// 	app.locals.recipes = db.collection('recipes')
+// })
 
 const app = express()
 app.use(cors())
@@ -56,11 +70,3 @@ app.post('/api/imagesubmit', async (req, res) => {
 })
 
 app.listen(5001)
-
-//mostly functinal cors headers posterity
-
-// res.writeHead(200, {
-// 	'Content-Type': 'application/json',
-// 	'Access-Control-Allow-Origin': '*',
-// 	'Access-Control-Allow-Headers': '*',
-// })
