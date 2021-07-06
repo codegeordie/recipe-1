@@ -36,18 +36,19 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 		)
 	})
 
+	const ingrInitialValues = {
+		ingredient_id: ingrArray[0]._id,
+		quantity: 100,
+		measure: 'g',
+	}
+
 	const initialValues = {
 		name: '',
 		description: '',
 		image: '',
 		photo: '',
 		servings: 1,
-		ingredients: [
-			{
-				ingredient_id: ingrArray[0]._id,
-				quantity: 1,
-			},
-		],
+		ingredients: [ingrInitialValues],
 	}
 
 	return (
@@ -127,15 +128,21 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 													{ingredientSelect}
 												</StyledSelect>
 												{/* <ErrorMessage name={`ingredients.${index}.name`} component="div" className="field-error"/> */}
-												<StyledSelect
+												<StyledNumInput
 													name={`ingredients.${index}.quantity`}
+													type='number'
+													min='0'
+													//step='0.01'
+													autoComplete='off'
+													required
+												/>
+												<StyledSelect
+													name={`ingredients.${index}.measure`}
 													component='select'
 												>
-													<option value={1}>1</option>
-													<option value={2}>2</option>
-													<option value={3}>3</option>
-													<option value={4}>4</option>
-													<option value={5}>5</option>
+													<option value={'g'}>g</option>
+													<option value={'oz'}>oz</option>
+													<option value={'lb'}>lb</option>
 												</StyledSelect>
 												{/* <ErrorMessage name={`ingredients.${index}.quantity`} component="div" className="field-error"/> */}
 												<Button
@@ -150,9 +157,7 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 									<Button
 										type='button'
 										className='secondary'
-										onClick={() =>
-											push({ ingredient_id: ingrArray[0]._id, quantity: 1 })
-										}
+										onClick={() => push(ingrInitialValues)}
 									>
 										Another
 									</Button>
@@ -191,13 +196,15 @@ const StyledLabel = styled.label`
 const StyledInput = styled(Field)`
 	flex: 1;
 	font: 400 1.6rem ${p => p.theme.font.body};
-	//border: 1px solid blue;
+`
+
+const StyledNumInput = styled(Field)`
+	font: 400 1.6rem ${p => p.theme.font.body};
+	width: 6rem;
 `
 
 const StyledSelect = styled(Field)`
-	//border: 1px solid red;
 	padding: 0.2rem;
-	//font-size: .8rem;
 	font: 400 1.6rem ${p => p.theme.font.body};
 `
 

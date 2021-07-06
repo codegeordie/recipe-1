@@ -1,25 +1,30 @@
-import { Currency } from "dinero.js";
+import { Currency } from 'dinero.js'
+
+type RecipeIngredients = {
+	ingredient_id: string
+	quantity: number
+	measure: 'g' | 'oz' | 'lb'
+}
 
 export interface RecipeSubmittal {
-//	_id: string;
-	name: string;
-	description: string;
-	image: string;
-//	tags: string[];
-	servings: number;
-	ingredients: {ingredient_id: string, quantity: number}[]
+	name: string
+	description: string
+	image: string
+	//	tags: string[];
+	servings: number
+	ingredients: RecipeIngredients[]
 }
 
 export interface RecipeBase {
-	_id: string;
-	name: string;
-	description: string;
-	image: string;
-	tags: string[];
-	servings: number;
-	calories: number;
-	cost: {value: number, currency: Currency}
-	ingredients: {ingredient_id: string, quantity: number}[]
+	_id: string
+	name: string
+	description: string
+	image: string
+	tags: string[]
+	servings: number
+	calories: number
+	cost: { value: number; currency: Currency }
+	ingredients: RecipeIngredients[]
 }
 
 export interface Recipe extends RecipeBase {
@@ -27,42 +32,44 @@ export interface Recipe extends RecipeBase {
 }
 
 export interface Ingredient {
-	_id: string;
-	name: string;
-	quantity: number;
-	calories: number;
+	_id: string
+	name: string
+	quantity: number
+	calories: number
 	cost: {
-		currency: Currency;
-		value: number;
+		currency: Currency
+		value: number
 	}
 }
 
 export interface Tag {
-	_id: string;
-	tag_name: string;
+	_id: string
+	tag_name: string
 }
 
 export interface MongoQ_Name {
-	name: string | undefined;
+	name: string | undefined
 }
 
 interface MongoQ_Id {
-	id: string;
+	id: string
 }
 
 interface MongoQ_IdMany {
-	id: string[];
+	id: string[]
 }
 
 interface MongoQ_Filters {
 	filters: string[] | undefined
 }
 
-export type GetRecipesQuery = (MongoQ_Name & MongoQ_Filters) | undefined;
+export type GetRecipesQuery = (MongoQ_Name & MongoQ_Filters) | undefined
 
-export type GetIngredientsQuery = MongoQ_Name | MongoQ_Id | MongoQ_IdMany | undefined;
-
-
+export type GetIngredientsQuery =
+	| MongoQ_Name
+	| MongoQ_Id
+	| MongoQ_IdMany
+	| undefined
 
 export interface RArrayAsProps {
 	recipesToRender: Recipe[]
@@ -74,6 +81,7 @@ export interface RecipeAsProps {
 
 export interface IngredientsProps {
 	ingrArray: Ingredient[]
+	ingrRec?: RecipeIngredients[]
 }
 
 // export interface RecipePageProps {

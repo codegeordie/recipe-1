@@ -12,7 +12,7 @@ export const RecipeDetail = ({ recipe }: RecipeAsProps) => {
 				<h1>{recipe.name}</h1>
 			</StyledHeroWrapper>
 			<StyledStatsWrapper>
-				<p>Makes {`3`} servings</p>
+				<p>{`Makes ${recipe.servings} servings`}</p>
 				<p>
 					{recipe.calories}
 					{`cal and `}

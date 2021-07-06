@@ -2,13 +2,22 @@ import React from 'react'
 import styled from 'styled-components'
 import { IngredientsProps } from '../server/interfaces'
 
-export const Ingredients = ({ ingrArray }: IngredientsProps) => {
+export const Ingredients = ({ ingrArray, ingrRec }: IngredientsProps) => {
+	console.log('ingrArray :>> ', ingrArray)
+	console.log('ingrRec :>> ', ingrRec)
 	const ingredientTable = ingrArray.map(ingredient => {
+		let iQuantity, iCost
+		ingrRec?.forEach(i => {
+			if (i.ingredient_id === ingredient._id) {
+				iQuantity = i.quantity
+				iCost = (ingredient.cost.value / ingredient.quantity) * iQuantity
+			}
+		})
 		return (
 			<IngredientItem key={ingredient._id}>
 				<StyledTd isName>{ingredient.name}</StyledTd>
-				<StyledTd>{ingredient.quantity}</StyledTd>
-				<StyledTd>{ingredient.cost.value}</StyledTd>
+				<StyledTd>{iQuantity}</StyledTd>
+				<StyledTd>{iCost}</StyledTd>
 			</IngredientItem>
 		)
 	})
