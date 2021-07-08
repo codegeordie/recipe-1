@@ -1,10 +1,9 @@
+import Dinero from 'dinero.js'
 import React from 'react'
 import styled from 'styled-components'
 import { IngredientsProps } from '../server/interfaces'
 
 export const Ingredients = ({ ingrArray, ingrRec }: IngredientsProps) => {
-	console.log('ingrArray :>> ', ingrArray)
-	console.log('ingrRec :>> ', ingrRec)
 	const ingredientTable = ingrArray.map(ingredient => {
 		let iQuantity, iCost
 		ingrRec?.forEach(i => {
@@ -18,8 +17,13 @@ export const Ingredients = ({ ingrArray, ingrRec }: IngredientsProps) => {
 		return (
 			<IngredientItem key={ingredient._id}>
 				<StyledTd isName>{ingredient.name}</StyledTd>
-				<StyledTd>{iQuantity}</StyledTd>
-				<StyledTd>{iCost}</StyledTd>
+				<StyledTd>{`${iQuantity}g`}</StyledTd>
+				<StyledTd>
+					{Dinero({
+						amount: iCost,
+						currency: 'USD',
+					}).toFormat('$0,0.00')}
+				</StyledTd>
 			</IngredientItem>
 		)
 	})

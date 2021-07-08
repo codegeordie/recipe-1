@@ -1,14 +1,13 @@
+import _, { isString } from 'lodash'
+import { useRouter } from 'next/dist/client/router'
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useGetTags } from '../hooks/useGetTags'
-import { Tag } from '../server/interfaces'
-import { CheckboxForm, CheckboxFormProps } from './CheckboxForm'
+import { Tag, Option } from '../server/interfaces'
+import { CheckboxForm } from './CheckboxForm'
 
-type FiltersWrapperProps = {
-	onSubmit: CheckboxFormProps['onSubmit']
-}
-
-export const FiltersWrapper = ({ onSubmit }: FiltersWrapperProps) => {
+export const FiltersWrapper = () => {
+	const router = useRouter()
 	const [possibleTags, setPossibleTags] = useState<Tag[]>()
 	const { getTags } = useGetTags()
 
@@ -16,10 +15,26 @@ export const FiltersWrapper = ({ onSubmit }: FiltersWrapperProps) => {
 		getTags().then(res => setPossibleTags(res))
 	}, [])
 
+	const onSubmit = (filters: Option[]) => {
+		const filterString = filters.map(tag => tag.label)
+		router.push({ query: { ...router.query, filters: filterString } })
+	}
+
 	return (
 		<>
-			{possibleTags && (
-				<CheckboxForm options={possibleTags} onSubmit={onSubmit} />
+			{possibleTags && router.isReady && (
+				<CheckboxForm
+					options={possibleTags.map(tag => ({
+						id: tag._id,
+						label: tag.tag_name,
+					}))}
+					initialChecked={
+						isString(router.query.filters)
+							? [router.query.filters]
+							: router.query.filters
+					}
+					onSubmit={onSubmit}
+				/>
 			)}
 		</>
 	)

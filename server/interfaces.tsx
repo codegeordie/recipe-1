@@ -47,6 +47,13 @@ export interface Tag {
 	tag_name: string
 }
 
+export type Option = { id: string; label: string }
+export type CheckboxFormProps = {
+	options: Option[]
+	initialChecked?: string[]
+	onSubmit: (selectedOptions: Option[]) => void
+}
+
 export interface MongoQ_Name {
 	name: string | undefined
 }
@@ -63,7 +70,7 @@ interface MongoQ_Filters {
 	filters: string[] | undefined
 }
 
-export type GetRecipesQuery = (MongoQ_Name & MongoQ_Filters) | undefined
+export type GetRecipesQuery = { name?: string; filters?: string[] }
 
 export type GetIngredientsQuery =
 	| MongoQ_Name

@@ -47,7 +47,7 @@ export const getStaticProps: GetStaticProps = async context => {
 
 export async function getStaticPaths() {
 	const { getRecipes } = useGetRecipes()
-	const recipe = await getRecipes(undefined)
+	const recipe = await getRecipes({})
 	const paths = recipe.map(i => `/recipes/${i._id}`)
 
 	return { paths, fallback: true }

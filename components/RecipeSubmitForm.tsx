@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Select from 'react-select'
 import {
 	Formik,
 	Field,
@@ -27,6 +28,10 @@ const ImageUploadInput = () => {
 
 export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 	const { submitRecipe } = useSubmitRecipe()
+
+	// const selectIngrs = ingrArray.map(i => {
+	// 	return { value: i._id, label: i.name }
+	// })
 
 	const ingredientSelect = ingrArray.map(i => {
 		return (
@@ -120,7 +125,12 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 												>
 													Ingredient
 												</StyledLabel>
-
+												{/* <StyledReactSelect
+													name={`ingredients.${index}.ingredient_id`}
+													options={selectIngrs}
+													value={selectIngrs ? selectIngrs.find(option => option.value === field.value) : ''}
+      										onChange={(option) => form.setFieldValue(field.name, option.value)}
+												/> */}
 												<StyledSelect
 													name={`ingredients.${index}.ingredient_id`}
 													component='select'
@@ -205,6 +215,12 @@ const StyledNumInput = styled(Field)`
 
 const StyledSelect = styled(Field)`
 	padding: 0.2rem;
+	font: 400 1.6rem ${p => p.theme.font.body};
+`
+
+const StyledReactSelect = styled(Select)`
+	//padding: 0.2rem;
+	flex: 1;
 	font: 400 1.6rem ${p => p.theme.font.body};
 `
 

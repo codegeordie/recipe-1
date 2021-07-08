@@ -5,6 +5,7 @@ exports.queryIngredients = async query => {
 	const { client } = await connectMongo()
 	const db = client.db('recipe')
 	const ingredients = db.collection('ingredients')
+
 	let result = []
 
 	if (Object.keys(query).length === 0) {

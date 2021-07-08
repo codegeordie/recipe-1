@@ -1,23 +1,18 @@
 import styled from 'styled-components'
 import { Formik, Field, Form } from 'formik'
-import { Tag } from '../server/interfaces'
 import _ from 'lodash'
+import { CheckboxFormProps } from '../server/interfaces'
 
-type Tags = string[]
-const initialTags: Tags = []
-
-export type CheckboxFormProps = {
-	options: Tag[]
-	onSubmit: (selectedOptions: Tag[]) => void
-}
-
-export const CheckboxForm = ({ options, onSubmit }: CheckboxFormProps) => {
-	const checkboxes = options.map(filter => {
+export const CheckboxForm = ({
+	options,
+	initialChecked = [],
+	onSubmit,
+}: CheckboxFormProps) => {
+	const checkboxes = options.map(option => {
 		return (
-			<label key={filter._id}>
-				<Field type='checkbox' name='filters' value={filter.tag_name} />
-				{filter.tag_name[0].toUpperCase() +
-					filter.tag_name.slice(1).toLowerCase()}
+			<label key={option.id}>
+				<Field type='checkbox' name='checked' value={option.label} />
+				{option.label[0].toUpperCase() + option.label.slice(1).toLowerCase()}
 			</label>
 		)
 	})
@@ -25,14 +20,12 @@ export const CheckboxForm = ({ options, onSubmit }: CheckboxFormProps) => {
 	return (
 		<StyledForm>
 			<Formik
-				initialValues={{
-					filters: initialTags,
-				}}
+				initialValues={{ checked: initialChecked }}
 				onSubmit={values => {
 					const selectedOptions = _.intersectionWith(
 						options,
-						values.filters,
-						({ tag_name }, checkedTag) => tag_name === checkedTag
+						values.checked,
+						({ label }, checked) => label === checked
 					)
 					onSubmit(selectedOptions)
 				}}

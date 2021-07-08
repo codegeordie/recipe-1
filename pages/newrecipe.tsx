@@ -6,6 +6,7 @@ import { useGetIngredients } from '../hooks/useGetIngredients'
 import { RecipeSubmitForm } from '../components/RecipeSubmitForm'
 import { GetIngredientsQuery, Ingredient } from '../server/interfaces'
 import { Nav } from '../components/Nav'
+import { useRouter } from 'next/dist/client/router'
 // import { useGetTags } from '../hooks/useGetTags'
 
 export default function NewRecipe() {
@@ -14,6 +15,13 @@ export default function NewRecipe() {
 	const { getIngredients } = useGetIngredients()
 
 	// const { getTags } = useGetTags()
+	// const { push, query: nextQuery } = useRouter()
+
+	// console.log('query :>> ', nextQuery)
+
+	// useEffect(() => {
+
+	// }, [nextQuery])
 
 	useEffect(() => {
 		// getTags()
@@ -24,9 +32,13 @@ export default function NewRecipe() {
 		<Main>
 			<Nav>
 				<Link href={`/`}>
-					<Button>{`\u2190 Back`}</Button>
+					<Button
+					// onClick={() => {
+					// 	push(`/newrecipe?testing=test`)
+					// }}
+					>{`\u2190 Back`}</Button>
 				</Link>
-				</Nav>
+			</Nav>
 			{ingrArray && <RecipeSubmitForm ingrArray={ingrArray} />}
 		</Main>
 	)
@@ -55,11 +67,11 @@ const Button = styled.button`
 	cursor: pointer;
 	font: 700 2rem ${p => p.theme.font.title};
 	line-height: 2rem;
-	padding: .5rem 2rem;
+	padding: 0.5rem 2rem;
 	color: ${p => p.theme.color.delta};
 	border: 2px solid ${p => p.theme.color.delta};
 	background-color: ${p => p.theme.color.white};
-	transition: .2s;
+	transition: 0.2s;
 	&:hover {
 		color: ${p => p.theme.color.white};
 		background-color: ${p => p.theme.color.delta};

@@ -1,40 +1,27 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { useRouter } from 'next/dist/client/router'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import _ from 'lodash'
 
 import { Nav } from '../components/Nav'
 import { Searchbar } from '../components/Searchbar'
 import { RecipeList } from '../components/RecipeList'
 import { FiltersWrapper } from '../components/FiltersWrapper'
 
-import { GetRecipesQuery, Recipe, Tag } from '../server/interfaces'
+import { Recipe } from '../server/interfaces'
 import { useGetRecipes } from '../hooks/useGetRecipes'
-import { useDebounce } from '../hooks/useDebounce'
 
 export default function Home() {
+	const router = useRouter()
 	const [recipeArray, setRecipeArray] = useState<Recipe[]>([])
-	const [query, setQuery] = useState<GetRecipesQuery>()
-	const [searchString, setSearchString] = useState()
-	//move down a layer?
-	const [filters, setFilters] = useState<Tag[]>([])
-
 	const { getRecipes } = useGetRecipes()
-	const searchbarOnSearch = useDebounce(setSearchString, 200)
 
 	useEffect(() => {
-		getRecipes(query).then(recipes => {
-			setRecipeArray(recipes)
-		})
-	}, [query])
-
-	useEffect(() => {
-		let filterString
-		if (filters) {
-			filterString = filters.map(tag => tag.tag_name)
-		}
-		setQuery({ name: searchString, filters: filterString })
-	}, [searchString, filters])
+		if (router.isReady)
+			getRecipes(router.query).then(recipes => setRecipeArray(recipes))
+	}, [router.query])
 
 	return (
 		<>
@@ -45,12 +32,12 @@ export default function Home() {
 			</Head>
 			<Main>
 				<Nav>
-					<Searchbar onSearch={searchbarOnSearch} />
+					{router.isReady && <Searchbar />}
 					<Link href={`/newrecipe`}>
 						<Button>New Recipe</Button>
 					</Link>
 				</Nav>
-				<FiltersWrapper onSubmit={setFilters} />
+				<FiltersWrapper />
 				{recipeArray && <RecipeList recipesToRender={recipeArray} />}
 			</Main>
 		</>

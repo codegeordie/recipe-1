@@ -25,7 +25,7 @@ exports.queryMongo = async query => {
 				{ $lookup: lookupIngredients },
 			])
 			.toArray()
-	} else if (query.hasOwnProperty('name')) {
+	} else if (query.hasOwnProperty('name') || query.hasOwnProperty('filters')) {
 		const reggie = new RegExp(query.name, 'i')
 		const onlyName = { name: { $regex: reggie } }
 		const withFilter = {
