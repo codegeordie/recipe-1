@@ -32,11 +32,7 @@ export default function NewRecipe() {
 		<Main>
 			<Nav>
 				<Link href={`/`}>
-					<Button
-					// onClick={() => {
-					// 	push(`/newrecipe?testing=test`)
-					// }}
-					>{`\u2190 Back`}</Button>
+					<Button>{`\u2190 Back`}</Button>
 				</Link>
 			</Nav>
 			{ingrArray && <RecipeSubmitForm ingrArray={ingrArray} />}

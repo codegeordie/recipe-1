@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/dist/client/router'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import _ from 'lodash'
+import _, { isString } from 'lodash'
 
 import { Nav } from '../components/Nav'
 import { Searchbar } from '../components/Searchbar'
@@ -32,7 +32,13 @@ export default function Home() {
 			</Head>
 			<Main>
 				<Nav>
-					{router.isReady && <Searchbar />}
+					{router.isReady && (
+						<Searchbar
+							initialSearch={
+								isString(router.query.name) ? router.query.name : ''
+							}
+						/>
+					)}
 					<Link href={`/newrecipe`}>
 						<Button>New Recipe</Button>
 					</Link>

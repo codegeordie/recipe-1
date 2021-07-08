@@ -6,15 +6,9 @@ export const useGetRecipes = () => {
 	const getRecipes = async (query: GetRecipesQuery) => {
 		const search = qs.stringify(query)
 
-		// const { body } = await fetch(
-		// 	`http://localhost:5001/api/recipes/?${search}`
-		// ).then(res => res.json())
-		// // return body
-		// console.log('body :>> ', body)
-
-		const { data } = await axios.get<Recipe[]>(
+		const data: Recipe[] = await fetch(
 			`http://localhost:5001/api/recipes/?${search}`
-		)
+		).then(res => res.json())
 
 		return data
 	}

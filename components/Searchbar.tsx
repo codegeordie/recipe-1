@@ -1,28 +1,17 @@
 import { useRouter } from 'next/dist/client/router'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import _, { isString } from 'lodash'
-import { useDebounce } from '../hooks/useDebounce'
+import { useDebounce } from 'react-use'
 
-export const Searchbar = () => {
+export const Searchbar = ({ initialSearch }: { initialSearch: string }) => {
 	const router = useRouter()
 
-	const initialSearchTerm = isString(router.query.name) ? router.query.name : ''
-	// console.log('initialSearchTerm :>> ', initialSearchTerm)
-	const [searchTerm, setSearchTerm] = useState<string>(initialSearchTerm)
-	const [searchActual, setSearchActual] = useState<string>(initialSearchTerm)
-
-	const onSearch = useCallback(useDebounce(setSearchActual, 200), [])
-
-	useEffect(() => {
-		// console.log('searchTerm :>> ', searchTerm)
-		onSearch(searchTerm)
-	}, [searchTerm])
-
-	useEffect(() => {
-		// console.log('searchActual :>> ', searchActual)
-		router.push({ query: { ...router.query, name: searchActual } })
-	}, [searchActual])
+	const [searchTerm, setSearchTerm] = useState<string>(initialSearch)
+	const [, cancel] = useDebounce(
+		() => router.push({ query: { ...router.query, name: searchTerm } }),
+		1250,
+		[searchTerm]
+	)
 
 	return (
 		<StyledSearchbar onSubmit={e => e.preventDefault()}>
