@@ -8,7 +8,8 @@ import _, { isString } from 'lodash'
 import { Nav } from '../components/Nav'
 import { Searchbar } from '../components/Searchbar'
 import { RecipeList } from '../components/RecipeList'
-import { FiltersWrapper } from '../components/FiltersWrapper'
+import { TagFilters } from '../components/TagFilters'
+import { CalorieSlider } from '../components/CalorieSlider'
 
 import { Recipe } from '../server/interfaces'
 import { useGetRecipes } from '../hooks/useGetRecipes'
@@ -43,8 +44,13 @@ export default function Home() {
 						<Button>New Recipe</Button>
 					</Link>
 				</Nav>
-				<FiltersWrapper />
-				{recipeArray && <RecipeList recipesToRender={recipeArray} />}
+				<StyledFlexRow>
+					<StyledFlexColumn>
+						<TagFilters />
+						<CalorieSlider />
+					</StyledFlexColumn>
+					{recipeArray && <RecipeList recipesToRender={recipeArray} />}
+				</StyledFlexRow>
 			</Main>
 		</>
 	)
@@ -55,8 +61,21 @@ const Main = styled.main`
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	//align-items: center;
 	background-color: ${p => p.theme.color.gamma};
+`
+
+const StyledFlexRow = styled.div`
+	display: flex;
+	flex: 1;
+`
+
+const StyledFlexColumn = styled.div`
+	width: 13vw;
+	display: flex;
+	flex-direction: column;
+	background-color: ${p => p.theme.color.white};
+	padding: 0.5rem;
 `
 
 const Button = styled.button`

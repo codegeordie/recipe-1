@@ -44,16 +44,9 @@ export const CheckboxForm = ({
 }
 
 const StyledForm = styled.div`
-	position: absolute;
-	left: 2rem;
-	top: 9rem;
-	width: 12rem;
-	height: 60rem;
-
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	background-color: ${p => p.theme.color.white};
 	div {
 		font: 400 1.6rem ${p => p.theme.font.body};
 	}

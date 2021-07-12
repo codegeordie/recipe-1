@@ -1,5 +1,4 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Dinero from 'dinero.js'
 import { RecipeAsProps } from '../server/interfaces'
@@ -31,7 +30,6 @@ const StyledRecipeDetail = styled.div`
 	width: 80%;
 	display: flex;
 	flex-direction: column;
-	//flex-wrap: 0;
 `
 
 const StyledHeroWrapper = styled.div`
