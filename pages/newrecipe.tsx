@@ -1,31 +1,21 @@
-import Head from 'next/head'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { useGetIngredients } from '../hooks/useGetIngredients'
+import { useGetIngredientsAll } from '../hooks/useGetIngredientsAll'
 import { RecipeSubmitForm } from '../components/RecipeSubmitForm'
-import { GetIngredientsQuery, Ingredient } from '../server/interfaces'
+import { Ingredient } from '../server/interfaces'
 import { Nav } from '../components/Nav'
-import { useRouter } from 'next/dist/client/router'
+
 // import { useGetTags } from '../hooks/useGetTags'
 
 export default function NewRecipe() {
 	const [ingrArray, setIngrArray] = useState<Ingredient[]>()
-	const [query, setQuery] = useState<GetIngredientsQuery>(undefined)
-	const { getIngredients } = useGetIngredients()
-
-	// const { getTags } = useGetTags()
-	// const { push, query: nextQuery } = useRouter()
-
-	// console.log('query :>> ', nextQuery)
-
-	// useEffect(() => {
-
-	// }, [nextQuery])
+	const { getIngredientsAll } = useGetIngredientsAll()
 
 	useEffect(() => {
 		// getTags()
-		getIngredients(query).then(i => setIngrArray(i))
+		// getIngredients(query).then(i => setIngrArray(i))
+		getIngredientsAll().then(i => setIngrArray(i))
 	}, [])
 
 	return (
@@ -49,15 +39,6 @@ const Main = styled.main`
 	color: ${p => p.theme.text.dark09};
 	background-color: ${p => p.theme.color.gamma};
 `
-
-// const Main = styled.main`
-// 	position: relative;
-// 	min-height: 100vh;
-// 	display: flex;
-// 	flex-direction: column;
-// 	align-items: center;
-// 	background-color: ${p => p.theme.color.gamma};
-// `
 
 const Button = styled.button`
 	cursor: pointer;

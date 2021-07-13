@@ -10,7 +10,6 @@ exports.connectMongo = async () => {
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
 		}).then(client => {
-			console.log('global :>> ', global)
 			return { client }
 		})
 	}

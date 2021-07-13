@@ -1,27 +1,29 @@
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-import React from 'react';
-import { createGlobalStyle, ThemeProvider } from "styled-components";
+import React from 'react'
+import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { theme } from '../components/Theme'
 
-
 export default function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <>
-      <Head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" /> 
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&family=Work+Sans:wght@200;400;700&display=swap" rel="stylesheet"/>
-      </Head>
-      <GlobalStyle />
-      <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </>
-  )
+	return (
+		<>
+			<Head>
+				<link rel='preconnect' href='https://fonts.googleapis.com' />
+				<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
+				<link
+					href='https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&family=Work+Sans:wght@200;400;700&display=swap'
+					rel='stylesheet'
+				/>
+			</Head>
+			<GlobalStyle />
+			<ThemeProvider theme={theme}>
+				<Component {...pageProps} />
+			</ThemeProvider>
+		</>
+	)
 }
 
-const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle`
   html,
   body {
     padding: 0;

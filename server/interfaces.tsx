@@ -70,13 +70,23 @@ interface MongoQ_Filters {
 	filters: string[] | undefined
 }
 
-export type GetRecipesQuery = { name?: string; filters?: string[] }
+export type GetRecipesQuery = {
+	name?: string
+	filters?: string[]
+	cal_min?: string
+	cal_max?: string
+}
 
-export type GetIngredientsQuery =
-	| MongoQ_Name
-	| MongoQ_Id
-	| MongoQ_IdMany
-	| undefined
+// export type GetIngredientsQuery = {
+// 	name?: string
+// 	_id?: string
+// }
+
+// export type GetIngredientsQuery =
+// 	| MongoQ_Name
+// 	| MongoQ_Id
+// 	| MongoQ_IdMany
+// 	| undefined
 
 export interface RArrayAsProps {
 	recipesToRender: Recipe[]

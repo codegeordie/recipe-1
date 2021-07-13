@@ -19,10 +19,10 @@ export const Default = Template.bind({})
 Default.args = {
 	label: 'RangeSlider',
 	rangeMin: 0,
-	rangeMax: 2000,
+	rangeMax: 800,
 	step: 25,
-	valueMin: 200,
-	valueMax: 1200,
+	valueMin: 100,
+	valueMax: 700,
 }
 
 // export const Secondary = Template.bind({})

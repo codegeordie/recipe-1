@@ -5,11 +5,11 @@ import { useDebounce } from 'react-use'
 
 export const Searchbar = ({ initialSearch }: { initialSearch: string }) => {
 	const router = useRouter()
-
 	const [searchTerm, setSearchTerm] = useState<string>(initialSearch)
-	const [, cancel] = useDebounce(
+
+	useDebounce(
 		() => router.push({ query: { ...router.query, name: searchTerm } }),
-		1250,
+		250,
 		[searchTerm]
 	)
 

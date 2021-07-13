@@ -3,7 +3,15 @@ import { useRef, useState } from 'react'
 import { useDebounce } from 'react-use'
 import styled, { CSSProperties } from 'styled-components'
 
-interface RangeSliderProps {
+interface RangeSliderCSSProps {
+	trackWidth?: CSSProperties['width']
+	trackHeight?: CSSProperties['height']
+	trackColor?: CSSProperties['backgroundColor']
+	highlightColor?: CSSProperties['backgroundColor']
+	handleColor?: CSSProperties['backgroundColor']
+}
+
+interface RangeSliderProps extends RangeSliderCSSProps {
 	/**
 	 * This callback fires whenever any of the toggles on the range slider are adjusted. The min and max values are always passed.
 	 * @param {number} min - The min value the range slide should go down to
@@ -16,11 +24,6 @@ interface RangeSliderProps {
 	step?: number
 	valueMin?: number
 	valueMax?: number
-	trackWidth?: CSSProperties['width']
-	trackHeight?: CSSProperties['height']
-	trackColor?: CSSProperties['backgroundColor']
-	highlightColor?: CSSProperties['backgroundColor']
-	handleColor?: CSSProperties['backgroundColor']
 }
 
 export const RangeSlider = ({
@@ -28,7 +31,7 @@ export const RangeSlider = ({
 	label,
 	rangeMin,
 	rangeMax,
-	step,
+	step = undefined,
 	valueMin,
 	valueMax,
 	trackWidth = '100%',
@@ -37,6 +40,14 @@ export const RangeSlider = ({
 	highlightColor = 'blue',
 	handleColor = 'blue',
 }: RangeSliderProps) => {
+	const styleProps: RangeSliderCSSProps = {
+		trackWidth,
+		trackHeight,
+		trackColor,
+		highlightColor,
+		handleColor,
+	}
+
 	const [alphaVal, setAlphaVal] = useState<number>(valueMin ?? rangeMin)
 	const [betaVal, setBetaVal] = useState<number>(valueMax ?? rangeMax)
 	const [highlightStart, setHighlightStart] = useState<number>(0)
@@ -64,32 +75,34 @@ export const RangeSlider = ({
 	])
 
 	return (
-		<StyledForm trackWidth={trackWidth} onSubmit={e => e.preventDefault()}>
-			<StyledRangeTrack>
-				<StyledRange
+		<StyledForm onSubmit={e => e.preventDefault()} {...styleProps}>
+			<StyledRangeTrack {...styleProps}>
+				<StyledRangeAlpha
 					type='range'
 					id={`${label}_alpha`}
 					name={`${label}_alpha`}
 					min={rangeMin}
 					max={rangeMax}
 					defaultValue={alphaVal}
-					step={step ?? undefined}
+					step={step}
 					onChange={e => {
 						setAlphaVal(parseInt(e.currentTarget.value))
 					}}
+					{...styleProps}
 				/>
 
-				<StyledRange
+				<StyledRangeBeta
 					type='range'
 					id={`${label}_beta`}
 					name={`${label}_beta`}
 					min={rangeMin}
 					max={rangeMax}
 					defaultValue={betaVal}
-					step={step ?? undefined}
+					step={step}
 					onChange={e => {
 						setBetaVal(parseInt(e.currentTarget.value))
 					}}
+					{...styleProps}
 				/>
 
 				<svg>
@@ -105,14 +118,7 @@ export const RangeSlider = ({
 	)
 }
 
-// const trackWidth = '100%'
-const trackHeight = '6px'
-const trackColor = 'rgba(100,100,100,0.3)'
-const highlightColor = 'blue'
-const handleColor = 'blue'
-
-/* const StyledForm = styled.form` */
-const StyledForm = styled.form<{ trackWidth }>`
+const StyledForm = styled.form<RangeSliderCSSProps>`
 	margin: 1.5rem 0 1rem;
 	svg {
 		pointer-events: none;
@@ -120,26 +126,25 @@ const StyledForm = styled.form<{ trackWidth }>`
 		left: 0;
 		top: 50%;
 		transform: translateY(-50%);
-		width: ${({ trackWidth }) => trackWidth};
-		height: ${trackHeight};
+		width: ${p => p.trackWidth};
+		height: ${p => p.trackHeight};
 		z-index: 2;
 		rect {
-			fill: ${highlightColor};
+			fill: ${p => p.highlightColor};
 		}
 	}
 `
 
-const StyledRangeTrack = styled.div<{ trackWidth: CSSProperties['width'] }>`
+const StyledRangeTrack = styled.div<RangeSliderCSSProps>`
 	position: relative;
-	width: ${({ trackWidth }) => trackWidth};
-	height: ${trackHeight};
-	background: ${trackColor};
-	border-radius: calc(${trackHeight} / 2);
+	width: ${p => p.trackWidth};
+	height: ${p => p.trackHeight};
+	background: ${p => p.trackColor};
+	border-radius: calc(${p => p.trackHeight} / 2);
 	z-index: 1;
 `
 
-const StyledRange = styled.input`
-	-webkit-appearance: none;
+const StyledRange = styled.input<RangeSliderCSSProps>`
 	appearance: none;
 	background: none;
 	pointer-events: none;
@@ -147,25 +152,40 @@ const StyledRange = styled.input`
 	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
-	width: ${trackWidth};
-	height: ${trackHeight};
-	border-radius: calc(${trackHeight} / 2);
+	width: ${p => p.trackWidth};
+	height: ${p => p.trackHeight};
+	border-radius: calc(${p => p.trackHeight} / 2);
 	z-index: 3;
 
 	&::-webkit-slider-thumb {
-		-webkit-appearance: none;
 		appearance: none;
-		width: calc(${trackHeight} * 3);
-		height: calc(${trackHeight} * 3);
+		width: calc(${p => p.trackHeight} * 3);
+		height: calc(${p => p.trackHeight} * 3);
 		border-radius: 50%;
 		border: 2px solid white;
-		background: ${handleColor};
-		box-shadow: 0 0 1px 1px ${highlightColor};
+		background: ${p => p.handleColor};
+		box-shadow: 0 0 1px 1px ${p => p.highlightColor};
 		cursor: pointer;
 		pointer-events: auto;
 		transition: 0.1s;
 		&:active {
-			box-shadow: 0 0 4px 1px ${highlightColor};
+			box-shadow: 0 0 4px 1px ${p => p.highlightColor};
+		}
+	}
+`
+
+const StyledRangeAlpha = styled(StyledRange)`
+	&::-webkit-slider-thumb {
+		&::before {
+			content: '';
+		}
+	}
+`
+
+const StyledRangeBeta = styled(StyledRange)`
+	&::-webkit-slider-thumb {
+		&::before {
+			content: '';
 		}
 	}
 `

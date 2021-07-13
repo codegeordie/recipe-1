@@ -5,19 +5,26 @@ import styled from 'styled-components'
 import { Ingredients } from '../../components/Ingredients'
 import { RecipeDetail } from '../../components/RecipeDetail'
 import { Nav } from '../../components/Nav'
-import { useGetRecipes } from '../../hooks/useGetRecipes'
+import { Button } from '../../components/Button'
+
+import { useGetRecipesAll } from '../../hooks/useGetRecipesAll'
 import { RecipeAsProps } from '../../server/interfaces'
+import { useGetRecipeId } from '../../hooks/useGetRecipeId'
 
 export default function RecipeId({ recipe }: RecipeAsProps) {
 	return (
 		<>
 			<Nav>
 				<Link href={`/`}>
-					<Button>{`\u2190 Back`}</Button>
+					<a>
+						<Button>{`\u2190 Back`}</Button>
+					</a>
 				</Link>
 				<FlexSpacer />
 				<Link href={`/newrecipe`}>
-					<Button>New Recipe</Button>
+					<a>
+						<Button>New Recipe</Button>
+					</a>
 				</Link>
 			</Nav>
 			<Main>
@@ -36,8 +43,8 @@ export const getStaticProps: GetStaticProps = async context => {
 	const recipeId = context?.params?.recipeId
 	if (typeof recipeId !== 'string') throw new Error(`getStaticProps ID failed`)
 
-	const { getRecipes } = useGetRecipes()
-	const recipeArr = await getRecipes({ id: [recipeId] })
+	const { getRecipeId } = useGetRecipeId()
+	const recipeArr = await getRecipeId({ id: recipeId })
 	const recipe = recipeArr[0]
 
 	return {
@@ -46,8 +53,8 @@ export const getStaticProps: GetStaticProps = async context => {
 }
 
 export async function getStaticPaths() {
-	const { getRecipes } = useGetRecipes()
-	const recipe = await getRecipes({})
+	const { getRecipesAll } = useGetRecipesAll()
+	const recipe = await getRecipesAll()
 	const paths = recipe.map(i => `/recipes/${i._id}`)
 
 	return { paths, fallback: true }
@@ -56,7 +63,7 @@ export async function getStaticPaths() {
 const Main = styled.main`
 	min-height: 100vh;
 	padding: 3rem 0;
-	flex: 1;
+	//flex: 1;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -72,19 +79,4 @@ const StyledDescription = styled.div`
 	padding: 3rem;
 	font: 1.8rem ${p => p.theme.font.body};
 	color: ${props => props.theme.text.dark07};
-`
-
-const Button = styled.button`
-	cursor: pointer;
-	font: 700 2rem ${p => p.theme.font.title};
-	line-height: 2rem;
-	padding: 0.5rem 2rem;
-	color: ${p => p.theme.color.delta};
-	border: 2px solid ${p => p.theme.color.delta};
-	background-color: ${p => p.theme.color.white};
-	transition: 0.2s;
-	&:hover {
-		color: ${p => p.theme.color.white};
-		background-color: ${p => p.theme.color.delta};
-	}
 `
