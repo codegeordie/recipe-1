@@ -19,10 +19,10 @@ export const CalorieSlider = () => {
 		<>
 			{router.isReady && (
 				<RangeSlider
-					onChange={onChange}
+					onChange={(min, max) => {}}
 					label={'testing'}
-					min={0}
-					max={2000}
+					rangeMin={0}
+					rangeMax={2000}
 					step={25}
 					valueMin={valueMin}
 					valueMax={valueMax}

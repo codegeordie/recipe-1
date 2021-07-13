@@ -1,26 +1,49 @@
 import { useEffect } from 'react'
 import { useRef, useState } from 'react'
 import { useDebounce } from 'react-use'
-import styled from 'styled-components'
+import styled, { CSSProperties } from 'styled-components'
 
 interface RangeSliderProps {
+	/**
+	 * This callback fires whenever any of the toggles on the range slider are adjusted. The min and max values are always passed.
+	 * @param {number} min - The min value the range slide should go down to
+	 * @param {number} max - The max value the range slider should go up to
+	 */
 	onChange: (min: number, max: number) => void
 	label: string
-	min: number
-	max: number
+	rangeMin: number
+	rangeMax: number
 	step?: number
 	valueMin?: number
 	valueMax?: number
+	trackWidth?: CSSProperties['width']
+	trackHeight?: CSSProperties['height']
+	trackColor?: CSSProperties['backgroundColor']
+	highlightColor?: CSSProperties['backgroundColor']
+	handleColor?: CSSProperties['backgroundColor']
 }
 
-export const RangeSlider = (props: RangeSliderProps) => {
-	const [alphaVal, setAlphaVal] = useState<number>(props.valueMin ?? props.min)
-	const [betaVal, setBetaVal] = useState<number>(props.valueMax ?? props.max)
-	const [HighlightStart, setHighlightStart] = useState<number>(0)
-	const [HighlightWidth, setHighlightWidth] = useState<number>(100)
+export const RangeSlider = ({
+	onChange,
+	label,
+	rangeMin,
+	rangeMax,
+	step,
+	valueMin,
+	valueMax,
+	trackWidth = '100%',
+	trackHeight = '6px',
+	trackColor = 'rgba(100,100,100,0.3)',
+	highlightColor = 'blue',
+	handleColor = 'blue',
+}: RangeSliderProps) => {
+	const [alphaVal, setAlphaVal] = useState<number>(valueMin ?? rangeMin)
+	const [betaVal, setBetaVal] = useState<number>(valueMax ?? rangeMax)
+	const [highlightStart, setHighlightStart] = useState<number>(0)
+	const [highlightWidth, setHighlightWidth] = useState<number>(100)
 
-	const minRef = useRef<number>(props.min)
-	const maxRef = useRef<number>(props.max)
+	const minRef = useRef<number>(rangeMin)
+	const maxRef = useRef<number>(rangeMax)
 
 	useEffect(() => {
 		const [min, max] =
@@ -29,41 +52,41 @@ export const RangeSlider = (props: RangeSliderProps) => {
 		minRef.current = min
 		maxRef.current = max
 
-		const startPercent = (min / props.max) * 100
-		const widthPercent = ((max - min) / (props.max - props.min)) * 100
+		const startPercent = (min / rangeMax) * 100
+		const widthPercent = ((max - min) / (rangeMax - rangeMin)) * 100
 		setHighlightStart(startPercent)
 		setHighlightWidth(widthPercent)
 	}, [alphaVal, betaVal])
 
-	useDebounce(() => props.onChange(minRef.current, maxRef.current), 350, [
+	useDebounce(() => onChange(minRef.current, maxRef.current), 350, [
 		alphaVal,
 		betaVal,
 	])
 
 	return (
-		<StyledForm onSubmit={e => e.preventDefault()}>
+		<StyledForm trackWidth={trackWidth} onSubmit={e => e.preventDefault()}>
 			<StyledRangeTrack>
-				<StyledRangeAlpha
+				<StyledRange
 					type='range'
-					id={`${props.label}_alpha`}
-					name={`${props.label}_alpha`}
-					min={props.min}
-					max={props.max}
+					id={`${label}_alpha`}
+					name={`${label}_alpha`}
+					min={rangeMin}
+					max={rangeMax}
 					defaultValue={alphaVal}
-					step={props.step ?? undefined}
+					step={step ?? undefined}
 					onChange={e => {
 						setAlphaVal(parseInt(e.currentTarget.value))
 					}}
 				/>
 
-				<StyledRangeBeta
+				<StyledRange
 					type='range'
-					id={`${props.label}_beta`}
-					name={`${props.label}_beta`}
-					min={props.min}
-					max={props.max}
+					id={`${label}_beta`}
+					name={`${label}_beta`}
+					min={rangeMin}
+					max={rangeMax}
 					defaultValue={betaVal}
-					step={props.step ?? undefined}
+					step={step ?? undefined}
 					onChange={e => {
 						setBetaVal(parseInt(e.currentTarget.value))
 					}}
@@ -71,9 +94,9 @@ export const RangeSlider = (props: RangeSliderProps) => {
 
 				<svg>
 					<rect
-						x={`${HighlightStart}%`}
+						x={`${highlightStart}%`}
 						y='0'
-						width={`${HighlightWidth}%`}
+						width={`${highlightWidth}%`}
 						height='100%'
 					/>
 				</svg>
@@ -82,13 +105,14 @@ export const RangeSlider = (props: RangeSliderProps) => {
 	)
 }
 
-const trackWidth = '100%'
+// const trackWidth = '100%'
 const trackHeight = '6px'
 const trackColor = 'rgba(100,100,100,0.3)'
 const highlightColor = 'blue'
 const handleColor = 'blue'
 
-const StyledForm = styled.form`
+/* const StyledForm = styled.form` */
+const StyledForm = styled.form<{ trackWidth }>`
 	margin: 1.5rem 0 1rem;
 	svg {
 		pointer-events: none;
@@ -96,7 +120,7 @@ const StyledForm = styled.form`
 		left: 0;
 		top: 50%;
 		transform: translateY(-50%);
-		width: ${trackWidth};
+		width: ${({ trackWidth }) => trackWidth};
 		height: ${trackHeight};
 		z-index: 2;
 		rect {
@@ -105,9 +129,9 @@ const StyledForm = styled.form`
 	}
 `
 
-const StyledRangeTrack = styled.div`
+const StyledRangeTrack = styled.div<{ trackWidth: CSSProperties['width'] }>`
 	position: relative;
-	width: ${trackWidth};
+	width: ${({ trackWidth }) => trackWidth};
 	height: ${trackHeight};
 	background: ${trackColor};
 	border-radius: calc(${trackHeight} / 2);
@@ -145,7 +169,3 @@ const StyledRange = styled.input`
 		}
 	}
 `
-
-const StyledRangeAlpha = styled(StyledRange)``
-
-const StyledRangeBeta = styled(StyledRange)``
