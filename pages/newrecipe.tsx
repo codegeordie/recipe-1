@@ -1,23 +1,11 @@
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { useGetIngredientsAll } from '../hooks/useGetIngredientsAll'
-import { RecipeSubmitForm } from '../components/RecipeSubmitForm'
-import { Ingredient } from '../server/interfaces'
 import { Nav } from '../components/Nav'
-
-// import { useGetTags } from '../hooks/useGetTags'
+import { Modal } from '../components/Modal'
+import { RecipeSubmitModal } from '../components/RecipeSubmitModal'
 
 export default function NewRecipe() {
-	const [ingrArray, setIngrArray] = useState<Ingredient[]>()
-	const { getIngredientsAll } = useGetIngredientsAll()
-
-	useEffect(() => {
-		// getTags()
-		// getIngredients(query).then(i => setIngrArray(i))
-		getIngredientsAll().then(i => setIngrArray(i))
-	}, [])
-
 	return (
 		<Main>
 			<Nav>
@@ -25,7 +13,10 @@ export default function NewRecipe() {
 					<Button>{`\u2190 Back`}</Button>
 				</Link>
 			</Nav>
-			{ingrArray && <RecipeSubmitForm ingrArray={ingrArray} />}
+
+			<Modal>
+				<RecipeSubmitModal />
+			</Modal>
 		</Main>
 	)
 }
@@ -40,7 +31,7 @@ const Main = styled.main`
 	background-color: ${p => p.theme.color.gamma};
 `
 
-const Button = styled.button`
+const Button = styled.a`
 	cursor: pointer;
 	font: 700 2rem ${p => p.theme.font.title};
 	line-height: 2rem;
