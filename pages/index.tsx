@@ -47,7 +47,7 @@ export default function Home() {
 				<StyledFlexRow>
 					<StyledFlexColumn>
 						<TagFilters />
-						<CalorieSlider />
+						<CalorieSlider rangeMin={0} rangeMax={800} />
 					</StyledFlexColumn>
 					{recipeArray && <RecipeList recipesToRender={recipeArray} />}
 				</StyledFlexRow>
