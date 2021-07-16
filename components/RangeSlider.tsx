@@ -83,6 +83,7 @@ export const RangeSlider = ({
 
 	return (
 		<StyledForm onSubmit={e => e.preventDefault()} {...styleProps}>
+			<StyledFormLabel>{label}</StyledFormLabel>
 			<StyledRangeTrack {...styleProps}>
 				<StyledTrackLabelMin overlapCheck={minHandlePosition} {...styleProps}>
 					{rangeMin}
@@ -139,7 +140,9 @@ export const RangeSlider = ({
 }
 
 const StyledForm = styled.form<RangeSliderCSSProps>`
-	margin: 1.5rem 0 1rem;
+	display: flex;
+	flex-direction: column;
+	/* margin: 1.5rem 0 1rem; */
 	svg {
 		pointer-events: none;
 		position: absolute;
@@ -153,6 +156,12 @@ const StyledForm = styled.form<RangeSliderCSSProps>`
 			fill: ${p => p.highlightColor};
 		}
 	}
+`
+
+const StyledFormLabel = styled.label`
+	align-self: center;
+	padding-bottom: 0.5rem;
+	font: 400 1.2rem ${p => p.theme.font.body};
 `
 
 const StyledRangeTrack = styled.div<RangeSliderCSSProps>`
@@ -220,6 +229,9 @@ const StyledRange = styled.input<RangeSliderCSSProps>`
 		&:active {
 			box-shadow: 0 0 4px 1px ${p => p.highlightColor};
 			cursor: grabbing;
+		}
+		&:focus {
+			box-shadow: 0 0 4px 1px ${p => p.highlightColor};
 		}
 	}
 

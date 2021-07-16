@@ -20,7 +20,8 @@ const ImageUploadInput = () => {
 			type='file'
 			name='file'
 			onChange={(e: React.FormEvent<HTMLInputElement>) => {
-				formikProps.setFieldValue('photo', e.currentTarget.files[0])
+				if (e.currentTarget.files)
+					formikProps.setFieldValue('photo', e.currentTarget.files[0])
 			}}
 		/>
 	)

@@ -17,8 +17,8 @@ export const CalorieSlider = ({ rangeMin, rangeMax }: CalorieSliderProps) => {
 	let [cal_min, cal_max] = [router.query.cal_min, router.query.cal_max]
 	if (Array.isArray(cal_min)) cal_min = cal_min[0]
 	if (Array.isArray(cal_max)) cal_max = cal_max[0]
-	const valueMin = parseInt(cal_min ?? rangeMin)
-	const valueMax = parseInt(cal_max ?? rangeMax)
+	const valueMin = cal_min ? parseInt(cal_min) : rangeMin
+	const valueMax = cal_max ? parseInt(cal_max) : rangeMax
 
 	return (
 		<>
