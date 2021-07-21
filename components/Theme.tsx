@@ -29,6 +29,7 @@ export const theme = {
 	font: {
 		body: 'Poppins', //100,400,700
 		title: 'Work Sans', //100,400,700
+		button: 'Work Sans', //100,400,700
 	},
 	// fontSizes: {
 	//   small: "1em",

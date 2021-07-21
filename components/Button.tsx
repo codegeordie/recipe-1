@@ -1,20 +1,43 @@
+import { darken } from 'polished'
 import styled from 'styled-components'
 
-export const Button = ({ children }: { children?: React.ReactNode }) => {
-	return <StyledButton>{children}</StyledButton>
+export interface ButtonProps
+	extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+	small?: boolean
+	large?: boolean
 }
 
-const StyledButton = styled.button`
+export const Button: React.FC<ButtonProps> = props => (
+	<StyledButton {...props} />
+)
+
+const StyledButton = styled.button<ButtonProps>`
 	cursor: pointer;
-	font: 700 2rem ${p => p.theme.font.title};
-	line-height: 2rem;
-	padding: 0.5rem 2rem;
-	color: ${p => p.theme.color.delta};
-	border: 2px solid ${p => p.theme.color.delta};
-	background-color: ${p => p.theme.color.white};
-	transition: 0.2s;
+	outline: none;
+	border: none;
+	background: none;
+	border-radius: 4px;
+	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+	font: 700 1.4rem ${p => p.theme.font.button};
+	line-height: 1.5;
+	padding: 0.75rem 1.5rem;
+	//color: white;
+	transition: 0.25s;
+	${p =>
+		p.small &&
+		`
+		font: 700 1.3rem ${p.theme.font.button};
+		padding: 0.5rem 1rem;
+	`}
+	${p =>
+		p.large &&
+		`
+		font: 700 1.6rem ${p.theme.font.button};
+		padding: 1.2rem 2rem;
+	`}
 	&:hover {
-		color: ${p => p.theme.color.white};
-		background-color: ${p => p.theme.color.delta};
+		//transform: scale(1.02) translateZ(0);
+		//${p => `padding: ${darken(0.1, p.theme.color.white)}`}
+		//${p => `background-color: ${darken(0.1, p.theme.color.white)}`}
 	}
 `

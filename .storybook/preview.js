@@ -1,4 +1,6 @@
 import React from 'react'
+import { ThemeProvider } from 'styled-components'
+import { theme } from '../components/Theme'
 
 import { GlobalStyle } from '../pages/_app.tsx'
 
@@ -7,7 +9,9 @@ export const decorators = [
 	Story => (
 		<>
 			<GlobalStyle />
-			<Story />
+			<ThemeProvider theme={theme}>
+				<Story />
+			</ThemeProvider>
 		</>
 	),
 ]

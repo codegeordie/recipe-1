@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
-import { Button } from './Button'
+import { AnimatePresence, motion } from 'framer-motion'
+import { PrimaryButton } from './PrimaryButton'
+import { SecondaryButton } from './SecondaryButton'
 
 interface ModalProps {
 	children: React.ReactNode
+	buttonText: string
 	// onCancelModal: () => void
 	// onAcceptModal: () => void
 	// acceptEnabled: boolean
@@ -12,7 +15,7 @@ interface ModalProps {
 	// title: string
 }
 
-export const Modal: React.FC<ModalProps> = ({ children }) => {
+export const Modal: React.FC<ModalProps> = ({ children, buttonText }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const openModal = () => setIsModalOpen(true)
 	const closeModal = () => setIsModalOpen(false)
@@ -31,20 +34,32 @@ export const Modal: React.FC<ModalProps> = ({ children }) => {
 
 	return (
 		<>
-			<button onClick={openModal}>Open Modal</button>
+			<PrimaryButton onClick={openModal}>{buttonText}</PrimaryButton>
 			{containerRef.current
 				? ReactDOM.createPortal(
-						<>
+						<AnimatePresence>
 							{isModalOpen && (
-								<>
+								<motion.div
+									key='modal'
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									exit={{ opacity: 0 }}
+									transition={{ duration: 0.2 }}
+								>
 									<Backdrop onClick={closeModal} />
-									<StyledModal>
-										<button onClick={closeModal}>Close</button>
-										{children}
-									</StyledModal>
-								</>
+									<Wrapper>
+										<StyledModal>
+											<FlexRow>
+												<SecondaryButton small onClick={closeModal}>
+													Close
+												</SecondaryButton>
+											</FlexRow>
+											<StyledModalContent>{children}</StyledModalContent>
+										</StyledModal>
+									</Wrapper>
+								</motion.div>
 							)}
-						</>,
+						</AnimatePresence>,
 						containerRef.current
 				  )
 				: null}
@@ -78,29 +93,44 @@ export const Modal: React.FC<ModalProps> = ({ children }) => {
 // 		: null
 // }
 
-// css for backdrop
 const Backdrop = styled.div`
 	width: 100%;
 	height: 100vh;
-	background: rgba(0, 0, 0, 0.45);
-	z-index: 100;
+	background: rgba(0, 0, 0, 0.65);
+	backdrop-filter: blur(2px);
+	z-index: 50;
 	position: fixed;
 	left: 0;
 	top: 0;
-	transition: opacity 0.3s ease-out;
-	opacity: 1;
 `
 
-// css for Modal
-const StyledModal = styled.div`
+const Wrapper = styled.div`
 	position: fixed;
 	width: 90%;
 	left: 5%;
 	top: 20vh;
+	/* background: white;
+	border-radius: 5px; */
+	z-index: 100;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`
+
+const StyledModal = styled.div`
+	padding: 0.5rem;
 	background: white;
-	border-radius: 5px;
-	z-index: 200; // I changed this to 999999 but didnot solve the issue
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+	border-radius: 8px;
+`
+
+const FlexRow = styled.div`
+	display: flex;
+	justify-content: flex-end;
+	padding: 1rem;
+`
+
+const StyledModalContent = styled.div`
+	padding: 0.5rem;
 `
 
 // .modal__header {

@@ -13,6 +13,10 @@ import { CalorieSlider } from '../components/CalorieSlider'
 
 import { Recipe } from '../server/interfaces'
 import { useGetRecipes } from '../hooks/useGetRecipes'
+import { SecondaryButton } from '../components/SecondaryButton'
+import { RecipeSubmitModal } from '../components/RecipeSubmitModal'
+import { Modal } from '../components/Modal'
+import { Dropdown } from '../components/Dropdown'
 
 export default function Home() {
 	const router = useRouter()
@@ -33,16 +37,18 @@ export default function Home() {
 			</Head>
 			<Main>
 				<Nav>
-					{router.isReady && (
-						<Searchbar
-							initialSearch={
-								isString(router.query.name) ? router.query.name : ''
-							}
-						/>
-					)}
-					<Link href={`/newrecipe`}>
-						<Button>New Recipe</Button>
-					</Link>
+					{router.isReady && <Searchbar />}
+
+					{router.isReady && <Dropdown />}
+
+					<Modal buttonText='New Recipe'>
+						<RecipeSubmitModal />
+					</Modal>
+					{/* <Link href={`/newrecipe`}>
+						<a>
+							<SecondaryButton>New Recipe</SecondaryButton>
+						</a>
+					</Link> */}
 				</Nav>
 				<StyledFlexRow>
 					<StyledFlexColumn>
@@ -76,19 +82,4 @@ const StyledFlexColumn = styled.div`
 	flex-direction: column;
 	background-color: ${p => p.theme.color.white};
 	padding: 0.5rem;
-`
-
-const Button = styled.button`
-	cursor: pointer;
-	font: 700 2rem ${p => p.theme.font.title};
-	line-height: 2rem;
-	padding: 0.5rem 2rem;
-	color: ${p => p.theme.color.delta};
-	border: 2px solid ${p => p.theme.color.delta};
-	background-color: ${p => p.theme.color.white};
-	transition: 0.2s;
-	&:hover {
-		color: ${p => p.theme.color.white};
-		background-color: ${p => p.theme.color.delta};
-	}
 `

@@ -1,21 +1,22 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
 
-import { Button } from '../components/Button'
+import { DangerButton } from '../components/DangerButton'
 
 export default {
-	title: 'Buttons/Button-Core',
-	component: Button,
-	//subcomponents: { PrimaryButton, GhostButton, HiddenButton, DangerButton },
+	title: 'Buttons/DangerButton',
+	component: DangerButton,
 	argTypes: {
 		//backgroundColor: { control: 'color' },
 	},
-} as ComponentMeta<typeof Button>
+} as ComponentMeta<typeof DangerButton>
 
-const Template: ComponentStory<typeof Button> = args => <Button {...args} />
+const Template: ComponentStory<typeof DangerButton> = args => (
+	<DangerButton {...args} />
+)
 
-export const Core = Template.bind({})
-Core.args = {
+export const Default = Template.bind({})
+Default.args = {
 	children: 'Button',
 }
 

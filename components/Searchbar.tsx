@@ -1,14 +1,35 @@
 import { useRouter } from 'next/dist/client/router'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useDebounce } from 'react-use'
+import _ from 'lodash'
 
-export const Searchbar = ({ initialSearch }: { initialSearch: string }) => {
+export const Searchbar = () => {
 	const router = useRouter()
-	const [searchTerm, setSearchTerm] = useState<string>(initialSearch)
+	const [searchTerm, setSearchTerm] = useState(router.query.name ?? '')
+
+	useEffect(() => {
+		if (router.query.name) {
+			setSearchTerm(
+				Array.isArray(router.query.name)
+					? router.query.name[0]
+					: router.query.name
+			)
+		} else {
+			setSearchTerm('')
+		}
+	}, [router.query])
 
 	useDebounce(
-		() => router.push({ query: { ...router.query, name: searchTerm } }),
+		() => {
+			const { name, ...rest } = router.query
+			if (!searchTerm) {
+				if (_.isEmpty(rest)) router.push('/', undefined, { shallow: true })
+				else router.push({ query: rest })
+			} else {
+				router.push({ query: { ...rest, name: searchTerm } })
+			}
+		},
 		250,
 		[searchTerm]
 	)
@@ -38,25 +59,27 @@ const StyledInput = styled.input`
 	width: 100%;
 	padding: 0 1.5rem;
 	outline: none;
+	border: none;
 	font: 400 2.2rem ${p => p.theme.font.title};
 	color: ${p => p.theme.text.dark07};
-	background-color: ${p => p.theme.color.gamma};
-	border: none;
-	border-left: 2px solid ${p => p.theme.color.delta};
-	border-bottom: 2px solid ${p => p.theme.color.delta};
+	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
 	transition: 0.25s;
 	&:hover {
-		box-shadow: 1px 1px 6px ${p => p.theme.color.beta};
+		box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3),
+			inset 0 0 0 1px ${p => p.theme.color.gamma};
 	}
 	&:focus {
-		box-shadow: 1px 1px 9px ${p => p.theme.color.beta};
+		box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3),
+			inset 0 0 0 1px ${p => p.theme.color.delta};
 	}
 `
 
 const StyledSearchLabel = styled.label`
-	opacity: 0 !important;
-	pointer-events: none;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
 	position: absolute;
-	left: 0;
-	top: 0;
+	white-space: nowrap;
+	width: 1px;
 `

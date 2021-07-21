@@ -11,6 +11,8 @@ import {
 } from 'formik'
 import { IngredientsProps } from '../server/interfaces'
 import { useSubmitRecipe } from '../hooks/useSubmitRecipe'
+import { SecondaryButton } from './SecondaryButton'
+import { PrimaryButton } from './PrimaryButton'
 
 const ImageUploadInput = () => {
 	const formikProps = useFormikContext()
@@ -156,26 +158,25 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 													<option value={'lb'}>lb</option>
 												</StyledSelect>
 												{/* <ErrorMessage name={`ingredients.${index}.quantity`} component="div" className="field-error"/> */}
-												<Button
+												<SecondaryButton
+													small
 													type='button'
-													className='secondary'
 													onClick={() => remove(index)}
 												>
 													X
-												</Button>
+												</SecondaryButton>
 											</Wrapper>
 										))}
-									<Button
+									<SecondaryButton
 										type='button'
-										className='secondary'
 										onClick={() => push(ingrInitialValues)}
 									>
 										Another
-									</Button>
+									</SecondaryButton>
 								</div>
 							)}
 						</FieldArray>
-						<Button type='submit'>Submit</Button>
+						<PrimaryButton type='submit'>Submit</PrimaryButton>
 					</StyledForm>
 				)}
 			</Formik>
@@ -223,28 +224,4 @@ const StyledReactSelect = styled(Select)`
 	//padding: 0.2rem;
 	flex: 1;
 	font: 400 1.6rem ${p => p.theme.font.body};
-`
-
-// const Button = styled.button`
-// 	max-width: 150px;
-// 	padding: 0.2rem 1rem;
-// 	font: 1.8rem ${p => p.theme.font.body};
-// 	color: ${p => p.theme.color.neutral};
-// 	border: 2px solid ${p => p.theme.color.beta};
-// 	//border-radius: .5rem;
-// 	background-color: ${p => p.theme.color.alpha};
-// `
-const Button = styled.button`
-	cursor: pointer;
-	font: 700 2rem ${p => p.theme.font.title};
-	line-height: 2rem;
-	padding: 0.5rem 2rem;
-	color: ${p => p.theme.color.delta};
-	border: 2px solid ${p => p.theme.color.delta};
-	background-color: ${p => p.theme.color.white};
-	transition: 0.2s;
-	&:hover {
-		color: ${p => p.theme.color.white};
-		background-color: ${p => p.theme.color.delta};
-	}
 `

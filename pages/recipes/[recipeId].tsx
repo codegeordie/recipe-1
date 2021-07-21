@@ -1,11 +1,11 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Ingredients } from '../../components/Ingredients'
 import { RecipeDetail } from '../../components/RecipeDetail'
 import { Nav } from '../../components/Nav'
-import { Button } from '../../components/Button'
+import { SecondaryButton } from '../../components/SecondaryButton'
 
 import { useGetRecipesAll } from '../../hooks/useGetRecipesAll'
 import { RecipeAsProps } from '../../server/interfaces'
@@ -17,13 +17,13 @@ export default function RecipeId({ recipe }: RecipeAsProps) {
 			<Nav>
 				<Link href={`/`}>
 					<a>
-						<Button>{`\u2190 Back`}</Button>
+						<SecondaryButton small>{`\u2190 Back`}</SecondaryButton>
 					</a>
 				</Link>
 				<FlexSpacer />
 				<Link href={`/newrecipe`}>
 					<a>
-						<Button>New Recipe</Button>
+						<SecondaryButton>New Recipe</SecondaryButton>
 					</a>
 				</Link>
 			</Nav>
