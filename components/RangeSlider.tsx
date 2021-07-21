@@ -28,6 +28,7 @@ interface RangeSliderProps extends RangeSliderCSSProps {
 	step?: number
 	valueMin?: number
 	valueMax?: number
+	debounce?: number
 }
 
 export const RangeSlider = ({
@@ -38,9 +39,10 @@ export const RangeSlider = ({
 	step = undefined,
 	valueMin,
 	valueMax,
+	debounce = 250,
 	trackWidth = '100%',
 	trackHeight = '6px',
-	trackColor = 'rgba(100,100,100,0.3)',
+	trackColor = '#6839394c',
 	highlightColor = 'blue',
 	handleColor = 'blue',
 }: RangeSliderProps) => {
@@ -76,7 +78,7 @@ export const RangeSlider = ({
 		setHighlightWidth(widthPercent)
 	}, [alphaVal, betaVal])
 
-	useDebounce(() => onChange(minRef.current, maxRef.current), 350, [
+	useDebounce(() => onChange(minRef.current, maxRef.current), debounce, [
 		alphaVal,
 		betaVal,
 	])
