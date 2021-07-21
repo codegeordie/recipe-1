@@ -13,5 +13,5 @@ const StyledNav = styled.nav`
 	justify-content: space-between;
 	align-items: center;
 	background-color: ${p => p.theme.color.white};
-	border-bottom: 2px solid ${p => p.theme.color.delta};
+	border-bottom: 1px solid ${p => p.theme.color.delta};
 `

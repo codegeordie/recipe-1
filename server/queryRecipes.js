@@ -44,5 +44,27 @@ exports.queryRecipesByName = async req => {
 	if (finalQuery.length === 1) finalQuery.unshift(defaultQuery)
 
 	result = await recipes.aggregate(finalQuery).toArray()
+
+	// console.log('result :>> ', result)
+
+	if (query.curr) {
+		const convertCurrency = (currObj, convTo) => {
+			let ratioToUSD = 1
+			if (convTo === 'EUR') ratioToUSD = 1.18
+			else if (convTo === 'MXN') ratioToUSD = 20.13
+
+			return {
+				value: Math.round(currObj.value * ratioToUSD),
+				currency: convTo,
+			}
+		}
+
+		const converted = result.map(recipe => ({
+			...recipe,
+			cost: convertCurrency(recipe.cost, query.curr),
+		}))
+		return converted
+	}
+
 	return result
 }
