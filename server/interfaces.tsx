@@ -29,6 +29,7 @@ export interface RecipeBase {
 
 export interface Recipe extends RecipeBase {
 	ingredients_full: Ingredient[]
+	serving_cal: number
 }
 
 export interface Ingredient {

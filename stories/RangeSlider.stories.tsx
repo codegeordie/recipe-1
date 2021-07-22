@@ -21,8 +21,8 @@ Default.args = {
 	rangeMin: 0,
 	rangeMax: 800,
 	step: 25,
-	valueMin: 100,
-	valueMax: 700,
+	alphaValue: 100,
+	betaValue: 700,
 }
 
 // export const Secondary = Template.bind({})

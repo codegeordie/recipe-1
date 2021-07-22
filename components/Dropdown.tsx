@@ -8,15 +8,7 @@ export const Dropdown = () => {
 	const [currCode, setCurrCode] = useState(router.query.curr ?? 'USD')
 
 	useEffect(() => {
-		if (router.query.curr) {
-			setCurrCode(
-				Array.isArray(router.query.curr)
-					? router.query.curr[0]
-					: router.query.curr
-			)
-		} else {
-			setCurrCode('USD')
-		}
+		if (!router.query.curr) setCurrCode('USD')
 	}, [router.query])
 
 	useEffect(() => {

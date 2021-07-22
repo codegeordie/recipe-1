@@ -38,14 +38,14 @@ exports.queryRecipesByName = async req => {
 	if (query.filters) finalQuery.unshift(tagQuery)
 	if (query.cal_max || query.cal_min) {
 		finalQuery.unshift(calQuery)
-		finalQuery.unshift(calSet)
+		// finalQuery.unshift(calSet)
 	}
+
+	finalQuery.unshift(calSet)
 
 	if (finalQuery.length === 1) finalQuery.unshift(defaultQuery)
 
 	result = await recipes.aggregate(finalQuery).toArray()
-
-	// console.log('result :>> ', result)
 
 	if (query.curr) {
 		const convertCurrency = (currObj, convTo) => {

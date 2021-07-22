@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { Formik, Field, Form } from 'formik'
 import _ from 'lodash'
 import { CheckboxFormProps } from '../server/interfaces'
+import { HiddenButton } from './HiddenButton'
 
 export const CheckboxForm = ({
 	options,
@@ -12,7 +13,9 @@ export const CheckboxForm = ({
 		return (
 			<label key={option.id}>
 				<Field type='checkbox' name='checked' value={option.label} />
-				{option.label[0].toUpperCase() + option.label.slice(1).toLowerCase()}
+				<span>
+					{option.label[0].toUpperCase() + option.label.slice(1).toLowerCase()}
+				</span>
 			</label>
 		)
 	})
@@ -21,6 +24,7 @@ export const CheckboxForm = ({
 		<StyledForm>
 			<Formik
 				initialValues={{ checked: initialChecked }}
+				enableReinitialize={true}
 				onSubmit={values => {
 					const selectedOptions = _.intersectionWith(
 						options,
@@ -30,14 +34,19 @@ export const CheckboxForm = ({
 					onSubmit(selectedOptions)
 				}}
 			>
-				<Form>
-					<h4 id='checkbox-group'>Filter By</h4>
-					<StyledCheckboxWrapper role='group' aria-labelledby='checkbox-group'>
-						{checkboxes}
-					</StyledCheckboxWrapper>
+				{({ handleSubmit }) => (
+					<Form onChangeCapture={() => handleSubmit()}>
+						<h4 id='checkbox-group'>Filter By</h4>
+						<StyledCheckboxWrapper
+							role='group'
+							aria-labelledby='checkbox-group'
+						>
+							{checkboxes}
+						</StyledCheckboxWrapper>
 
-					<Button type='submit'>Filter</Button>
-				</Form>
+						<HiddenButton type='submit'>Filter</HiddenButton>
+					</Form>
+				)}
 			</Formik>
 		</StyledForm>
 	)
@@ -48,12 +57,12 @@ const StyledForm = styled.div`
 	flex-direction: column;
 	align-items: center;
 	div {
-		font: 400 1.6rem ${p => p.theme.font.body};
+		//font: 400 1.3rem ${p => p.theme.font.body};
 	}
 	h4 {
 		margin-bottom: 1.5rem;
 		text-align: center;
-		font: 200 2rem ${p => p.theme.font.body};
+		font: 200 1.6rem ${p => p.theme.font.title};
 		border-bottom: 1px solid ${p => p.theme.text.dark03};
 	}
 `
@@ -63,21 +72,12 @@ const StyledCheckboxWrapper = styled.div`
 	flex-direction: column;
 	label {
 		padding: 0.5rem;
-	}
-`
-
-const Button = styled.button`
-	margin-top: 1rem;
-	cursor: pointer;
-	font: 700 1.8rem ${p => p.theme.font.title};
-	line-height: 1.8rem;
-	padding: 0.4rem 1.5rem;
-	color: ${p => p.theme.color.alpha};
-	border: 2px solid ${p => p.theme.color.alpha};
-	background-color: ${p => p.theme.color.white};
-	transition: 0.2s;
-	&:hover {
-		color: ${p => p.theme.color.white};
-		background-color: ${p => p.theme.color.alpha};
+		display: flex;
+		align-items: center;
+		span {
+			color: ${p => p.theme.text.dark07};
+			font: 400 1.3rem ${p => p.theme.font.body};
+			margin-left: 1ch;
+		}
 	}
 `

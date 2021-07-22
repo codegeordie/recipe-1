@@ -14,9 +14,14 @@ export const TagFilters = () => {
 		getTags().then(res => setPossibleTags(res))
 	}, [])
 
-	const onSubmit = (filters: Option[]) => {
-		const filterString = filters.map(tag => tag.label)
-		router.push({ query: { ...router.query, filters: filterString } })
+	const onSubmit = (filterArray: Option[]) => {
+		const filterString = filterArray.map(tag => tag.label)
+		const { filters, ...rest } = router.query
+
+		if (_.isEmpty(filterString))
+			if (_.isEmpty(rest)) router.push('/', undefined, { shallow: true })
+			else router.push({ query: rest })
+		else router.push({ query: { ...rest, filters: filterString } })
 	}
 
 	return (

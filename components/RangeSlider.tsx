@@ -1,6 +1,3 @@
-import { useEffect } from 'react'
-import { useRef, useState } from 'react'
-import { useDebounce } from 'react-use'
 import styled, { CSSProperties } from 'styled-components'
 
 type RangeSliderCSSProps = {
@@ -15,31 +12,33 @@ interface SliderTooltipProps extends RangeSliderCSSProps {
 	position: number
 }
 
-interface RangeSliderProps extends RangeSliderCSSProps {
-	/**
-	 * This callback fires whenever any of the toggles on the range slider are adjusted. The min and max values are always passed.
-	 * @param {number} min - The min value the range slide should go down to
-	 * @param {number} max - The max value the range slider should go up to
-	 */
-	onChange: (min: number, max: number) => void
+interface SliderTrackLabelProps extends RangeSliderCSSProps {
+	overlapCheck: number
+}
+
+export interface RangeSliderProps extends RangeSliderCSSProps {
+	onAlphaChange: (alpha: number) => void
+	onBetaChange: (alpha: number) => void
+	alphaValue: number
+	betaValue: number
 	label: string
 	rangeMin: number
 	rangeMax: number
 	step?: number
-	valueMin?: number
-	valueMax?: number
-	debounce?: number
+	minHandlePosition?: number
+	maxHandlePosition?: number
+	highlightWidth?: number
 }
 
 export const RangeSlider = ({
-	onChange,
+	onAlphaChange,
+	onBetaChange,
+	alphaValue,
+	betaValue,
 	label,
 	rangeMin,
 	rangeMax,
 	step = undefined,
-	valueMin,
-	valueMax,
-	debounce = 250,
 	trackWidth = '100%',
 	trackHeight = '6px',
 	trackColor = '#6839394c',
@@ -54,34 +53,12 @@ export const RangeSlider = ({
 		handleColor,
 	}
 
-	const [alphaVal, setAlphaVal] = useState<number>(valueMin ?? rangeMin)
-	const [betaVal, setBetaVal] = useState<number>(valueMax ?? rangeMax)
-	const [minHandlePosition, setMinHandlePosition] = useState(0)
-	const [maxHandlePosition, setMaxHandlePosition] = useState(100)
-	const [highlightWidth, setHighlightWidth] = useState(100)
+	const [min, max] =
+		alphaValue <= betaValue ? [alphaValue, betaValue] : [betaValue, alphaValue]
 
-	const minRef = useRef<number>(rangeMin)
-	const maxRef = useRef<number>(rangeMax)
-
-	useEffect(() => {
-		const [min, max] =
-			alphaVal <= betaVal ? [alphaVal, betaVal] : [betaVal, alphaVal]
-
-		minRef.current = min
-		maxRef.current = max
-
-		const startPercent = (min / rangeMax) * 100
-		const endPercent = (max / rangeMax) * 100
-		const widthPercent = ((max - min) / (rangeMax - rangeMin)) * 100
-		setMinHandlePosition(startPercent)
-		setMaxHandlePosition(endPercent)
-		setHighlightWidth(widthPercent)
-	}, [alphaVal, betaVal])
-
-	useDebounce(() => onChange(minRef.current, maxRef.current), debounce, [
-		alphaVal,
-		betaVal,
-	])
+	const minHandlePosition = (min / rangeMax) * 100
+	const maxHandlePosition = (max / rangeMax) * 100
+	const highlightWidth = ((max - min) / (rangeMax - rangeMin)) * 100
 
 	return (
 		<StyledForm onSubmit={e => e.preventDefault()} {...styleProps}>
@@ -99,19 +76,21 @@ export const RangeSlider = ({
 					name={`${label}_alpha`}
 					min={rangeMin}
 					max={rangeMax}
-					defaultValue={alphaVal}
+					value={alphaValue}
 					step={step}
 					onChange={e => {
-						setAlphaVal(parseInt(e.currentTarget.value))
+						const value = parseInt(e.currentTarget.value)
+
+						onAlphaChange(value)
 					}}
 					{...styleProps}
 				/>
 
 				<StyledValueTooltip position={minHandlePosition} {...styleProps}>
-					{minRef.current}
+					{min}
 				</StyledValueTooltip>
 				<StyledValueTooltip position={maxHandlePosition} {...styleProps}>
-					{maxRef.current}
+					{max}
 				</StyledValueTooltip>
 
 				<StyledRange
@@ -120,10 +99,12 @@ export const RangeSlider = ({
 					name={`${label}_beta`}
 					min={rangeMin}
 					max={rangeMax}
-					defaultValue={betaVal}
+					value={betaValue}
 					step={step}
 					onChange={e => {
-						setBetaVal(parseInt(e.currentTarget.value))
+						const value = parseInt(e.currentTarget.value)
+
+						onBetaChange(value)
 					}}
 					{...styleProps}
 				/>
@@ -176,7 +157,7 @@ const StyledRangeTrack = styled.div<RangeSliderCSSProps>`
 `
 
 //prettier-ignore
-const StyledTrackLabel = styled.label<RangeSliderCSSProps & { overlapCheck: number }>`
+const StyledTrackLabel = styled.label<SliderTrackLabelProps>`
 	position: absolute;
 	top: calc(${p => p.trackHeight} * 2);
 	height: calc(${p => p.trackHeight} * 3);
