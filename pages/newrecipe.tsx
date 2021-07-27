@@ -6,6 +6,9 @@ import { Modal } from '../components/Modal'
 import { RecipeSubmitModal } from '../components/RecipeSubmitModal'
 import { SecondaryButton } from '../components/SecondaryButton'
 import { Toggle } from '../components/Toggle'
+import { DownshiftExample } from '../components/DownshiftDropdown'
+import { Combobox } from '../components/Combobox'
+import { Dropdown } from '../components/Dropdown'
 
 export default function NewRecipe() {
 	return (
@@ -18,6 +21,28 @@ export default function NewRecipe() {
 				</Link>
 				<Toggle />
 			</Nav>
+
+			<Wrapper>
+				<DownshiftExample
+					items={[
+						{ id: '1', value: 'One' },
+						{ id: '2', value: 'Two' },
+						{ id: '3', value: 'Three' },
+						{ id: '4', value: 'Four' },
+						{ id: '5', value: 'Five' },
+					]}
+				/>
+				<Dropdown
+					items={[
+						{ id: '1', value: 'One' },
+						{ id: '2', value: 'Two' },
+						{ id: '3', value: 'Three' },
+						{ id: '4', value: 'Four' },
+						{ id: '5', value: 'Five' },
+					]}
+				/>
+				<Combobox />
+			</Wrapper>
 
 			<Modal buttonText='open modal'>
 				<RecipeSubmitModal />
@@ -34,4 +59,8 @@ const Main = styled.main`
 	align-items: center;
 	color: ${p => p.theme.text.dark09};
 	background-color: ${p => p.theme.color.gamma};
+`
+
+const Wrapper = styled.div`
+	display: flex;
 `

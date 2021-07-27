@@ -44,6 +44,10 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 1.6rem;
   }
 
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
   
   a {
     color: inherit;

@@ -16,7 +16,7 @@ import { useGetRecipes } from '../hooks/useGetRecipes'
 import { SecondaryButton } from '../components/SecondaryButton'
 import { RecipeSubmitModal } from '../components/RecipeSubmitModal'
 import { Modal } from '../components/Modal'
-import { Dropdown } from '../components/Dropdown'
+import { OldDropdown } from '../components/Dropdown'
 
 export default function Home() {
 	const router = useRouter()
@@ -39,7 +39,7 @@ export default function Home() {
 				<Nav>
 					{router.isReady && <Searchbar />}
 
-					{router.isReady && <Dropdown />}
+					{router.isReady && <OldDropdown />}
 
 					<Modal buttonText='New Recipe'>
 						<RecipeSubmitModal />
