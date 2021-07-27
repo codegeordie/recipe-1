@@ -10,7 +10,13 @@ import { DownshiftExample } from '../components/DownshiftDropdown'
 import { Combobox } from '../components/Combobox'
 import { Dropdown } from '../components/Dropdown'
 
+import { signIn, signOut, useSession } from 'next-auth/client'
+
 export default function NewRecipe() {
+	const [session, loading] = useSession()
+
+	if (session) console.log('session :>> ', session)
+
 	return (
 		<Main>
 			<Nav>
@@ -47,6 +53,19 @@ export default function NewRecipe() {
 			<Modal buttonText='open modal'>
 				<RecipeSubmitModal />
 			</Modal>
+
+			{!session && (
+				<>
+					Not signed in <br />
+					<button onClick={() => signIn()}>Sign in</button>
+				</>
+			)}
+			{session && (
+				<>
+					Signed in as {session.uid} <br />
+					<button onClick={() => signOut()}>Sign out</button>
+				</>
+			)}
 		</Main>
 	)
 }

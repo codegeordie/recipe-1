@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Select from 'react-select'
+import { useSession } from 'next-auth/client'
 import {
 	Formik,
 	Field,
@@ -31,10 +32,11 @@ const ImageUploadInput = () => {
 
 export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 	const { submitRecipe } = useSubmitRecipe()
-
+	const [session, loading] = useSession()
 	// const selectIngrs = ingrArray.map(i => {
 	// 	return { value: i._id, label: i.name }
 	// })
+	console.log('session.uid :>> ', session.uid)
 
 	const ingredientSelect = ingrArray.map(i => {
 		return (
@@ -65,9 +67,9 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 				initialValues={initialValues}
 				//enableReinitialize={true}
 				onSubmit={async values => {
+					values.user = session.uid
 					if (values.photo) {
 						let data = new FormData()
-
 						data.append('photo', values.photo)
 
 						const { url } = await fetch(
@@ -80,6 +82,7 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 
 						values.image = url
 					}
+
 					submitRecipe(values)
 				}}
 			>

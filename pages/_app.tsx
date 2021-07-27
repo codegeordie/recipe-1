@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import React from 'react'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import { Provider } from 'next-auth/client'
 import { theme } from '../components/Theme'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
@@ -17,7 +18,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 			</Head>
 			<GlobalStyle />
 			<ThemeProvider theme={theme}>
-				<Component {...pageProps} />
+				<Provider session={pageProps.session}>
+					<Component {...pageProps} />
+				</Provider>
 			</ThemeProvider>
 		</>
 	)
