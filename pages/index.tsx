@@ -17,14 +17,23 @@ import { SecondaryButton } from '../components/SecondaryButton'
 import { RecipeSubmitModal } from '../components/RecipeSubmitModal'
 import { Modal } from '../components/Modal'
 import { OldDropdown } from '../components/Dropdown'
+import { useSession } from 'next-auth/client'
 
 export default function Home() {
 	const router = useRouter()
+	///
+	const [session, loading] = useSession()
+	///
 	const [recipeArray, setRecipeArray] = useState<Recipe[]>([])
 	const { getRecipes } = useGetRecipes()
 
+	// useEffect(() => {
+	// 	if (router.isReady)
+	// 		getRecipes(router.query).then(recipes => setRecipeArray(recipes))
+	// }, [router.query])
+
 	useEffect(() => {
-		if (router.isReady)
+		if (router.isReady && session)
 			getRecipes(router.query).then(recipes => setRecipeArray(recipes))
 	}, [router.query])
 

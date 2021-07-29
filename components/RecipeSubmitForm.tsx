@@ -36,7 +36,7 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 	// const selectIngrs = ingrArray.map(i => {
 	// 	return { value: i._id, label: i.name }
 	// })
-	console.log('session.uid :>> ', session.uid)
+	//console.log('session.uid :>> ', session.uid)
 
 	const ingredientSelect = ingrArray.map(i => {
 		return (
@@ -67,7 +67,7 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 				initialValues={initialValues}
 				//enableReinitialize={true}
 				onSubmit={async values => {
-					values.user = session.uid
+					values.uid = session.uid
 					if (values.photo) {
 						let data = new FormData()
 						data.append('photo', values.photo)

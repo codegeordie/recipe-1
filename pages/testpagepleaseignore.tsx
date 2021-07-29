@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Nav } from '../components/Nav'
 import { Modal } from '../components/Modal'
@@ -11,11 +11,24 @@ import { Combobox } from '../components/Combobox'
 import { Dropdown } from '../components/Dropdown'
 
 import { signIn, signOut, useSession } from 'next-auth/client'
+import { useGetFavorites, useSetFavorite } from '../hooks/useFavorite'
+import { useRouter } from 'next/dist/client/router'
+import { RecipeList } from '../components/RecipeList'
 
 export default function NewRecipe() {
 	const [session, loading] = useSession()
 
-	if (session) console.log('session :>> ', session)
+	const router = useRouter()
+	const [recipeArray, setRecipeArray] = useState([])
+	//const { getRecipes } = useGetRecipes()
+	const { setFavorite } = useSetFavorite()
+	const { getFavorites } = useGetFavorites()
+
+	// useEffect(() => {
+	// 	if (router.isReady && session)
+	// 		getFavorites({ id: session.uid }).then(result => console.log(result))
+	// 	// getFavorites(router.query).then(recipes => setRecipeArray(recipes))
+	// }, [router.query])
 
 	return (
 		<Main>
@@ -63,7 +76,28 @@ export default function NewRecipe() {
 			{session && (
 				<>
 					Signed in as {session.uid} <br />
+					<button
+						onClick={() =>
+							setFavorite({
+								uid: session.uid,
+								recipeId: '60d0ecb36d07e32f31ff700c',
+							})
+						}
+					>
+						Fav
+					</button>
+					<button
+						onClick={() =>
+							getFavorites({ id: session.uid }).then(favoritesFull => {
+								console.log('favoritesFull :>> ', favoritesFull)
+								setRecipeArray(favoritesFull[0].favoritesFull)
+							})
+						}
+					>
+						SHOW FAV
+					</button>
 					<button onClick={() => signOut()}>Sign out</button>
+					{recipeArray && <RecipeList recipesToRender={recipeArray} />}
 				</>
 			)}
 		</Main>
