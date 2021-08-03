@@ -1,7 +1,8 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
-import Adapters from 'next-auth/adapters'
-import User, { UserSchema } from '../../../models/User'
+// import Adapters from 'next-auth/adapters'
+// import User, { UserSchema } from '../../../models/User'
+import jwt from 'jsonwebtoken'
 
 export default NextAuth({
 	providers: [
@@ -14,26 +15,42 @@ export default NextAuth({
 			clientSecret: process.env.GOOGLE_SECRET,
 		}),
 	],
-	// Optional SQL or MongoDB database to persist users
 	database: process.env.DATABASE_URL,
-	adapter: Adapters.TypeORM.Adapter(
-		// The first argument should be a database connection string or TypeORM config object
-		process.env.DATABASE_URL,
-		// The second argument can be used to pass custom models and schemas
-		{
-			models: {
-				User: { model: User, schema: UserSchema },
-				// User: Model.User
-			},
-		}
-	),
+	session: {
+		jwt: true,
+	},
+	jwt: {
+		secret: process.env.JWT_SECRET,
+		encode: async params =>
+			params && params.token
+				? jwt.sign(params.token, params.secret, { algorithm: 'HS512' })
+				: '',
+		decode: async params =>
+			params && params.token ? jwt.verify(params.token, params.secret) : '',
+	},
 	callbacks: {
-		async session(session, user) {
-			if (!user) throw new Error('session callback: no user found')
-			session.uid = user.id
-			console.log('session :>> ', session)
-
+		jwt: async (token, user) => {
+			// Add auth_time to token on initial sign in
+			if (!!user) token.auth_time = Math.floor(Date.now() / 1000)
+			return token
+		},
+		session: async (session, token) => {
+			if (!session?.user) {
+				return session
+			}
+			session.user.uid = token.sub
 			return session
 		},
 	},
+	// adapter: Adapters.TypeORM.Adapter(
+	// 	// The first argument should be a database connection string or TypeORM config object
+	// 	process.env.DATABASE_URL,
+	// 	// The second argument can be used to pass custom models and schemas
+	// 	{
+	// 		models: {
+	// 			User: { model: User, schema: UserSchema },
+	// 			// User: Model.User
+	// 		},
+	// 	}
+	// ),
 })

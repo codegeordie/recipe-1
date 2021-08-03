@@ -27,15 +27,15 @@ export default function Home() {
 	const [recipeArray, setRecipeArray] = useState<Recipe[]>([])
 	const { getRecipes } = useGetRecipes()
 
-	// useEffect(() => {
-	// 	if (router.isReady)
-	// 		getRecipes(router.query).then(recipes => setRecipeArray(recipes))
-	// }, [router.query])
-
 	useEffect(() => {
-		if (router.isReady && session)
+		if (router.isReady)
 			getRecipes(router.query).then(recipes => setRecipeArray(recipes))
 	}, [router.query])
+
+	// useEffect(() => {
+	// 	if (router.isReady && session)
+	// 		getRecipes(router.query).then(recipes => setRecipeArray(recipes))
+	// }, [router.query])
 
 	return (
 		<>

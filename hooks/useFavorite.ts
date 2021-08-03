@@ -20,9 +20,9 @@ export const useGetFavorites = () => {
 
 		console.log('search(in useFavorite) :>> ', search)
 
-		const data = await fetch(
-			`http://localhost:5001/api/favorites/?${search}`
-		).then(res => res.json())
+		const data = await fetch(`http://localhost:5001/api/favorites/?${search}`, {
+			credentials: 'include',
+		}).then(res => res.json())
 
 		console.log('data :>> ', data)
 

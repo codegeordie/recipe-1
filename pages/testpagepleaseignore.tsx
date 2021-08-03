@@ -30,6 +30,23 @@ export default function NewRecipe() {
 	// 	// getFavorites(router.query).then(recipes => setRecipeArray(recipes))
 	// }, [router.query])
 
+	// useEffect(() => {
+	// 	test()
+	// }, [session])
+
+	// const test = async () => {
+	// 	if (session) {
+	// 		const quer = { token: session.accessToken }
+	// 		const data = await fetch(`http://localhost:5001/api/token`, {
+	// 			method: 'POST',
+	// 			body: JSON.stringify(quer),
+	// 			headers: { 'Content-Type': 'application/json' },
+	// 		})
+	// 	}
+	// }
+
+	console.log('testpage / session :>> ', session)
+
 	return (
 		<Main>
 			<Nav>
@@ -75,11 +92,11 @@ export default function NewRecipe() {
 			)}
 			{session && (
 				<>
-					Signed in as {session.uid} <br />
+					Signed in as {session.user.uid} <br />
 					<button
 						onClick={() =>
 							setFavorite({
-								uid: session.uid,
+								uid: session.user.uid,
 								recipeId: '60d0ecb36d07e32f31ff700c',
 							})
 						}
@@ -88,7 +105,7 @@ export default function NewRecipe() {
 					</button>
 					<button
 						onClick={() =>
-							getFavorites({ id: session.uid }).then(favoritesFull => {
+							getFavorites({ id: session.user.uid }).then(favoritesFull => {
 								console.log('favoritesFull :>> ', favoritesFull)
 								setRecipeArray(favoritesFull[0].favoritesFull)
 							})
