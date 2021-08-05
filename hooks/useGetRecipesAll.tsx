@@ -7,7 +7,7 @@ export const useGetRecipesAll = () => {
 		// const search = qs.stringify(query)
 
 		const data: Recipe[] = await fetch(
-			`http://localhost:5001/api/allrecipes/`
+			`http://localhost:5001/api/recipes/all`
 		).then(res => res.json())
 
 		return data

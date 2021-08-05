@@ -6,7 +6,7 @@ export const useGetIngredients = () => {
 		const search = qs.stringify(query)
 
 		const data: Ingredient[] = await fetch(
-			`http://localhost:5001/api/ingredients_by_name/?${search}`
+			`http://localhost:5001/api/ingredients/?${search}`
 		).then(res => res.json())
 
 		return data

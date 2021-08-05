@@ -44,7 +44,7 @@ export const getStaticProps: GetStaticProps = async context => {
 	if (typeof recipeId !== 'string') throw new Error(`getStaticProps ID failed`)
 
 	const { getRecipeId } = useGetRecipeId()
-	const recipeArr = await getRecipeId({ id: recipeId })
+	const recipeArr = await getRecipeId({ recipeId })
 	const recipe = recipeArr[0]
 
 	return {
