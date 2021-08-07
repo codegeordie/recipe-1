@@ -11,9 +11,9 @@ import {
 	useFormikContext,
 } from 'formik'
 import { IngredientsProps } from '../server/interfaces'
-import { useSubmitRecipe } from '../hooks/useSubmitRecipe'
 import { SecondaryButton } from './SecondaryButton'
 import { PrimaryButton } from './PrimaryButton'
+import { submitRecipe } from '../functions/api/recipes'
 
 const ImageUploadInput = () => {
 	const formikProps = useFormikContext()
@@ -31,7 +31,6 @@ const ImageUploadInput = () => {
 }
 
 export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
-	const { submitRecipe } = useSubmitRecipe()
 	const [session, loading] = useSession()
 	// const selectIngrs = ingrArray.map(i => {
 	// 	return { value: i._id, label: i.name }

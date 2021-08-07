@@ -3,12 +3,12 @@ import styled from 'styled-components'
 import { RArrayAsProps } from '../server/interfaces'
 import { RecipeCard } from './RecipeCard'
 
-export const RecipeList = ({ recipesToRender }: RArrayAsProps) => {
-	const recipes = recipesToRender.map(recipe => {
-		return <RecipeCard key={recipe._id} recipe={recipe} />
+export const RecipeList = ({ recipes, id }: RArrayAsProps) => {
+	const recipesOutput = recipes.map(recipe => {
+		return <RecipeCard key={id + recipe._id} recipe={recipe} />
 	})
 
-	return <StyledRecipeList>{recipes}</StyledRecipeList>
+	return <StyledRecipeList>{recipesOutput}</StyledRecipeList>
 }
 
 const StyledRecipeList = styled.ul`

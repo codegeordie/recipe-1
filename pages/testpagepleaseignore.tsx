@@ -11,39 +11,14 @@ import { Combobox } from '../components/Combobox'
 import { Dropdown } from '../components/Dropdown'
 
 import { signIn, signOut, useSession } from 'next-auth/client'
-import { useGetFavorites, useSetFavorite } from '../hooks/useFavorite'
+import { getFavorites, setFavorite } from '../functions/api/users'
 import { useRouter } from 'next/dist/client/router'
 import { RecipeList } from '../components/RecipeList'
 
 export default function NewRecipe() {
-	const [session, loading] = useSession()
-
 	const router = useRouter()
+	const [session, loading] = useSession()
 	const [recipeArray, setRecipeArray] = useState([])
-	//const { getRecipes } = useGetRecipes()
-	const { setFavorite } = useSetFavorite()
-	const { getFavorites } = useGetFavorites()
-
-	// useEffect(() => {
-	// 	if (router.isReady && session)
-	// 		getFavorites({ id: session.uid }).then(result => console.log(result))
-	// 	// getFavorites(router.query).then(recipes => setRecipeArray(recipes))
-	// }, [router.query])
-
-	// useEffect(() => {
-	// 	test()
-	// }, [session])
-
-	// const test = async () => {
-	// 	if (session) {
-	// 		const quer = { token: session.accessToken }
-	// 		const data = await fetch(`http://localhost:5001/api/token`, {
-	// 			method: 'POST',
-	// 			body: JSON.stringify(quer),
-	// 			headers: { 'Content-Type': 'application/json' },
-	// 		})
-	// 	}
-	// }
 
 	console.log('testpage / session :>> ', session)
 
@@ -105,16 +80,19 @@ export default function NewRecipe() {
 					</button>
 					<button
 						onClick={() =>
-							getFavorites({ id: session.user.uid }).then(favoritesFull => {
-								console.log('favoritesFull :>> ', favoritesFull)
-								setRecipeArray(favoritesFull[0].favoritesFull)
+							getFavorites({ id: session.user.uid }).then(favorites => {
+								console.log('favorites :>> ', favorites)
+								setRecipeArray(favorites)
+								// setRecipeArray(favoritesFull[0].favoritesFull)
 							})
 						}
 					>
 						SHOW FAV
 					</button>
 					<button onClick={() => signOut()}>Sign out</button>
-					{recipeArray && <RecipeList recipesToRender={recipeArray} />}
+					{recipeArray && (
+						<RecipeList id='testrecipelist' recipes={recipeArray} />
+					)}
 				</>
 			)}
 		</Main>

@@ -1,31 +1,30 @@
 import Head from 'next/head'
-import Link from 'next/link'
+import { signIn, signOut, useSession } from 'next-auth/client'
 import { useRouter } from 'next/dist/client/router'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import _, { isString } from 'lodash'
+import _ from 'lodash'
 
 import { Nav } from '../components/Nav'
 import { Searchbar } from '../components/Searchbar'
 import { RecipeList } from '../components/RecipeList'
 import { TagFilters } from '../components/TagFilters'
 import { CalorieSlider } from '../components/CalorieSlider'
-
-import { Recipe } from '../server/interfaces'
-import { useGetRecipes } from '../hooks/useGetRecipes'
+import { PrimaryButton } from '../components/PrimaryButton'
 import { SecondaryButton } from '../components/SecondaryButton'
 import { RecipeSubmitModal } from '../components/RecipeSubmitModal'
 import { Modal } from '../components/Modal'
 import { OldDropdown } from '../components/Dropdown'
-import { useSession } from 'next-auth/client'
+import { Recipe } from '../server/interfaces'
+
+import { getRecipes } from '../functions/api/recipes'
+import { getFavorites } from '../functions/api/users'
 
 export default function Home() {
 	const router = useRouter()
-	///
 	const [session, loading] = useSession()
-	///
 	const [recipeArray, setRecipeArray] = useState<Recipe[]>([])
-	const { getRecipes } = useGetRecipes()
+	// const [favoriteArray, setFavoriteArray] = useState<Recipe[]>([])
 
 	useEffect(() => {
 		if (router.isReady)
@@ -33,9 +32,12 @@ export default function Home() {
 	}, [router.query])
 
 	// useEffect(() => {
-	// 	if (router.isReady && session)
-	// 		getRecipes(router.query).then(recipes => setRecipeArray(recipes))
-	// }, [router.query])
+	// 	if (session && session.user) {
+	// 		getFavorites({ id: session.user.uid }).then(recipes =>
+	// 			setFavoriteArray(recipes)
+	// 		)
+	// 	}
+	// }, [session])
 
 	return (
 		<>
@@ -48,24 +50,39 @@ export default function Home() {
 				<Nav>
 					{router.isReady && <Searchbar />}
 
-					{router.isReady && <OldDropdown />}
-
-					<Modal buttonText='New Recipe'>
-						<RecipeSubmitModal />
-					</Modal>
-					{/* <Link href={`/newrecipe`}>
-						<a>
-							<SecondaryButton>New Recipe</SecondaryButton>
-						</a>
-					</Link> */}
+					{/* {router.isReady && <OldDropdown />} */}
+					<StyledNavButtonsWrapper>
+						{session && (
+							<>
+								<Modal buttonText='New Recipe'>
+									<RecipeSubmitModal />
+								</Modal>
+								<SecondaryButton onClick={() => signOut()}>
+									Log Out
+								</SecondaryButton>
+							</>
+						)}
+						{!session && (
+							<>
+								<PrimaryButton onClick={() => signIn()}>Login</PrimaryButton>
+							</>
+						)}
+					</StyledNavButtonsWrapper>
 				</Nav>
-				<StyledFlexRow>
-					<StyledFlexColumn>
+				<StyledContentWrapper>
+					<StyledSidebarWrapper>
 						<TagFilters />
 						<CalorieSlider rangeMin={0} rangeMax={800} />
-					</StyledFlexColumn>
-					{recipeArray && <RecipeList recipesToRender={recipeArray} />}
-				</StyledFlexRow>
+					</StyledSidebarWrapper>
+					<StyledRecipeListsWrapper>
+						{/* {session && (
+							<StyledFavoritesWrapper>
+								<RecipeList id='flist' recipes={favoriteArray} />
+							</StyledFavoritesWrapper>
+						)} */}
+						{recipeArray && <RecipeList id='rlist' recipes={recipeArray} />}
+					</StyledRecipeListsWrapper>
+				</StyledContentWrapper>
 			</Main>
 		</>
 	)
@@ -76,19 +93,35 @@ const Main = styled.main`
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
-	//align-items: center;
 	background-color: ${p => p.theme.color.gamma};
 `
 
-const StyledFlexRow = styled.div`
+const StyledContentWrapper = styled.div`
 	display: flex;
 	flex: 1;
 `
 
-const StyledFlexColumn = styled.div`
+const StyledSidebarWrapper = styled.div`
 	width: 13vw;
+	min-width: 13vw;
 	display: flex;
 	flex-direction: column;
 	background-color: ${p => p.theme.color.white};
 	padding: 0.5rem;
+`
+
+const StyledRecipeListsWrapper = styled.div`
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+`
+
+const StyledNavButtonsWrapper = styled.div`
+	display: flex;
+	justify-content: flex-end;
+`
+
+const StyledFavoritesWrapper = styled.div`
+	background-color: #ddeeed;
+	margin: 2rem;
 `

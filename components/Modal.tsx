@@ -34,7 +34,7 @@ export const Modal: React.FC<ModalProps> = ({ children, buttonText }) => {
 
 	return (
 		<>
-			<PrimaryButton onClick={openModal}>{buttonText}</PrimaryButton>
+			<SecondaryButton onClick={openModal}>{buttonText}</SecondaryButton>
 			{containerRef.current
 				? ReactDOM.createPortal(
 						<AnimatePresence>

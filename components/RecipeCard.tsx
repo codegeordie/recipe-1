@@ -15,6 +15,9 @@ export const RecipeCard = ({ recipe }: RecipeAsProps) => {
 				</InfoWrapper>
 				<StatsWrapper>
 					<FoodStat>{recipe.serving_cal}cal</FoodStat>
+
+					{recipe.favorited && <FoodStat>❤️</FoodStat>}
+
 					<FoodStat>
 						{Dinero({
 							amount: recipe.cost.value,

@@ -90,7 +90,8 @@ export type GetRecipesQuery = {
 // 	| undefined
 
 export interface RArrayAsProps {
-	recipesToRender: Recipe[]
+	recipes: Recipe[]
+	id: string
 }
 
 export interface RecipeAsProps {

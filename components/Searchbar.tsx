@@ -6,14 +6,14 @@ import _ from 'lodash'
 
 export const Searchbar = () => {
 	const router = useRouter()
-	const [searchTerm, setSearchTerm] = useState(router.query.name ?? '')
+	const [searchTerm, setSearchTerm] = useState(router.query.search ?? '')
 
 	useEffect(() => {
-		if (router.query.name) {
+		if (router.query.search) {
 			setSearchTerm(
-				Array.isArray(router.query.name)
-					? router.query.name[0]
-					: router.query.name
+				Array.isArray(router.query.search)
+					? router.query.search[0]
+					: router.query.search
 			)
 		} else {
 			setSearchTerm('')
@@ -22,12 +22,12 @@ export const Searchbar = () => {
 
 	useDebounce(
 		() => {
-			const { name, ...rest } = router.query
+			const { search, ...rest } = router.query
 			if (!searchTerm) {
 				if (_.isEmpty(rest)) router.push('/', undefined, { shallow: true })
 				else router.push({ query: rest })
 			} else {
-				router.push({ query: { ...rest, name: searchTerm } })
+				router.push({ query: { ...rest, search: searchTerm } })
 			}
 		},
 		250,

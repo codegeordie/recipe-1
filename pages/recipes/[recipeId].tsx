@@ -1,15 +1,14 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
+import { Nav } from '../../components/Nav'
 import { Ingredients } from '../../components/Ingredients'
 import { RecipeDetail } from '../../components/RecipeDetail'
-import { Nav } from '../../components/Nav'
 import { SecondaryButton } from '../../components/SecondaryButton'
 
-import { useGetRecipesAll } from '../../hooks/useGetRecipesAll'
 import { RecipeAsProps } from '../../server/interfaces'
-import { useGetRecipeId } from '../../hooks/useGetRecipeId'
+import { getRecipeById, getRecipesAll } from '../../functions/api/recipes'
 
 export default function RecipeId({ recipe }: RecipeAsProps) {
 	return (
@@ -43,8 +42,7 @@ export const getStaticProps: GetStaticProps = async context => {
 	const recipeId = context?.params?.recipeId
 	if (typeof recipeId !== 'string') throw new Error(`getStaticProps ID failed`)
 
-	const { getRecipeId } = useGetRecipeId()
-	const recipeArr = await getRecipeId({ recipeId })
+	const recipeArr = await getRecipeById(recipeId)
 	const recipe = recipeArr[0]
 
 	return {
@@ -53,7 +51,6 @@ export const getStaticProps: GetStaticProps = async context => {
 }
 
 export async function getStaticPaths() {
-	const { getRecipesAll } = useGetRecipesAll()
 	const recipe = await getRecipesAll()
 	const paths = recipe.map(i => `/recipes/${i._id}`)
 
