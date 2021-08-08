@@ -13,10 +13,23 @@ export const RecipeList = ({ recipes, id }: RArrayAsProps) => {
 
 const StyledRecipeList = styled.ul`
 	position: relative;
-	padding: 1rem;
-	display: flex;
+	//padding: 0 10px;
+	/* display: flex;
 	flex-wrap: wrap;
-	flex: 1;
-	justify-content: center;
-	align-content: flex-start;
+	justify-content: center; */
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-auto-rows: clamp(100px, 35vw, 350px);
+	gap: 10px;
+
+	@media only screen and (min-width: 768px) {
+		grid-template-columns: repeat(3, 1fr);
+	}
+	@media only screen and (min-width: 900px) {
+		grid-template-columns: repeat(4, 1fr);
+		gap: 15px;
+	}
+	/* @media only screen and (min-width: 1200px) {
+		grid-template-columns: repeat(5, 1fr);
+	} */
 `

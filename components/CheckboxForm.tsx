@@ -36,7 +36,7 @@ export const CheckboxForm = ({
 			>
 				{({ handleSubmit }) => (
 					<Form onChangeCapture={() => handleSubmit()}>
-						<h4 id='checkbox-group'>Filter By</h4>
+						{/* <h4 id='checkbox-group'>Show only:</h4> */}
 						<StyledCheckboxWrapper
 							role='group'
 							aria-labelledby='checkbox-group'
@@ -55,28 +55,31 @@ export const CheckboxForm = ({
 const StyledForm = styled.div`
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	//align-items: center;
+	//border: 1px solid skyblue;
 	div {
 		//font: 400 1.3rem ${p => p.theme.font.body};
 	}
-	h4 {
+	/* h4 {
+		padding: 0.5rem;
 		margin-bottom: 1.5rem;
-		text-align: center;
+		//text-align: center;
 		font: 200 1.6rem ${p => p.theme.font.title};
+		color: ${p => p.theme.text.dark05};
 		border-bottom: 1px solid ${p => p.theme.text.dark03};
-	}
+	} */
 `
 
 const StyledCheckboxWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	label {
-		padding: 0.5rem;
+		padding: 5px 0;
 		display: flex;
 		align-items: center;
 		span {
 			color: ${p => p.theme.text.dark07};
-			font: 400 1.3rem ${p => p.theme.font.body};
+			font: 400 1.5rem ${p => p.theme.font.body};
 			margin-left: 1ch;
 		}
 	}

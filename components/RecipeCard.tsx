@@ -52,13 +52,14 @@ const FoodDesc = styled.p`
 const StyledRecipeCard = styled.li`
 	cursor: pointer;
 	position: relative;
-	margin: 0.75rem;
-	width: 250px;
-	height: 300px;
+	//margin: 0.75rem;
+	//width: 250px;
+	//height: 300px;
 	background-color: ${p => p.theme.color.white};
 	border: 3px solid ${p => p.theme.color.white};
 	overflow: hidden;
 	transition: 0.3s;
+	box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.2);
 	&:hover {
 		box-shadow: 1px 1px 15px -5px ${p => p.theme.color.delta};
 	}
@@ -79,7 +80,7 @@ const StyledRecipeImage = styled.img`
 const FoodTitle = styled.h4`
 	padding: 1rem;
 	text-align: center;
-	font: 700 2.2rem ${p => p.theme.font.title};
+	font: 700 1.8rem ${p => p.theme.font.title};
 	color: ${p => p.theme.text.dark07};
 	//color: ${p => p.theme.color.delta};
 `
@@ -98,6 +99,6 @@ const StatsWrapper = styled.div`
 const FoodStat = styled.p`
 	flex: 1;
 	text-align: center;
-	font: 200 1.6rem ${p => p.theme.font.body};
+	font: 200 1.5rem ${p => p.theme.font.body};
 	color: ${p => p.theme.text.dark07};
 `

@@ -1,18 +1,32 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-interface ToggleProps {}
+type ToggleProps = {
+	label?: string
+}
 
-export const Toggle: React.FC<ToggleProps> = () => {
+export const Toggle: React.FC<ToggleProps> = ({ label }) => {
 	return (
-		<label>
+		<StyledWrapper>
 			<StyledCheckbox type='checkbox'></StyledCheckbox>
 			<StyledToggle>
 				<StyledHandle />
 			</StyledToggle>
-		</label>
+			{label && <StyledLabel>{label}</StyledLabel>}
+		</StyledWrapper>
 	)
 }
+
+const StyledWrapper = styled.label`
+	display: flex;
+	align-items: center;
+`
+
+const StyledLabel = styled.span`
+	margin-left: 1ch;
+	font: 400 1.5rem ${p => p.theme.font.body};
+	color: ${p => p.theme.text.dark07};
+`
 
 const StyledHandle = styled.div``
 

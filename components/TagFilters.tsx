@@ -1,6 +1,7 @@
 import _, { isString } from 'lodash'
 import { useRouter } from 'next/dist/client/router'
 import React, { useState, useEffect } from 'react'
+import styled from 'styled-components'
 import { getTags } from '../functions/api/tags'
 import { Tag, Option } from '../server/interfaces'
 import { CheckboxForm } from './CheckboxForm'
@@ -24,7 +25,7 @@ export const TagFilters = () => {
 	}
 
 	return (
-		<>
+		<StyledTagFilters>
 			{possibleTags && router.isReady && (
 				<CheckboxForm
 					options={possibleTags.map(tag => ({
@@ -39,6 +40,11 @@ export const TagFilters = () => {
 					onSubmit={onSubmit}
 				/>
 			)}
-		</>
+		</StyledTagFilters>
 	)
 }
+
+const StyledTagFilters = styled.div`
+	//border: 1px solid pink;
+	margin-bottom: 25px;
+`

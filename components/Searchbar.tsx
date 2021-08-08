@@ -60,6 +60,7 @@ const StyledInput = styled.input`
 	padding: 0 1.5rem;
 	outline: none;
 	border: none;
+	border-radius: 5px;
 	font: 400 2.2rem ${p => p.theme.font.title};
 	color: ${p => p.theme.text.dark07};
 	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);

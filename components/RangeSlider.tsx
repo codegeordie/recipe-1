@@ -144,7 +144,7 @@ const StyledForm = styled.form<RangeSliderCSSProps>`
 const StyledFormLabel = styled.label`
 	align-self: center;
 	padding-bottom: 0.5rem;
-	font: 400 1.2rem ${p => p.theme.font.body};
+	font: 400 1.3rem ${p => p.theme.font.body};
 `
 
 const StyledRangeTrack = styled.div<RangeSliderCSSProps>`
@@ -245,7 +245,7 @@ const StyledValueTooltip = styled.label<SliderTooltipProps>`
 	transform: translateX(-${p => p.position}%);
 	display: flex;
 	align-items: flex-end;
-	//color: ${p => p.trackColor};
+	color: ${p => p.theme.text.dark07};
 	font-weight: 700;
 	font-size: 1.2rem;
 	padding: 0 0.5ch;

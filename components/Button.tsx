@@ -16,7 +16,7 @@ const StyledButton = styled.button<ButtonProps>`
 	outline: none;
 	border: none;
 	background: none;
-	border-radius: 4px;
+	border-radius: 5px;
 	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
 	font: 700 1.4rem ${p => p.theme.font.button};
 	line-height: 1.5;
