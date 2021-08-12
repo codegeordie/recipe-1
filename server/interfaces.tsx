@@ -3,14 +3,16 @@ import { Currency } from 'dinero.js'
 type RecipeIngredients = {
 	ingredient_id: string
 	quantity: number
-	measure: 'g' | 'oz' | 'lb'
+	measure: 'g' | 'oz' | 'lb' | string
 }
 
-export interface RecipeSubmittal {
+export type RecipeSubmittal = {
+	uid: string
+	//public?: boolean
 	name: string
 	description: string
 	image: string
-	//	tags: string[];
+	photo: any
 	servings: number
 	ingredients: RecipeIngredients[]
 }

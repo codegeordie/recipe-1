@@ -11,8 +11,7 @@ import { Searchbar } from '../components/Searchbar'
 import { RecipeList } from '../components/RecipeList'
 import { TagFilters } from '../components/TagFilters'
 import { CalorieSlider } from '../components/CalorieSlider'
-import { PrimaryButton } from '../components/PrimaryButton'
-import { SecondaryButton } from '../components/SecondaryButton'
+import { PrimaryButton, SecondaryButton } from '../components/Button'
 import { RecipeSubmitModal } from '../components/RecipeSubmitModal'
 import { Modal } from '../components/Modal'
 import { OldDropdown } from '../components/Dropdown'
@@ -111,16 +110,26 @@ const StyledPageGrid = styled.div`
 	padding: 0 10px;
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
-	grid-template-rows: 100px minmax(calc(100vh - 75px), auto);
+	grid-template-rows: 100px minmax(calc(100vh - 100px), auto);
 `
 
 const Aside = styled.aside`
-	grid-column: 1 / 3;
+	grid-column: 1 / 4;
 	padding-right: 15px;
+	@media only screen and (min-width: 768px) {
+		grid-column: 1 / 3;
+	}
+	@media only screen and (min-width: 992px) {
+		padding-right: 30px;
+	}
 `
 
 const Main = styled.main`
-	grid-column: 3 / 13;
+	grid-column: 4 / 13;
+
+	@media only screen and (min-width: 768px) {
+		grid-column: 3 / 13;
+	}
 `
 
 const StyledNavFlexSpacer = styled.div`

@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import { AnimatePresence, motion } from 'framer-motion'
-import { PrimaryButton } from './PrimaryButton'
-import { SecondaryButton } from './SecondaryButton'
+import { PrimaryButton, SecondaryButton } from './Button'
 
 interface ModalProps {
 	children: React.ReactNode
@@ -118,19 +117,19 @@ const Wrapper = styled.div`
 `
 
 const StyledModal = styled.div`
-	padding: 0.5rem;
+	padding: 10px;
 	background: white;
-	border-radius: 8px;
+	border-radius: 9px;
 `
 
 const FlexRow = styled.div`
 	display: flex;
 	justify-content: flex-end;
-	padding: 1rem;
+	//padding: 1rem;
 `
 
 const StyledModalContent = styled.div`
-	padding: 0.5rem;
+	//padding: 0.5rem;
 `
 
 // .modal__header {

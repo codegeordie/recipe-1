@@ -1,49 +1,24 @@
 import React from 'react'
 import styled from 'styled-components'
-import Select from 'react-select'
 import { useSession } from 'next-auth/client'
-import {
-	Formik,
-	Field,
-	Form,
-	ErrorMessage,
-	FieldArray,
-	useFormikContext,
-} from 'formik'
-import { IngredientsProps } from '../server/interfaces'
-import { SecondaryButton } from './SecondaryButton'
-import { PrimaryButton } from './PrimaryButton'
+import { FieldArray, useFormik, FormikProvider } from 'formik'
+import { IngredientsProps, RecipeSubmittal } from '../server/interfaces'
 import { submitRecipe } from '../functions/api/recipes'
-
-const ImageUploadInput = () => {
-	const formikProps = useFormikContext()
-	return (
-		<StyledInput
-			id='file'
-			type='file'
-			name='file'
-			onChange={(e: React.FormEvent<HTMLInputElement>) => {
-				if (e.currentTarget.files)
-					formikProps.setFieldValue('photo', e.currentTarget.files[0])
-			}}
-		/>
-	)
-}
+import {
+	PrimaryButton,
+	RoundButton,
+	SecondaryButton,
+	TextButton,
+} from './Button'
+import { DropdownFormik } from './DropdownFormik'
+import { InputFormik } from './InputFormik'
+import { TextareaFormik } from './TextareaFormik'
+import { FileInputFormik } from './FileInputFormik'
+import { NumInputFormik } from './NumInputFormik'
+import { Toggle } from './Toggle'
 
 export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 	const [session, loading] = useSession()
-	// const selectIngrs = ingrArray.map(i => {
-	// 	return { value: i._id, label: i.name }
-	// })
-	//console.log('session.uid :>> ', session.uid)
-
-	const ingredientSelect = ingrArray.map(i => {
-		return (
-			<option key={i._id} value={i._id}>
-				{i.name}
-			</option>
-		)
-	})
 
 	const ingrInitialValues = {
 		ingredient_id: ingrArray[0]._id,
@@ -52,6 +27,7 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 	}
 
 	const initialValues = {
+		uid: '',
 		name: '',
 		description: '',
 		image: '',
@@ -60,170 +36,190 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 		ingredients: [ingrInitialValues],
 	}
 
+	const onSubmit = async (values: RecipeSubmittal) => {
+		if (!session) throw Error('not logged in, cannot submit')
+		values.uid = session.uid as string
+
+		if (values.photo) {
+			let data = new FormData()
+			data.append('photo', values.photo)
+
+			const { url } = await fetch('http://localhost:5001/api/imagesubmit', {
+				method: 'POST',
+				body: data,
+			}).then(res => res.json())
+
+			values.image = url
+		}
+		submitRecipe(values)
+	}
+
+	const formik = useFormik({
+		initialValues,
+		onSubmit,
+		//onSubmit: values => alert(JSON.stringify(values, null, 2)),
+	})
+
 	return (
-		<>
-			<Formik
-				initialValues={initialValues}
-				//enableReinitialize={true}
-				onSubmit={async values => {
-					values.uid = session.uid
-					if (values.photo) {
-						let data = new FormData()
-						data.append('photo', values.photo)
-
-						const { url } = await fetch(
-							'http://localhost:5001/api/imagesubmit',
-							{
-								method: 'post',
-								body: data,
-							}
-						).then(res => res.json())
-
-						values.image = url
-					}
-
-					submitRecipe(values)
-				}}
-			>
-				{({ values }) => (
-					<StyledForm>
-						<Wrapper>
-							<ImageUploadInput />
-
-							<StyledLabel htmlFor='name'>Name</StyledLabel>
-							<StyledInput
-								id='name'
-								name='name'
-								placeholder='Chicken'
-								autoComplete='off'
-								required
-							/>
-						</Wrapper>
-						<Wrapper>
-							<StyledLabel htmlFor='description'>Description</StyledLabel>
-							<StyledInput
-								id='description'
-								name='description'
-								placeholder='lorem'
-								autoComplete='off'
-								required
-							/>
-						</Wrapper>
-						<Wrapper>
-							<StyledLabel htmlFor='servings'>Servings</StyledLabel>
-							<StyledInput
-								id='servings'
-								name='servings'
-								placeholder='2'
-								autoComplete='off'
-								required
-							/>
-						</Wrapper>
-						<FieldArray name='ingredients'>
-							{({ insert, remove, push }) => (
-								<div>
-									{values.ingredients.length > 0 &&
-										values.ingredients.map((ingredient, index) => (
-											<Wrapper className='row' key={index}>
-												<StyledLabel
-													htmlFor={`ingredients.${index}.ingredient_id`}
-												>
-													Ingredient
-												</StyledLabel>
-												{/* <StyledReactSelect
-													name={`ingredients.${index}.ingredient_id`}
-													options={selectIngrs}
-													value={selectIngrs ? selectIngrs.find(option => option.value === field.value) : ''}
-      										onChange={(option) => form.setFieldValue(field.name, option.value)}
-												/> */}
-												<StyledSelect
-													name={`ingredients.${index}.ingredient_id`}
-													component='select'
-												>
-													{ingredientSelect}
-												</StyledSelect>
-												{/* <ErrorMessage name={`ingredients.${index}.name`} component="div" className="field-error"/> */}
-												<StyledNumInput
-													name={`ingredients.${index}.quantity`}
-													type='number'
-													min='0'
-													//step='0.01'
-													autoComplete='off'
-													required
-												/>
-												<StyledSelect
-													name={`ingredients.${index}.measure`}
-													component='select'
-												>
-													<option value={'g'}>g</option>
-													<option value={'oz'}>oz</option>
-													<option value={'lb'}>lb</option>
-												</StyledSelect>
-												{/* <ErrorMessage name={`ingredients.${index}.quantity`} component="div" className="field-error"/> */}
-												<SecondaryButton
-													small
-													type='button'
-													onClick={() => remove(index)}
-												>
-													X
-												</SecondaryButton>
-											</Wrapper>
-										))}
+		<FormikProvider value={formik}>
+			<StyledForm onSubmit={formik.handleSubmit}>
+				<StyledGridWrapper>
+					<InputFormik label='Recipe Name' name='name' formik={formik} />
+					<TextareaFormik
+						label='Description'
+						name='description'
+						formik={formik}
+					/>
+					<FileInputFormik
+						label='Upload an Image'
+						name='file'
+						required={false}
+						formik={formik}
+					/>
+					<StyledRowWrapper>
+						<NumInputFormik label='Servings' name='servings' formik={formik} />
+						{/* <StyledPrivateToggleWrapper>
+							<StyledLabel>Make Recipe Public</StyledLabel>
+							<Toggle />
+						</StyledPrivateToggleWrapper> */}
+					</StyledRowWrapper>
+				</StyledGridWrapper>
+				<StyledGridWrapper>
+					<FieldArray name='ingredients'>
+						{({ insert, remove, push }) => (
+							<StyledIngredientsWrapper>
+								<StyledLabel>Ingredients and Measures</StyledLabel>
+								{formik.values.ingredients.length > 0 &&
+									formik.values.ingredients.map((ingredient, index) => (
+										<StyledIngredientRowWrapper className='row' key={index}>
+											<DropdownFormik
+												label='Select an Ingredient'
+												name={`ingredients.${index}.ingredient_id`}
+												items={ingrArray.map(i => ({
+													id: i._id,
+													value: i.name,
+												}))}
+											/>
+											<NumInputFormik
+												label=''
+												name={`ingredients.${index}.quantity`}
+												formik={formik}
+											/>
+											<DropdownFormik
+												label='Quantity'
+												name={`ingredients.${index}.measure`}
+												items={[
+													{ id: 'g', value: 'g' },
+													{ id: 'oz', value: 'oz' },
+													{ id: 'lb', value: 'lb' },
+												]}
+												initialSelectedItem={{ id: 'g', value: 'g' }}
+											/>
+											<TextButton
+												small
+												type='button'
+												onClick={() => remove(index)}
+											>
+												X
+											</TextButton>
+										</StyledIngredientRowWrapper>
+									))}
+								<AdditionalIngredientButton>
 									<SecondaryButton
+										small
 										type='button'
 										onClick={() => push(ingrInitialValues)}
 									>
-										Another
+										+ Ingredient
 									</SecondaryButton>
-								</div>
-							)}
-						</FieldArray>
-						<PrimaryButton type='submit'>Submit</PrimaryButton>
-					</StyledForm>
-				)}
-			</Formik>
-		</>
+								</AdditionalIngredientButton>
+							</StyledIngredientsWrapper>
+						)}
+					</FieldArray>
+				</StyledGridWrapper>
+				<StyledSubmitButtonWrapper>
+					<PrimaryButton type='submit'>Submit Recipe</PrimaryButton>
+				</StyledSubmitButtonWrapper>
+			</StyledForm>
+		</FormikProvider>
 	)
 }
 
-const StyledForm = styled(Form)`
-	width: 500px;
-	max-width: 500px;
-
-	border: 1px solid ${p => p.theme.color.delta};
-	display: flex;
-	flex-direction: column;
-	align-content: center;
+const StyledForm = styled.form`
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	column-gap: 40px;
+	margin-top: 15px;
+	/* @media screen and (min-width: 576px) {
+		grid-template-columns: 1fr;
+	} */
+	@media screen and (max-width: 768px) {
+		grid-template-columns: 1fr;
+		row-gap: 20px;
+	}
 `
 
-const Wrapper = styled.div`
+const StyledGridWrapper = styled.div`
+	display: grid;
+	align-items: start;
+	grid-template-columns: 1fr;
+	grid-auto-rows: min-content;
+	row-gap: 20px;
+`
+
+const StyledRowWrapper = styled.div`
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	/* * {
+		border: 1px solid blue;
+	} */
+`
+
+const StyledPrivateToggleWrapper = styled.div`
+	margin: auto;
 	display: flex;
-	padding: 0.5rem;
+	label {
+		margin-right: 0.5rem;
+	}
+`
+
+const StyledIngredientsWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	@media screen and (max-width: 768px) {
+		margin: 0 auto;
+	}
+`
+
+const StyledIngredientRowWrapper = styled.div`
+	display: grid;
+	grid-template-columns: 170px 7rem 3.5rem auto;
+	grid-template-rows: 1fr;
+	column-gap: 10px;
+	align-items: center;
+	margin-bottom: 5px;
 `
 
 const StyledLabel = styled.label`
-	flex: 1;
-	text-align: right;
-	font: 400 1.6rem ${p => p.theme.font.body};
+	pointer-events: none;
+	position: relative;
+	height: 1.5rem;
+	font: 1.5rem ${p => p.theme.font.body};
+	color: ${p => p.theme.text.dark07};
+	margin: 0 0 0.3rem 1rem;
 `
 
-const StyledInput = styled(Field)`
-	flex: 1;
-	font: 400 1.6rem ${p => p.theme.font.body};
+const AdditionalIngredientButton = styled.div`
+	margin-top: 10px;
+	align-self: center;
 `
 
-const StyledNumInput = styled(Field)`
-	font: 400 1.6rem ${p => p.theme.font.body};
-	width: 6rem;
-`
-
-const StyledSelect = styled(Field)`
-	padding: 0.2rem;
-	font: 400 1.6rem ${p => p.theme.font.body};
-`
-
-const StyledReactSelect = styled(Select)`
-	//padding: 0.2rem;
-	flex: 1;
-	font: 400 1.6rem ${p => p.theme.font.body};
+const StyledSubmitButtonWrapper = styled.div`
+	grid-column: span 2;
+	display: grid;
+	place-content: center;
+	margin-top: 10px;
+	@media screen and (max-width: 768px) {
+		grid-column: span 1;
+	}
 `

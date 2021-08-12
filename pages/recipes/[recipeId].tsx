@@ -5,36 +5,38 @@ import styled from 'styled-components'
 import { Nav } from '../../components/Nav'
 import { Ingredients } from '../../components/Ingredients'
 import { RecipeDetail } from '../../components/RecipeDetail'
-import { SecondaryButton } from '../../components/SecondaryButton'
+import { SecondaryButton } from '../../components/Button'
 
 import { RecipeAsProps } from '../../server/interfaces'
 import { getRecipeById, getRecipesAll } from '../../functions/api/recipes'
 
 export default function RecipeId({ recipe }: RecipeAsProps) {
 	return (
-		<>
-			<Nav>
-				<Link href={`/`}>
-					<a>
-						<SecondaryButton small>{`\u2190 Back`}</SecondaryButton>
-					</a>
-				</Link>
-				<FlexSpacer />
-				<Link href={`/newrecipe`}>
-					<a>
-						<SecondaryButton>New Recipe</SecondaryButton>
-					</a>
-				</Link>
-			</Nav>
-			<Main>
-				<RecipeDetail recipe={recipe} />
-				<StyledDescription>{recipe.description}</StyledDescription>
-				<Ingredients
-					ingrArray={recipe.ingredients_full}
-					ingrRec={recipe.ingredients}
-				/>
-			</Main>
-		</>
+		<StyledPageBackground>
+			<StyledPageGrid>
+				<Nav>
+					{/* <Link href={`/`}>
+						<a>
+							<SecondaryButton small>{`\u2190 Back`}</SecondaryButton>
+						</a>
+					</Link> */}
+					<StyledNavFlexSpacer />
+					<Link href={`/newrecipe`}>
+						<a>
+							<SecondaryButton>New Recipe</SecondaryButton>
+						</a>
+					</Link>
+				</Nav>
+				<Main>
+					<RecipeDetail recipe={recipe} />
+					<StyledDescription>{recipe.description}</StyledDescription>
+					<Ingredients
+						ingrArray={recipe.ingredients_full}
+						ingrRec={recipe.ingredients}
+					/>
+				</Main>
+			</StyledPageGrid>
+		</StyledPageBackground>
 	)
 }
 
@@ -57,17 +59,27 @@ export async function getStaticPaths() {
 	return { paths, fallback: true }
 }
 
-const Main = styled.main`
-	min-height: 100vh;
-	padding: 3rem 0;
-	//flex: 1;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+const StyledPageBackground = styled.div`
 	background-color: ${p => p.theme.color.gamma};
 `
 
-const FlexSpacer = styled.div`
+const StyledPageGrid = styled.div`
+	max-width: 1300px;
+	margin: 0 auto;
+	padding: 0 10px;
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	grid-template-rows: 100px minmax(calc(100vh - 75px), auto);
+`
+
+const Main = styled.main`
+	grid-column: 1 / 13;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`
+
+const StyledNavFlexSpacer = styled.div`
 	flex: 1;
 `
 

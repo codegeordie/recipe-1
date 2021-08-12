@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Formik, Field, Form } from 'formik'
 import _ from 'lodash'
 import { CheckboxFormProps } from '../server/interfaces'
-import { HiddenButton } from './HiddenButton'
+import { HiddenButton } from './Button'
 
 export const CheckboxForm = ({
 	options,

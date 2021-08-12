@@ -1,16 +1,24 @@
 import _ from 'lodash'
-import { useRouter } from 'next/dist/client/router'
-import { useEffect, useState } from 'react'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 import { useSelect } from 'downshift'
+import { useField } from 'formik'
 import { SecondaryButton } from './Button'
 
-interface DropdownItems {
+type DropdownFormik = {
 	label: string
 	items: { id: string; value: string }[]
+	name: string
+	initialSelectedItem?: { id: string; value: string }
 }
 
-export const Dropdown = ({ label, items, ...rest }: DropdownItems) => {
+export const DropdownFormik = ({
+	label,
+	items,
+	initialSelectedItem,
+	...rest
+}: DropdownFormik) => {
+	const [field, meta, { setValue }] = useField(rest)
+
 	const {
 		isOpen,
 		selectedItem,
@@ -19,10 +27,16 @@ export const Dropdown = ({ label, items, ...rest }: DropdownItems) => {
 		getLabelProps,
 		highlightedIndex,
 		getItemProps,
-	} = useSelect({ items })
+	} = useSelect({
+		items,
+		initialSelectedItem,
+		onSelectedItemChange: e => {
+			setValue(e.selectedItem.id)
+		},
+	})
 
 	return (
-		<StyledDropdown {...rest}>
+		<StyledDropdown {...field} {...rest}>
 			<StyledLabel {...getLabelProps()}>{label}</StyledLabel>
 			<StyledButton type='button' isOpen={isOpen} {...getToggleButtonProps()}>
 				{(selectedItem && selectedItem.value) || label}
@@ -49,16 +63,19 @@ const StyledDropdown = styled.div`
 
 const StyledButton = styled.button<{ isOpen: boolean }>`
 	//height: 50px;
-	width: 200px;
+	//width: 200px;
+	width: 100%;
 	cursor: pointer;
 	border-radius: 9px;
 	padding: 0.5rem 1rem;
 	font: 1.4rem ${p => p.theme.font.button};
+	color: ${p => p.theme.text.dark07};
 	border: 1px solid transparent;
 	background-color: white;
 	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
 	transition: border 0.2s;
 	text-align: left;
+	z-index: 10;
 	&:hover {
 		border: 1px solid ${p => p.theme.color.delta};
 	}
@@ -75,6 +92,7 @@ const StyledList = styled.ul<{ isOpen: boolean }>`
 	background-color: white;
 	box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
 	overflow: hidden;
+	z-index: 20;
 	${p => p.isOpen && `border: 1px solid ${p.theme.color.delta};`}
 `
 
@@ -95,52 +113,3 @@ const StyledLabel = styled.label`
 	white-space: nowrap;
 	width: 1px;
 `
-
-// >>>>>>>>>>>>>>>
-
-// >>>>>>>>>>>>>>>
-
-// >>>>>>>>>>>>>>>
-
-export const OldDropdown = () => {
-	const router = useRouter()
-	const [currCode, setCurrCode] = useState(router.query.curr ?? 'USD')
-
-	useEffect(() => {
-		if (!router.query.curr) setCurrCode('USD')
-	}, [router.query])
-
-	useEffect(() => {
-		const { curr, ...rest } = router.query
-		if (currCode === 'USD') {
-			if (_.isEmpty(rest)) router.push('/', undefined, { shallow: true })
-			else router.push({ query: rest })
-		} else {
-			router.push({ query: { ...rest, curr: currCode } })
-		}
-	}, [currCode])
-
-	const choiceArray = [
-		{ code: 'USD', desc: 'USD' },
-		{ code: 'EUR', desc: 'Euros' },
-		{ code: 'MXN', desc: 'Pesos' },
-	]
-
-	const options = choiceArray.map(({ code, desc }) => (
-		<option key={code} value={code}>
-			{desc}
-		</option>
-	))
-
-	return (
-		<>
-			<select
-				id='currency'
-				onChange={e => setCurrCode(e.currentTarget.value)}
-				value={currCode}
-			>
-				{options}
-			</select>
-		</>
-	)
-}

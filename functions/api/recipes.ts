@@ -5,6 +5,7 @@ import {
 	GetRecipesQuery,
 	RecipeSubmittal,
 } from '../../server/interfaces'
+import { ObjectId } from 'mongodb'
 
 export const getRecipes = async (query?: GetRecipesQuery) => {
 	const search = qs.stringify(query)
@@ -44,7 +45,32 @@ export const getRecipeById = async (recipeId: string) => {
 export const submitRecipe = async (recipe: RecipeSubmittal) => {
 	const response = await axios.post(
 		`http://localhost:5001/api/recipes/`,
-		recipe
+		recipe,
+		{ withCredentials: true }
+	)
+
+	return response
+}
+
+type RecipeUpdate = {
+	recipeId: string
+	recipe: RecipeSubmittal
+}
+
+export const updateRecipe = async ({ recipeId, recipe }: RecipeUpdate) => {
+	const response = await axios.put(
+		`http://localhost:5001/api/recipes/id/${recipeId}`,
+		recipe,
+		{ withCredentials: true }
+	)
+
+	return response
+}
+
+export const deleteRecipe = async (recipeId: string) => {
+	const response = await axios.delete(
+		`http://localhost:5001/api/recipes/id/${recipeId}`,
+		{ withCredentials: true }
 	)
 
 	return response
