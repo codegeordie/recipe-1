@@ -97,7 +97,6 @@ const Backdrop = styled.div`
 	height: 100vh;
 	background: rgba(0, 0, 0, 0.65);
 	backdrop-filter: blur(2px);
-	z-index: 50;
 	position: fixed;
 	left: 0;
 	top: 0;
@@ -108,15 +107,14 @@ const Wrapper = styled.div`
 	width: 90%;
 	left: 5%;
 	top: 20vh;
-	/* background: white;
-	border-radius: 5px; */
-	z-index: 100;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 `
 
 const StyledModal = styled.div`
+	display: flex;
+	flex-direction: column;
 	padding: 10px;
 	background: white;
 	border-radius: 9px;

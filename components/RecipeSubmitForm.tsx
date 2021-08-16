@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useSession } from 'next-auth/client'
+//import { useSession } from 'next-auth/client'
 import { FieldArray, useFormik, FormikProvider } from 'formik'
 import { IngredientsProps, RecipeSubmittal } from '../server/interfaces'
 import { submitRecipe } from '../functions/api/recipes'
@@ -18,7 +18,7 @@ import { NumInputFormik } from './NumInputFormik'
 import { Toggle } from './Toggle'
 
 export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
-	const [session, loading] = useSession()
+	//const [session, loading] = useSession()
 
 	const ingrInitialValues = {
 		ingredient_id: ingrArray[0]._id,
@@ -27,7 +27,8 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 	}
 
 	const initialValues = {
-		uid: '',
+		//uid: '',
+		isPrivate: false,
 		name: '',
 		description: '',
 		image: '',
@@ -37,8 +38,8 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 	}
 
 	const onSubmit = async (values: RecipeSubmittal) => {
-		if (!session) throw Error('not logged in, cannot submit')
-		values.uid = session.uid as string
+		//if (!session) throw Error('not logged in, cannot submit')
+		//values.uid = session.uid as string
 
 		if (values.photo) {
 			let data = new FormData()
@@ -170,9 +171,6 @@ const StyledGridWrapper = styled.div`
 const StyledRowWrapper = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 2fr;
-	/* * {
-		border: 1px solid blue;
-	} */
 `
 
 const StyledPrivateToggleWrapper = styled.div`

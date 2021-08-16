@@ -3,30 +3,42 @@ import React from 'react'
 import styled from 'styled-components'
 import { RecipeAsProps } from '../server/interfaces'
 import Dinero from 'dinero.js'
+import { deleteRecipe } from '../functions/api/recipes'
 
 export const RecipeCard = ({ recipe }: RecipeAsProps) => {
 	return (
-		<Link href={`/recipes/${recipe._id}`}>
+		<>
+			{/* <Link href={`/recipes/${recipe._id}`}> */}
 			<StyledRecipeCard>
 				<StyledRecipeImage src={recipe.image} />
-				<InfoWrapper>
-					<FoodTitle>{recipe.name}</FoodTitle>
-					<FoodDesc>{recipe.description}</FoodDesc>
-				</InfoWrapper>
-				<StatsWrapper>
-					<FoodStat>{recipe.serving_cal}cal</FoodStat>
 
-					{recipe.favorited && <FoodStat>❤️</FoodStat>}
+				{/* <TestInfoBar>
+					<p>test</p>
+					<button onClick={() => deleteRecipe(recipe._id)}>delete</button>
+				</TestInfoBar> */}
+				<Link href={`/recipes/${recipe._id}`}>
+					<a>
+						<InfoWrapper>
+							<FoodTitle>{recipe.name}</FoodTitle>
+							<FoodDesc>{recipe.description}</FoodDesc>
+						</InfoWrapper>
+						<StatsWrapper>
+							<FoodStat>{recipe.serving_cal}cal</FoodStat>
 
-					<FoodStat>
-						{Dinero({
-							amount: recipe.cost.value,
-							currency: recipe.cost.currency,
-						}).toFormat('$0,0.00')}
-					</FoodStat>
-				</StatsWrapper>
+							{recipe.favorited && <FoodStat>❤️</FoodStat>}
+
+							<FoodStat>
+								{Dinero({
+									amount: recipe.cost.value,
+									currency: recipe.cost.currency,
+								}).toFormat('$0,0.00')}
+							</FoodStat>
+						</StatsWrapper>
+					</a>
+				</Link>
 			</StyledRecipeCard>
-		</Link>
+			{/* </Link> */}
+		</>
 	)
 }
 
@@ -101,4 +113,15 @@ const FoodStat = styled.p`
 	text-align: center;
 	font: 200 1.5rem ${p => p.theme.font.body};
 	color: ${p => p.theme.text.dark07};
+`
+
+const TestInfoBar = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 3rem;
+	background-color: rgba(255, 255, 255, 0.6);
+	display: flex;
+	flex-direction: row;
 `

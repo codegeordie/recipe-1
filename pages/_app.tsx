@@ -51,6 +51,11 @@ export const GlobalStyle = createGlobalStyle`
     min-height: 100vh;
   }
 
+  #__next {
+    position: relative;
+    z-index: 0;
+  }
+  
   h1,h2,h3,h4,h5,h6,p {
     font-size: 1.6rem;
   }

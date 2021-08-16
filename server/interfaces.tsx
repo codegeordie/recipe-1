@@ -7,14 +7,16 @@ type RecipeIngredients = {
 }
 
 export type RecipeSubmittal = {
-	uid: string
-	//public?: boolean
+	uid?: string
+	isPublic?: boolean
 	name: string
 	description: string
 	image: string
 	photo: any
 	servings: number
 	ingredients: RecipeIngredients[]
+	createdAt?: Date
+	updatedAt?: Date
 }
 
 export interface RecipeBase {

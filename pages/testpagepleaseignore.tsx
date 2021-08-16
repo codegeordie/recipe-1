@@ -126,7 +126,9 @@ export default function NewRecipe() {
 				// 		},
 				// 	})
 				// }
-			></PrimaryButton>
+			>
+				test
+			</PrimaryButton>
 			<StyledSpacer />
 
 			<StyledInputWrapper>
@@ -163,16 +165,16 @@ const Wrapper = styled.div`
 // input
 ///////////////////////
 const InputUnderlineKeyframe = keyframes`
-        0%   { transform: translateX(-100%); }
-        30%  { transform: translateX(-90%); }
-        64%  { transform: translateX(-95%); }
-        100% { transform: translateX(-94%); }
+	0%   { transform: translateX(-100%); }
+	30%  { transform: translateX(-90%); }
+	64%  { transform: translateX(-95%); }
+	100% { transform: translateX(-94%); }
 `
 
 const InputUnderlineFull = keyframes`
-        0%   { transform: translateX(-100%); }
-        30%  { transform: translateX(-90%); }
-        100% { transform: translateX(0); }
+	0%   { transform: translateX(-100%); }
+	30%  { transform: translateX(-90%); }
+	100% { transform: translateX(0); }
 `
 
 const StyledInput = styled.textarea`

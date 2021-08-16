@@ -20,6 +20,7 @@ import { Recipe } from '../server/interfaces'
 import { getRecipes } from '../functions/api/recipes'
 import { getFavorites } from '../functions/api/users'
 import { Toggle } from '../components/Toggle'
+import { UserModal } from '../components/UserModal'
 
 export default function Home() {
 	const router = useRouter()
@@ -57,6 +58,9 @@ export default function Home() {
 								<>
 									<Modal buttonText='New Recipe'>
 										<RecipeSubmitModal />
+									</Modal>
+									<Modal buttonText='user'>
+										<UserModal />
 									</Modal>
 									<SecondaryButton onClick={() => signOut()}>
 										Log Out
