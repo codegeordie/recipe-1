@@ -11,16 +11,33 @@ import { Combobox } from '../components/Combobox'
 import { Dropdown } from '../components/Dropdown'
 
 import { signIn, signOut, useSession } from 'next-auth/client'
-import { getFavorites, setFavorite } from '../functions/api/users'
+import {
+	getFavorites,
+	setFavorite,
+	getCurrency,
+	setCurrency,
+} from '../functions/api/users'
 import { useRouter } from 'next/dist/client/router'
 import { RecipeList } from '../components/RecipeList'
 import { Input } from '../components/Input'
 import { deleteRecipe, updateRecipe } from '../functions/api/recipes'
 
+import { useDispatch, useSelector } from 'react-redux'
+import { increment } from '../redux/slices/testSlice'
+
 export default function NewRecipe() {
 	const router = useRouter()
 	const [session, loading] = useSession()
 	const [recipeArray, setRecipeArray] = useState([])
+
+	const [testState, setTestState] = useState('off')
+	const toggleToggle = () => {
+		if (testState === 'on') setTestState('off')
+		else setTestState('on')
+	}
+
+	const dispatch = useDispatch()
+	const reduxtest = useSelector(state => state.test.value)
 
 	console.log('testpage / session :>> ', session)
 
@@ -32,7 +49,8 @@ export default function NewRecipe() {
 						<SecondaryButton small>{`\u2190 Back`}</SecondaryButton>
 					</a>
 				</Link>
-				<Toggle />
+				<Toggle label='testing' onChange={() => toggleToggle()} />
+				<h2>{testState}</h2>
 			</Nav>
 
 			<Wrapper>
@@ -58,6 +76,16 @@ export default function NewRecipe() {
 			</Wrapper>
 
 			<StyledSpacer />
+			<button
+				onClick={() => {
+					getCurrency().then(userCurr => {
+						console.log('userCurr :>> ', userCurr)
+						//dispatch(setCurrency(userCurr.id))
+					})
+				}}
+			>
+				getfav
+			</button>
 
 			<Dropdown
 				label='Select an Ingredient'
@@ -112,7 +140,11 @@ export default function NewRecipe() {
 				</>
 			)}
 			<StyledSpacer />
-			<PrimaryButton
+			<PrimaryButton onClick={() => dispatch(increment())}>
+				ReduxTest
+			</PrimaryButton>
+			<h2>{reduxtest}</h2>
+			{/* <PrimaryButton
 				onClick={() => deleteRecipe('611428b2a9db900241dac196')}
 				// onClick={() =>
 				// 	updateRecipe({
@@ -128,7 +160,7 @@ export default function NewRecipe() {
 				// }
 			>
 				test
-			</PrimaryButton>
+			</PrimaryButton> */}
 			<StyledSpacer />
 
 			<StyledInputWrapper>

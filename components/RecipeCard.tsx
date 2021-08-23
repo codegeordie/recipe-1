@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { RecipeAsProps } from '../server/interfaces'
 import Dinero from 'dinero.js'
 import { deleteRecipe } from '../functions/api/recipes'
+import { SecondaryButton } from './Button'
+import { setFavorite } from '../functions/api/users'
 
 export const RecipeCard = ({ recipe }: RecipeAsProps) => {
 	return (
@@ -12,10 +14,17 @@ export const RecipeCard = ({ recipe }: RecipeAsProps) => {
 			<StyledRecipeCard>
 				<StyledRecipeImage src={recipe.image} />
 
-				{/* <TestInfoBar>
+				<TestInfoBar>
 					<p>test</p>
-					<button onClick={() => deleteRecipe(recipe._id)}>delete</button>
-				</TestInfoBar> */}
+					{/* <button onClick={() => deleteRecipe(recipe._id)}>delete</button> */}
+					<button
+						onClick={() => {
+							setFavorite({ recipeId: recipe._id })
+						}}
+					>
+						Favorite This
+					</button>
+				</TestInfoBar>
 				<Link href={`/recipes/${recipe._id}`}>
 					<a>
 						<InfoWrapper>

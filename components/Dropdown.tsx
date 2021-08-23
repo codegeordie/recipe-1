@@ -8,18 +8,33 @@ import { SecondaryButton } from './Button'
 interface DropdownItems {
 	label: string
 	items: { id: string; value: string }[]
+	selectedItem: any
+	handleSelected: any
+	initialSelected?: any
 }
 
-export const Dropdown = ({ label, items, ...rest }: DropdownItems) => {
+export const Dropdown = ({
+	label,
+	items,
+	selectedItem,
+	handleSelected,
+	initialSelected = null,
+	...rest
+}: DropdownItems) => {
 	const {
 		isOpen,
-		selectedItem,
+		//selectedItem,
 		getToggleButtonProps,
 		getMenuProps,
 		getLabelProps,
 		highlightedIndex,
 		getItemProps,
-	} = useSelect({ items })
+	} = useSelect({
+		items,
+		selectedItem,
+		onSelectedItemChange: handleSelected,
+		initialSelectedItem: initialSelected,
+	})
 
 	return (
 		<StyledDropdown {...rest}>

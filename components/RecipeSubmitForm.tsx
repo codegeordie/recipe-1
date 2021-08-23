@@ -15,7 +15,7 @@ import { InputFormik } from './InputFormik'
 import { TextareaFormik } from './TextareaFormik'
 import { FileInputFormik } from './FileInputFormik'
 import { NumInputFormik } from './NumInputFormik'
-import { Toggle } from './Toggle'
+import { Toggle, ToggleFormik } from './Toggle'
 
 export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 	//const [session, loading] = useSession()
@@ -79,9 +79,15 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 					/>
 					<StyledRowWrapper>
 						<NumInputFormik label='Servings' name='servings' formik={formik} />
+						<input
+							type='checkbox'
+							name='isPrivate'
+							onChange={formik.handleChange}
+							value={formik.values.isPrivate}
+						/>
 						{/* <StyledPrivateToggleWrapper>
-							<StyledLabel>Make Recipe Public</StyledLabel>
-							<Toggle />
+							<StyledLabel>Keep Recipe Private</StyledLabel>
+							<ToggleFormik name='isPrivate' formik={formik} />
 						</StyledPrivateToggleWrapper> */}
 					</StyledRowWrapper>
 				</StyledGridWrapper>

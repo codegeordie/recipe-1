@@ -24,11 +24,15 @@ export interface RecipeBase {
 	name: string
 	description: string
 	image: string
-	tags: string[]
 	servings: number
+	ingredients: RecipeIngredients[]
+	tags: string[]
 	calories: number
 	cost: { value: number; currency: Currency }
-	ingredients: RecipeIngredients[]
+	createdBy: string
+	isPrivate?: boolean
+	createdAt: Date
+	updatedAt: Date
 }
 
 export interface Recipe extends RecipeBase {
@@ -80,6 +84,9 @@ export type GetRecipesQuery = {
 	filters?: string[]
 	cal_min?: string
 	cal_max?: string
+	showOnlyCreated?: boolean
+	showOnlyFavorites?: boolean
+	currency?: any
 }
 
 // export type GetIngredientsQuery = {

@@ -2,13 +2,35 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 
 type ToggleProps = {
+	name?: string
 	label?: string
+	onChange?: () => void
 }
 
-export const Toggle: React.FC<ToggleProps> = ({ label }) => {
+export const Toggle: React.FC<ToggleProps> = ({ label, onChange }) => {
 	return (
 		<StyledWrapper>
-			<StyledCheckbox type='checkbox'></StyledCheckbox>
+			<StyledCheckbox type='checkbox' onChange={onChange}></StyledCheckbox>
+			<StyledToggle>
+				<StyledHandle />
+			</StyledToggle>
+			{label && <StyledLabel>{label}</StyledLabel>}
+		</StyledWrapper>
+	)
+}
+
+export const ToggleFormik: React.FC<ToggleProps> = ({
+	label,
+	onChange,
+	...props
+}) => {
+	return (
+		<StyledWrapper>
+			<StyledCheckbox
+				type='checkbox'
+				//onChange={onChange}
+				{...props}
+			></StyledCheckbox>
 			<StyledToggle>
 				<StyledHandle />
 			</StyledToggle>

@@ -2,8 +2,10 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import React from 'react'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
-import { Provider } from 'next-auth/client'
+import { Provider as NextAuthProvider } from 'next-auth/client'
 import { theme } from '../components/Theme'
+import { Provider as ReduxProvider } from 'react-redux'
+import store from '../redux/store'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
 	return (
@@ -26,9 +28,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 			</Head>
 			<GlobalStyle />
 			<ThemeProvider theme={theme}>
-				<Provider session={pageProps.session}>
-					<Component {...pageProps} />
-				</Provider>
+				<NextAuthProvider session={pageProps.session}>
+					<ReduxProvider store={store}>
+						<Component {...pageProps} />
+					</ReduxProvider>
+				</NextAuthProvider>
 			</ThemeProvider>
 		</>
 	)

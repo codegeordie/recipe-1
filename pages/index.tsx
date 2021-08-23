@@ -18,9 +18,21 @@ import { OldDropdown } from '../components/Dropdown'
 import { Recipe } from '../server/interfaces'
 
 import { getRecipes } from '../functions/api/recipes'
-import { getFavorites } from '../functions/api/users'
+import { getCurrency, getFavorites, setCurrency } from '../functions/api/users'
 import { Toggle } from '../components/Toggle'
 import { UserModal } from '../components/UserModal'
+
+import { useDispatch, useSelector } from 'react-redux'
+import {
+	createdBool,
+	toggleShowCreated,
+	toggleShowFavorites,
+} from '../redux/slices/recipesSlice'
+import { RootState } from '../redux/store'
+import {
+	changeCurrency,
+	userCurrencyPreference,
+} from '../redux/slices/userSlice'
 
 export default function Home() {
 	const router = useRouter()
@@ -28,18 +40,36 @@ export default function Home() {
 	const [recipeArray, setRecipeArray] = useState<Recipe[]>([])
 	// const [favoriteArray, setFavoriteArray] = useState<Recipe[]>([])
 
+	//////////
+
+	const dispatch = useDispatch()
+	const showOnlyFavorites = useSelector(
+		(state: RootState) => state.recipes.showOnlyFavorites
+	)
+	const showOnlyCreated = useSelector(createdBool)
+
+	/////////
+	const currency = useSelector(userCurrencyPreference)
+
+	///////////
+
 	useEffect(() => {
 		if (router.isReady)
-			getRecipes(router.query).then(recipes => setRecipeArray(recipes))
-	}, [router.query])
+			getRecipes({
+				...router.query,
+				showOnlyCreated,
+				showOnlyFavorites,
+				currency,
+			}).then(recipes => setRecipeArray(recipes))
+	}, [router.query, showOnlyCreated, showOnlyFavorites, currency])
 
-	// useEffect(() => {
-	// 	if (session && session.user) {
-	// 		getFavorites({ id: session.user.uid }).then(recipes =>
-	// 			setFavoriteArray(recipes)
-	// 		)
-	// 	}
-	// }, [session])
+	useEffect(() => {
+		if (session) {
+			getCurrency().then(userCurr => {
+				if (userCurr) dispatch(changeCurrency(userCurr.id))
+			})
+		}
+	}, [session])
 
 	return (
 		<>
@@ -76,30 +106,27 @@ export default function Home() {
 					</Nav>
 
 					<Aside>
+						<StyledToggleWrapper>
+							<Toggle
+								label='Only My Recipes'
+								onChange={() => dispatch(toggleShowCreated())}
+							/>
+							<Toggle
+								label='Only My Favorites'
+								onChange={() => dispatch(toggleShowFavorites())}
+							/>
+							{/* {showFavorites && <p>favs</p>}
+							{showCreated && <p>created</p>} */}
+						</StyledToggleWrapper>
 						<TagFilters />
-						{/* <Toggle label='testing' /> */}
 						<CalorieSlider rangeMin={0} rangeMax={800} />
 					</Aside>
 
 					<Main>
-						{/* <StyledRecipeListsWrapper> */}
 						{recipeArray && <RecipeList id='rlist' recipes={recipeArray} />}
-						{/* </StyledRecipeListsWrapper> */}
 					</Main>
 				</StyledPageGrid>
 			</StyledPageBackground>
-
-			{/* <Main2>
-				<StyledContentWrapper>
-					<StyledSidebarWrapper>
-						<TagFilters />
-						<CalorieSlider rangeMin={0} rangeMax={800} />
-					</StyledSidebarWrapper>
-					<StyledRecipeListsWrapper>
-						{recipeArray && <RecipeList id='rlist' recipes={recipeArray} />}
-					</StyledRecipeListsWrapper>
-				</StyledContentWrapper>
-			</Main2> */}
 		</>
 	)
 }
@@ -147,37 +174,8 @@ const StyledNavButtonsWrapper = styled.div`
 	}
 `
 
-///////////////////////
-
-const Main2 = styled.main`
-	position: relative;
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
-	background-color: ${p => p.theme.color.gamma};
-`
-
-const StyledContentWrapper = styled.div`
-	display: flex;
-	flex: 1;
-`
-
-const StyledSidebarWrapper = styled.div`
-	width: 13vw;
-	min-width: 13vw;
-	display: flex;
-	flex-direction: column;
-	background-color: ${p => p.theme.color.white};
-	padding: 0.5rem;
-`
-
-const StyledRecipeListsWrapper = styled.div`
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-`
-
-const StyledFavoritesWrapper = styled.div`
-	background-color: #ddeeed;
-	margin: 2rem;
+const StyledToggleWrapper = styled.div`
+	display: grid;
+	row-gap: 15px;
+	margin-bottom: 15px;
 `
