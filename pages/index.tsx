@@ -18,7 +18,7 @@ import { OldDropdown } from '../components/Dropdown'
 import { Recipe } from '../server/interfaces'
 
 import { getRecipes } from '../functions/api/recipes'
-import { getCurrency, getFavorites, setCurrency } from '../functions/api/users'
+import { getCurrency } from '../functions/api/users'
 import { Toggle } from '../components/Toggle'
 import { UserModal } from '../components/UserModal'
 
@@ -33,25 +33,25 @@ import {
 	changeCurrency,
 	userCurrencyPreference,
 } from '../redux/slices/userSlice'
+import { Menu } from '../components/Menu'
+import {
+	recipeArray as reduxRecipeArray,
+	refreshRecipeArray,
+} from '../redux/slices/recipeListSlice'
+import { CurrencyDropdown } from '../components/CurrencyDropdown'
 
 export default function Home() {
 	const router = useRouter()
 	const [session, loading] = useSession()
-	const [recipeArray, setRecipeArray] = useState<Recipe[]>([])
-	// const [favoriteArray, setFavoriteArray] = useState<Recipe[]>([])
-
-	//////////
-
 	const dispatch = useDispatch()
+
 	const showOnlyFavorites = useSelector(
 		(state: RootState) => state.recipes.showOnlyFavorites
 	)
 	const showOnlyCreated = useSelector(createdBool)
-
-	/////////
+	const recipeArray = useSelector(reduxRecipeArray)
 	const currency = useSelector(userCurrencyPreference)
-
-	///////////
+	const currencyCode = currency.id
 
 	useEffect(() => {
 		if (router.isReady)
@@ -59,14 +59,14 @@ export default function Home() {
 				...router.query,
 				showOnlyCreated,
 				showOnlyFavorites,
-				currency,
-			}).then(recipes => setRecipeArray(recipes))
+				currency: currencyCode,
+			}).then(recipes => dispatch(refreshRecipeArray(recipes)))
 	}, [router.query, showOnlyCreated, showOnlyFavorites, currency])
 
 	useEffect(() => {
 		if (session) {
 			getCurrency().then(userCurr => {
-				if (userCurr) dispatch(changeCurrency(userCurr.id))
+				if (userCurr) dispatch(changeCurrency(userCurr))
 			})
 		}
 	}, [session])
@@ -89,9 +89,9 @@ export default function Home() {
 									<Modal buttonText='New Recipe'>
 										<RecipeSubmitModal />
 									</Modal>
-									<Modal buttonText='user'>
+									<Menu buttonText='user'>
 										<UserModal />
-									</Modal>
+									</Menu>
 									<SecondaryButton onClick={() => signOut()}>
 										Log Out
 									</SecondaryButton>
@@ -115,11 +115,12 @@ export default function Home() {
 								label='Only My Favorites'
 								onChange={() => dispatch(toggleShowFavorites())}
 							/>
-							{/* {showFavorites && <p>favs</p>}
-							{showCreated && <p>created</p>} */}
 						</StyledToggleWrapper>
 						<TagFilters />
 						<CalorieSlider rangeMin={0} rangeMax={800} />
+						<StyledDropdownWrapper>
+							<CurrencyDropdown />
+						</StyledDropdownWrapper>
 					</Aside>
 
 					<Main>
@@ -178,4 +179,9 @@ const StyledToggleWrapper = styled.div`
 	display: grid;
 	row-gap: 15px;
 	margin-bottom: 15px;
+`
+
+const StyledDropdownWrapper = styled.div`
+	margin-top: 40px;
+	width: 100%;
 `

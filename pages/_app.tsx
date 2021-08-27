@@ -6,6 +6,10 @@ import { Provider as NextAuthProvider } from 'next-auth/client'
 import { theme } from '../components/Theme'
 import { Provider as ReduxProvider } from 'react-redux'
 import store from '../redux/store'
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
+
+let persistor = persistStore(store)
 
 export default function MyApp({ Component, pageProps }: AppProps) {
 	return (
@@ -30,7 +34,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 			<ThemeProvider theme={theme}>
 				<NextAuthProvider session={pageProps.session}>
 					<ReduxProvider store={store}>
-						<Component {...pageProps} />
+						<PersistGate loading={null} persistor={persistor}>
+							<Component {...pageProps} />
+						</PersistGate>
 					</ReduxProvider>
 				</NextAuthProvider>
 			</ThemeProvider>

@@ -18,7 +18,7 @@ export const Dropdown = ({
 	items,
 	selectedItem,
 	handleSelected,
-	initialSelected = null,
+	initialSelected,
 	...rest
 }: DropdownItems) => {
 	const {
@@ -33,8 +33,10 @@ export const Dropdown = ({
 		items,
 		selectedItem,
 		onSelectedItemChange: handleSelected,
-		initialSelectedItem: initialSelected,
+		//initialSelectedItem: initialSelected,
 	})
+
+	console.log('selectedItem :>> ', selectedItem)
 
 	return (
 		<StyledDropdown {...rest}>
@@ -64,7 +66,7 @@ const StyledDropdown = styled.div`
 
 const StyledButton = styled.button<{ isOpen: boolean }>`
 	//height: 50px;
-	width: 200px;
+	width: 100%;
 	cursor: pointer;
 	border-radius: 9px;
 	padding: 0.5rem 1rem;

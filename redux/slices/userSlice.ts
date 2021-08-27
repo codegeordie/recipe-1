@@ -3,7 +3,7 @@ import { RootState } from '../store'
 
 export const userSlice = createSlice({
 	name: 'user',
-	initialState: { currency: 'USD' },
+	initialState: { currency: { id: 'USD', value: 'US Dollars' } },
 	reducers: {
 		changeCurrency: (state, action) => {
 			state.currency = action.payload

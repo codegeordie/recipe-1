@@ -19,7 +19,7 @@ export type RecipeSubmittal = {
 	updatedAt?: Date
 }
 
-export interface RecipeBase {
+export type RecipeBase = {
 	_id: string
 	name: string
 	description: string
@@ -35,12 +35,13 @@ export interface RecipeBase {
 	updatedAt: Date
 }
 
-export interface Recipe extends RecipeBase {
+export type Recipe = RecipeBase & {
 	ingredients_full: Ingredient[]
 	serving_cal: number
+	favorited: boolean
 }
 
-export interface Ingredient {
+export type Ingredient = {
 	_id: string
 	name: string
 	quantity: number
@@ -51,7 +52,7 @@ export interface Ingredient {
 	}
 }
 
-export interface Tag {
+export type Tag = {
 	_id: string
 	tag_name: string
 }
@@ -86,7 +87,7 @@ export type GetRecipesQuery = {
 	cal_max?: string
 	showOnlyCreated?: boolean
 	showOnlyFavorites?: boolean
-	currency?: any
+	currency?: string
 }
 
 // export type GetIngredientsQuery = {
