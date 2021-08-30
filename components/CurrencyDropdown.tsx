@@ -5,14 +5,18 @@ import {
 } from '../redux/slices/userSlice'
 import { setCurrency } from '../functions/api/users'
 import { Dropdown } from './Dropdown'
+import { useSession } from 'next-auth/client'
 
 export const CurrencyDropdown = () => {
+	const [session] = useSession()
 	const dispatch = useDispatch()
 	const selectedItem = useSelector(userCurrencyPreference)
 
 	const handleSelected = ({ selectedItem }) => {
 		dispatch(changeCurrency(selectedItem))
-		setCurrency({ currency: selectedItem })
+		if (session) {
+			setCurrency({ currency: selectedItem })
+		}
 	}
 
 	const items = [

@@ -11,12 +11,7 @@ import { Combobox } from '../components/Combobox'
 import { Dropdown } from '../components/Dropdown'
 
 import { signIn, signOut, useSession } from 'next-auth/client'
-import {
-	getFavorites,
-	setFavorite,
-	getCurrency,
-	setCurrency,
-} from '../functions/api/users'
+import { setFavorite, getCurrency, setCurrency } from '../functions/api/users'
 import { useRouter } from 'next/dist/client/router'
 import { RecipeList } from '../components/RecipeList'
 import { Input } from '../components/Input'
@@ -24,6 +19,8 @@ import { deleteRecipe, updateRecipe } from '../functions/api/recipes'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { increment } from '../redux/slices/testSlice'
+
+import { UserMenu } from '../components/UserMenu'
 
 export default function NewRecipe() {
 	const router = useRouter()
@@ -112,27 +109,6 @@ export default function NewRecipe() {
 			{session && (
 				<>
 					Signed in as {session.user.uid} <br />
-					<button
-						onClick={() =>
-							setFavorite({
-								uid: session.user.uid,
-								recipeId: '60d0ecb36d07e32f31ff700c',
-							})
-						}
-					>
-						Fav
-					</button>
-					<button
-						onClick={() =>
-							getFavorites({ id: session.user.uid }).then(favorites => {
-								console.log('favorites :>> ', favorites)
-								setRecipeArray(favorites)
-								// setRecipeArray(favoritesFull[0].favoritesFull)
-							})
-						}
-					>
-						SHOW FAV
-					</button>
 					<button onClick={() => signOut()}>Sign out</button>
 					{recipeArray && (
 						<RecipeList id='testrecipelist' recipes={recipeArray} />
@@ -144,6 +120,13 @@ export default function NewRecipe() {
 				ReduxTest
 			</PrimaryButton>
 			<h2>{reduxtest}</h2>
+			<StyledSpacer />
+			<StyledSpacer />
+
+			<RadixWrapper>
+				<UserMenu />
+			</RadixWrapper>
+
 			{/* <PrimaryButton
 				onClick={() => deleteRecipe('611428b2a9db900241dac196')}
 				// onClick={() =>
@@ -191,6 +174,15 @@ const StyledSpacer = styled.div`
 
 const Wrapper = styled.div`
 	display: flex;
+`
+
+const RadixWrapper = styled.div`
+	width: 100%;
+	padding: 60px;
+	display: flex;
+	justify-content: center;
+
+	background-color: #334;
 `
 
 //////////////////////

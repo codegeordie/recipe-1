@@ -14,13 +14,12 @@ import { CalorieSlider } from '../components/CalorieSlider'
 import { PrimaryButton, SecondaryButton } from '../components/Button'
 import { RecipeSubmitModal } from '../components/RecipeSubmitModal'
 import { Modal } from '../components/Modal'
-import { OldDropdown } from '../components/Dropdown'
-import { Recipe } from '../server/interfaces'
+import { CurrencyDropdown } from '../components/CurrencyDropdown'
+import { UserMenu } from '../components/UserMenu'
+import { Toggle } from '../components/Toggle'
 
 import { getRecipes } from '../functions/api/recipes'
 import { getCurrency } from '../functions/api/users'
-import { Toggle } from '../components/Toggle'
-import { UserModal } from '../components/UserModal'
 
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -33,12 +32,10 @@ import {
 	changeCurrency,
 	userCurrencyPreference,
 } from '../redux/slices/userSlice'
-import { Menu } from '../components/Menu'
 import {
 	recipeArray as reduxRecipeArray,
 	refreshRecipeArray,
 } from '../redux/slices/recipeListSlice'
-import { CurrencyDropdown } from '../components/CurrencyDropdown'
 
 export default function Home() {
 	const router = useRouter()
@@ -89,12 +86,7 @@ export default function Home() {
 									<Modal buttonText='New Recipe'>
 										<RecipeSubmitModal />
 									</Modal>
-									<Menu buttonText='user'>
-										<UserModal />
-									</Menu>
-									<SecondaryButton onClick={() => signOut()}>
-										Log Out
-									</SecondaryButton>
+									<UserMenu />
 								</>
 							)}
 							{!session && (
@@ -106,16 +98,20 @@ export default function Home() {
 					</Nav>
 
 					<Aside>
-						<StyledToggleWrapper>
-							<Toggle
-								label='Only My Recipes'
-								onChange={() => dispatch(toggleShowCreated())}
-							/>
-							<Toggle
-								label='Only My Favorites'
-								onChange={() => dispatch(toggleShowFavorites())}
-							/>
-						</StyledToggleWrapper>
+						{session && (
+							<>
+								<StyledToggleWrapper>
+									<Toggle
+										label='Only My Recipes'
+										onChange={() => dispatch(toggleShowCreated())}
+									/>
+									<Toggle
+										label='Only My Favorites'
+										onChange={() => dispatch(toggleShowFavorites())}
+									/>
+								</StyledToggleWrapper>
+							</>
+						)}
 						<TagFilters />
 						<CalorieSlider rangeMin={0} rangeMax={800} />
 						<StyledDropdownWrapper>

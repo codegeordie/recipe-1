@@ -8,6 +8,7 @@ import { Provider as ReduxProvider } from 'react-redux'
 import store from '../redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
+import { IdProvider } from '@radix-ui/react-id'
 
 let persistor = persistStore(store)
 
@@ -33,11 +34,13 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 			<GlobalStyle />
 			<ThemeProvider theme={theme}>
 				<NextAuthProvider session={pageProps.session}>
-					<ReduxProvider store={store}>
-						<PersistGate loading={null} persistor={persistor}>
-							<Component {...pageProps} />
-						</PersistGate>
-					</ReduxProvider>
+					<IdProvider>
+						<ReduxProvider store={store}>
+							<PersistGate loading={null} persistor={persistor}>
+								<Component {...pageProps} />
+							</PersistGate>
+						</ReduxProvider>
+					</IdProvider>
 				</NextAuthProvider>
 			</ThemeProvider>
 		</>

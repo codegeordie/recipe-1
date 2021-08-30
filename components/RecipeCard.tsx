@@ -8,9 +8,11 @@ import { SecondaryButton, TextButton } from './Button'
 import { setFavorite } from '../functions/api/users'
 import { recipesSlice } from '../redux/slices/recipesSlice'
 import { useDispatch } from 'react-redux'
+import { signIn, useSession } from 'next-auth/client'
 
 export const RecipeCard = ({ recipe }: RecipeAsProps) => {
 	const dispatch = useDispatch()
+	const [session] = useSession()
 
 	return (
 		<StyledRecipeCard>
@@ -34,7 +36,7 @@ export const RecipeCard = ({ recipe }: RecipeAsProps) => {
 							❤️
 						</StyledHeartButton>
 					)}
-					{!recipe.favorited && (
+					{!recipe.favorited && session && (
 						<StyledHeartButton
 							onClick={() =>
 								dispatch(
