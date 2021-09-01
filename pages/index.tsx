@@ -65,6 +65,9 @@ export default function Home() {
 			getCurrency().then(userCurr => {
 				if (userCurr) dispatch(changeCurrency(userCurr))
 			})
+			// .catch(err => {
+			// 	console.log('err', err)
+			// })
 		}
 	}, [session])
 

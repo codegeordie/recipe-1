@@ -9,24 +9,24 @@ import {
 export const getRecipes = (query?: GetRecipesQuery) => {
 	const search = qs.stringify(query)
 
-	return fetch(`http://localhost:5001/api/recipes/?${search}`, {
+	return fetch(`${process.env.NEXT_PUBLIC_API_URL}/recipes/?${search}`, {
 		credentials: 'include',
 	}).then(res => res.json())
 }
 
 export const getRecipesAll = () =>
-	fetch(`http://localhost:5001/api/recipes/all`, {
+	fetch(`${process.env.NEXT_PUBLIC_API_URL}/recipes/all`, {
 		credentials: 'include',
 	}).then(res => res.json())
 
 //:Recipe[]
 export const getRecipeById = (recipeId: string) =>
-	fetch(`http://localhost:5001/api/recipes/id/${recipeId}`, {
+	fetch(`${process.env.NEXT_PUBLIC_API_URL}/recipes/id/${recipeId}`, {
 		credentials: 'include',
 	}).then(res => res.json())
 
 export const submitRecipe = (recipe: RecipeSubmittal) =>
-	axios.post(`http://localhost:5001/api/recipes/`, recipe, {
+	axios.post(`${process.env.NEXT_PUBLIC_API_URL}/recipes/`, recipe, {
 		withCredentials: true,
 	})
 
@@ -36,12 +36,16 @@ type RecipeUpdate = {
 	recipe: RecipeSubmittal
 }
 export const updateRecipe = ({ recipeId, recipe }: RecipeUpdate) =>
-	axios.put(`http://localhost:5001/api/recipes/id/${recipeId}`, recipe, {
-		withCredentials: true,
-	})
+	axios.put(
+		`${process.env.NEXT_PUBLIC_API_URL}/recipes/id/${recipeId}`,
+		recipe,
+		{
+			withCredentials: true,
+		}
+	)
 ///////////////
 
 export const deleteRecipe = (recipeId: string) =>
-	axios.delete(`http://localhost:5001/api/recipes/id/${recipeId}`, {
+	axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/recipes/id/${recipeId}`, {
 		withCredentials: true,
 	})

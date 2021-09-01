@@ -10,7 +10,7 @@ export const setFavorite = ({ recipeId, setFavBool }: SetFavorite) => async (
 	dispatch(setFavoriteAction({ recipeId, setFavBool }))
 
 	const response = await axios.post(
-		`http://localhost:5001/api/users/favorites`,
+		`${process.env.NEXT_PUBLIC_API_URL}/users/favorites`,
 		{ recipeId, setFavBool },
 		{
 			withCredentials: true,
@@ -24,7 +24,7 @@ export const setFavorite = ({ recipeId, setFavBool }: SetFavorite) => async (
 // 	const search = qs.stringify(query)
 
 // 	const response = await fetch(
-// 		`http://localhost:5001/api/favorites/?${search}`,
+// 		`${process.env.NEXT_PUBLIC_API_URL}/favorites/?${search}`,
 // 		{
 // 			credentials: 'include',
 // 		}
@@ -42,7 +42,7 @@ export const setFavorite = ({ recipeId, setFavBool }: SetFavorite) => async (
 
 export const setCurrency = async ({ currency }: { currency: any }) => {
 	const response = await axios.post(
-		`http://localhost:5001/api/users/currency`,
+		`${process.env.NEXT_PUBLIC_API_URL}/users/currency`,
 		{ currency },
 		{
 			withCredentials: true,
@@ -53,8 +53,12 @@ export const setCurrency = async ({ currency }: { currency: any }) => {
 }
 
 export const getCurrency = async () => {
-	const response = await fetch(`http://localhost:5001/api/users/currency`, {
-		credentials: 'include',
-	}).then(res => res.json())
-	return response
+	try {
+		return fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/currency`, {
+			credentials: 'include',
+		}).then(res => res.json())
+	} catch (error) {
+		//Somebugreporttool.report(error);
+		throw error
+	}
 }

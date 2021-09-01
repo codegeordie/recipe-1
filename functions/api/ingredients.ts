@@ -5,7 +5,7 @@ export const getIngredients = async (query: { name: string }) => {
 	const search = qs.stringify(query)
 
 	const response: Ingredient[] = await fetch(
-		`http://localhost:5001/api/ingredients/?${search}`
+		`${process.env.NEXT_PUBLIC_API_URL}/ingredients/?${search}`
 	).then(res => res.json())
 
 	return response
@@ -13,7 +13,7 @@ export const getIngredients = async (query: { name: string }) => {
 
 export const getIngredientsAll = async () => {
 	const response: Ingredient[] = await fetch(
-		`http://localhost:5001/api/ingredients/all/`
+		`${process.env.NEXT_PUBLIC_API_URL}/ingredients/all/`
 	).then(res => res.json())
 
 	return response

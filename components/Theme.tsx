@@ -1,15 +1,13 @@
-import { m } from 'framer-motion'
-import { ThemeProvider } from 'styled-components'
+// import { m } from 'framer-motion'
+// import { ThemeProvider } from 'styled-components'
 
 export const theme = {
-	// color: {
-	// 	alpha: '#FF9F1C',
-	// 	beta: '#FFBF69',
-	// 	neutral: '#FFFDF9',
-	// 	gamma: '#CBF3F0',
-	// 	delta: '#2EC4B6',
-	//   omega: '#0F1020'
-	// },
+	media: {
+		small: '(min-width: 576px)',
+		medium: '(min-width: 768px)',
+		large: '(min-width: 992px)',
+		huge: '(min-width: 1200px)',
+	},
 	color: {
 		alpha: '#FF9F1C',
 		beta: '#FFD399',
