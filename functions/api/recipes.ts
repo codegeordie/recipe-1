@@ -21,7 +21,7 @@ export const getRecipesAll = () =>
 
 //:Recipe[]
 export const getRecipeById = (recipeId: string) =>
-	fetch(`${process.env.NEXT_PUBLIC_API_URL}/recipes/id/${recipeId}`, {
+	fetch(`${process.env.NEXT_PUBLIC_API_URL_DIRECT}/recipes/id/${recipeId}`, {
 		credentials: 'include',
 	}).then(res => res.json())
 
