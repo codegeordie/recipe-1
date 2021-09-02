@@ -15,7 +15,7 @@ export const getRecipes = (query?: GetRecipesQuery) => {
 }
 
 export const getRecipesAll = () =>
-	fetch(`${process.env.NEXT_PUBLIC_API_URL}/recipes/all`, {
+	fetch(`${process.env.NEXT_PUBLIC_API_URL_DIRECT}/recipes/all`, {
 		credentials: 'include',
 	}).then(res => res.json())
 
