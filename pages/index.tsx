@@ -100,6 +100,49 @@ export default function Home() {
 						</StyledNavButtonsWrapper>
 					</Nav>
 
+					<MobileAside>
+						<Modal buttonText='Filters' small={true}>
+							<StyledFiltersModal>
+								{session && (
+									<>
+										<StyledToggleWrapper>
+											<Toggle
+												label='Only My Recipes'
+												onChange={() => dispatch(toggleShowCreated())}
+											/>
+											<Toggle
+												label='Only My Favorites'
+												onChange={() => dispatch(toggleShowFavorites())}
+											/>
+										</StyledToggleWrapper>
+									</>
+								)}
+								<TagFilters />
+								<CalorieSlider rangeMin={0} rangeMax={800} />
+								<StyledDropdownWrapper>
+									<CurrencyDropdown />
+								</StyledDropdownWrapper>
+							</StyledFiltersModal>
+						</Modal>
+						<StyledMobileNavButtonsWrapper>
+							{session && (
+								<>
+									<Modal buttonText='New Recipe' small={true}>
+										<RecipeSubmitModal />
+									</Modal>
+									<UserMenu small={true} />
+								</>
+							)}
+							{!session && (
+								<>
+									<PrimaryButton onClick={() => signIn()} small>
+										Login
+									</PrimaryButton>
+								</>
+							)}
+						</StyledMobileNavButtonsWrapper>
+					</MobileAside>
+
 					<Aside>
 						{session && (
 							<>
@@ -141,36 +184,76 @@ const StyledPageGrid = styled.div`
 	padding: 0 10px;
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
-	grid-template-rows: 100px minmax(calc(100vh - 100px), auto);
+	grid-template-rows: 75px 50px minmax(calc(100vh - 125px), auto);
+	@media only screen and (min-width: 576px) {
+		grid-template-rows: 100px minmax(calc(100vh - 100px), auto);
+	}
+`
+
+const MobileAside = styled.aside`
+	grid-column: 1 / 13;
+	grid-row: 2 / 2;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	> :not(:first-child) {
+		margin-left: 10px;
+	}
+	@media only screen and (min-width: 576px) {
+		display: none;
+	}
+`
+
+const StyledFiltersModal = styled.div`
+	padding: 20px;
 `
 
 const Aside = styled.aside`
 	grid-column: 1 / 4;
 	padding-right: 15px;
-	@media only screen and (min-width: 768px) {
-		grid-column: 1 / 3;
+	@media only screen and (max-width: 575px) {
+		display: none;
 	}
 	@media only screen and (min-width: 992px) {
+		grid-column: 1 / 3;
 		padding-right: 30px;
 	}
 `
 
 const Main = styled.main`
-	grid-column: 4 / 13;
-
-	@media only screen and (min-width: 768px) {
+	grid-column: 1 / 13;
+	@media only screen and (min-width: 576px) {
+		grid-column: 4 / 13;
+	}
+	@media only screen and (min-width: 992px) {
 		grid-column: 3 / 13;
 	}
 `
 
 const StyledNavFlexSpacer = styled.div`
 	flex: 1;
+	@media only screen and (max-width: 575px) {
+		display: none;
+	}
+`
+
+const StyledMobileNavButtonsWrapper = styled.div`
+	display: flex;
+	> :not(:first-child) {
+		margin-left: 10px;
+	}
+	@media only screen and (min-width: 576px) {
+		display: none;
+	}
 `
 
 const StyledNavButtonsWrapper = styled.div`
 	display: flex;
 	> :not(:first-child) {
 		margin-left: 10px;
+	}
+	@media only screen and (max-width: 575px) {
+		display: none;
 	}
 `
 

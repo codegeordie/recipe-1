@@ -18,10 +18,12 @@ const StyledRecipeList = styled.ul`
 	flex-wrap: wrap;
 	justify-content: center; */
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
+	grid-template-columns: 1fr;
 	grid-auto-rows: clamp(250px, 30vw, 350px);
 	gap: 10px;
-
+	@media only screen and (min-width: 350px) {
+		grid-template-columns: repeat(2, 1fr);
+	}
 	@media only screen and (min-width: 576px) {
 		grid-template-columns: repeat(2, 1fr);
 	}

@@ -7,6 +7,7 @@ import { PrimaryButton, SecondaryButton } from './Button'
 interface ModalProps {
 	children: React.ReactNode
 	buttonText: string
+	small?: boolean
 	// onCancelModal: () => void
 	// onAcceptModal: () => void
 	// acceptEnabled: boolean
@@ -14,7 +15,11 @@ interface ModalProps {
 	// title: string
 }
 
-export const Modal: React.FC<ModalProps> = ({ children, buttonText }) => {
+export const Modal: React.FC<ModalProps> = ({
+	children,
+	buttonText,
+	small = false,
+}) => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const openModal = () => setIsModalOpen(true)
 	const closeModal = () => setIsModalOpen(false)
@@ -33,7 +38,9 @@ export const Modal: React.FC<ModalProps> = ({ children, buttonText }) => {
 
 	return (
 		<>
-			<SecondaryButton onClick={openModal}>{buttonText}</SecondaryButton>
+			<SecondaryButton onClick={openModal} small={small}>
+				{buttonText}
+			</SecondaryButton>
 			{containerRef.current
 				? ReactDOM.createPortal(
 						<AnimatePresence>

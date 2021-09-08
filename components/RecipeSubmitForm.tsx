@@ -154,15 +154,13 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 
 const StyledForm = styled.form`
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr;
 	column-gap: 40px;
+	row-gap: 20px;
 	margin-top: 15px;
-	/* @media screen and (min-width: 576px) {
-		grid-template-columns: 1fr;
-	} */
-	@media screen and (max-width: 768px) {
-		grid-template-columns: 1fr;
-		row-gap: 20px;
+	@media screen and (min-width: 768px) {
+		grid-template-columns: 1fr 1fr;
+		row-gap: normal;
 	}
 `
 
@@ -197,11 +195,15 @@ const StyledIngredientsWrapper = styled.div`
 
 const StyledIngredientRowWrapper = styled.div`
 	display: grid;
-	grid-template-columns: 170px 7rem 3.5rem auto;
+	grid-template-columns: 160px 5rem 3.5rem auto;
 	grid-template-rows: 1fr;
-	column-gap: 10px;
+	column-gap: 5px;
 	align-items: center;
 	margin-bottom: 5px;
+	@media screen and (min-width: 576px) {
+		grid-template-columns: 175px 6.5rem 3.5rem auto;
+		column-gap: 10px;
+	}
 `
 
 const StyledLabel = styled.label`

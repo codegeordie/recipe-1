@@ -57,11 +57,17 @@ const StyledTh = styled.th<{ isName?: boolean }>`
 	padding: 1rem 1.5rem;
 	border-bottom: 1px solid ${p => p.theme.color.delta};
 	text-align: ${props => (props.isName ? 'left' : 'center')};
-	font: 200 1.8rem ${p => p.theme.font.title};
+	font: 200 1.6rem ${p => p.theme.font.title};
+	@media screen and (min-width: 576px) {
+		font: 200 1.8rem ${p => p.theme.font.title};
+	}
 `
 
 const StyledTd = styled.td<{ isName?: boolean }>`
 	padding: 0.5rem 1.5rem;
 	text-align: ${props => (props.isName ? 'left' : 'center')};
-	font: 400 1.6rem ${p => p.theme.font.title};
+	font: 400 1.4rem ${p => p.theme.font.title};
+	@media screen and (min-width: 576px) {
+		font: 400 1.6rem ${p => p.theme.font.title};
+	}
 `

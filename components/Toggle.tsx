@@ -54,6 +54,7 @@ const StyledHandle = styled.div``
 
 const StyledToggle = styled.div`
 	width: 40px;
+	min-width: 40px;
 	height: 20px;
 	border-radius: 10px;
 	background-color: rgba(0, 0, 0, 0.1);

@@ -9,21 +9,27 @@ import { SecondaryButton } from '../../components/Button'
 
 import { RecipeAsProps } from '../../server/interfaces'
 import { getRecipeById, getRecipesAll } from '../../functions/api/recipes'
+import { useRouter } from 'next/dist/client/router'
 
 export default function RecipeId({ recipe }: RecipeAsProps) {
+	const router = useRouter()
+
 	return (
 		<StyledPageBackground>
 			<StyledPageGrid>
 				<Nav>
-					{/* <Link href={`/`}>
-						<a>
-							<SecondaryButton small>{`\u2190 Back`}</SecondaryButton>
-						</a>
-					</Link> */}
+					{/* <Link href={`/`}> */}
+					<a>
+						<SecondaryButton
+							small
+							onClick={() => router.back()}
+						>{`\u2190 Back`}</SecondaryButton>
+					</a>
+					{/* </Link> */}
 					<StyledNavFlexSpacer />
 					<Link href={`/newrecipe`}>
 						<a>
-							<SecondaryButton>New Recipe</SecondaryButton>
+							<SecondaryButton small>New Recipe</SecondaryButton>
 						</a>
 					</Link>
 				</Nav>
@@ -56,7 +62,7 @@ export async function getStaticPaths() {
 	const recipe = await getRecipesAll()
 	const paths = recipe.map(i => `/recipes/${i._id}`)
 
-	return { paths, fallback: true }
+	return { paths, fallback: 'blocking' }
 }
 
 const StyledPageBackground = styled.div`
@@ -84,8 +90,13 @@ const StyledNavFlexSpacer = styled.div`
 `
 
 const StyledDescription = styled.div`
-	width: 80%;
-	padding: 3rem;
-	font: 1.8rem ${p => p.theme.font.body};
+	width: 100%;
+	padding: 3rem 1.5rem;
+	font: 1.6rem ${p => p.theme.font.body};
 	color: ${props => props.theme.text.dark07};
+	@media screen and (min-width: 576px) {
+		font: 1.8rem ${p => p.theme.font.body};
+		width: 85%;
+		padding: 3rem;
+	}
 `

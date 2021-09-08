@@ -70,7 +70,7 @@ export const RecipeCard = ({ recipe }: RecipeAsProps) => {
 const StyledRecipeCard = styled.li`
 	display: grid;
 	grid-template-columns: 1fr;
-	grid-template-rows: 6fr 3fr 1fr;
+	grid-template-rows: 6fr minmax(0, 3fr) 1fr;
 	background-color: ${p => p.theme.color.white};
 	border: 3px solid ${p => p.theme.color.white};
 	transition: 0.3s;
@@ -115,12 +115,22 @@ const StyledHeartButton = styled.button`
 `
 
 const StyledFoodTitle = styled.h4`
-	padding: 1rem;
+	padding: 0.5rem;
 	text-align: center;
-	font: 700 1.8rem ${p => p.theme.font.title};
+	font: 700 1.6rem ${p => p.theme.font.title};
 	color: ${p => p.theme.text.dark07};
+	/* text-overflow: ellipsis;
+	overflow: hidden;
+	border: 1px solid red; */
 	&:hover {
 		text-decoration: underline;
+	}
+	@media only screen and (min-width: 576px) {
+		font: 700 1.7rem ${p => p.theme.font.title};
+		padding: 1rem;
+	}
+	@media only screen and (min-width: 768px) {
+		font: 700 1.8rem ${p => p.theme.font.title};
 	}
 `
 
@@ -136,6 +146,12 @@ const StyledStatsWrapper = styled.div`
 const StyledFoodStat = styled.p`
 	flex: 1;
 	text-align: center;
-	font: 200 1.5rem ${p => p.theme.font.body};
+	font: 200 1.3rem ${p => p.theme.font.body};
 	color: ${p => p.theme.text.dark07};
+	@media only screen and (min-width: 576px) {
+		font: 200 1.4rem ${p => p.theme.font.body};
+	}
+	@media only screen and (min-width: 768px) {
+		font: 200 1.5rem ${p => p.theme.font.body};
+	}
 `

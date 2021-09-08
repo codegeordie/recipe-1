@@ -52,6 +52,9 @@ export const Searchbar = () => {
 const StyledSearchbar = styled.form`
 	position: relative;
 	width: clamp(300px, 500px, 50vw);
+	@media only screen and (max-width: 575px) {
+		width: 100%;
+	}
 `
 
 const StyledInput = styled.input`

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { changeCurrency } from '../redux/slices/userSlice'
 import { SecondaryButton } from './Button'
 
-export const UserMenu = () => {
+export const UserMenu = ({ small = false }) => {
 	const dispatch = useDispatch()
 
 	const signUserOut = () => {
@@ -15,7 +15,7 @@ export const UserMenu = () => {
 
 	return (
 		<DropdownMenu.Root>
-			<DropdownMenu.Trigger as={SecondaryButton}>
+			<DropdownMenu.Trigger as={SecondaryButton} small={small}>
 				User Menu
 			</DropdownMenu.Trigger>
 
