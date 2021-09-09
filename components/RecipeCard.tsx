@@ -9,6 +9,7 @@ import { setFavorite } from '../functions/api/users'
 import { recipesSlice } from '../redux/slices/recipesSlice'
 import { useDispatch } from 'react-redux'
 import { signIn, useSession } from 'next-auth/client'
+import { Star as StarIcon, StarFilled as StarIconFilled } from '@air/icons'
 
 export const RecipeCard = ({ recipe }: RecipeAsProps) => {
 	const dispatch = useDispatch()
@@ -33,7 +34,7 @@ export const RecipeCard = ({ recipe }: RecipeAsProps) => {
 								)
 							}
 						>
-							❤️
+							<StarIconFilled width='30' fill='white' />
 						</StyledHeartButton>
 					)}
 					{!recipe.favorited && session && (
@@ -44,7 +45,7 @@ export const RecipeCard = ({ recipe }: RecipeAsProps) => {
 								)
 							}
 						>
-							🤍
+							<StarIcon width='30' fill='white' fillOpacity='0.8' />
 						</StyledHeartButton>
 					)}
 				</StyledButtonBar>
@@ -105,13 +106,23 @@ const StyledButtonBar = styled.div`
 `
 
 const StyledHeartButton = styled.button`
-	font-size: 2.5rem;
+	/* font-size: 2.5rem;
 	padding: 5px;
-	border-radius: 50%;
+	border-radius: 50%; */
 	background: none;
 	outline: none;
 	border: none;
 	cursor: pointer;
+	border-radius: 50%;
+	transition: 0.3s;
+	&:hover {
+		background: radial-gradient(
+			circle,
+			rgba(0, 0, 0, 0.4) 0%,
+			rgba(0, 0, 0, 0.25) 20%,
+			rgba(0, 0, 0, 0) 70%
+		);
+	}
 `
 
 const StyledFoodTitle = styled.h4`

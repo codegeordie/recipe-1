@@ -1,8 +1,9 @@
 import _ from 'lodash'
 import { useRouter } from 'next/dist/client/router'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useContext } from 'react'
 import { useDebounce } from 'react-use'
 import { RangeSlider, RangeSliderProps } from './RangeSlider'
+import { ThemeContext } from 'styled-components'
 
 interface CalorieSliderProps {
 	rangeMin: number
@@ -11,6 +12,7 @@ interface CalorieSliderProps {
 
 export const CalorieSlider = ({ rangeMin, rangeMax }: CalorieSliderProps) => {
 	const router = useRouter()
+	const themeContext = useContext(ThemeContext)
 
 	let [cal_min, cal_max] = [router.query.cal_min, router.query.cal_max]
 	if (Array.isArray(cal_min)) cal_min = cal_min[0]
@@ -63,7 +65,7 @@ export const CalorieSlider = ({ rangeMin, rangeMax }: CalorieSliderProps) => {
 					rangeMin={rangeMin}
 					rangeMax={rangeMax}
 					step={5}
-					handleColor={'rgba(15, 120, 175, 1)'}
+					handleColor={'rgba(15, 120, 175, 0.9)'}
 					highlightColor={'rgba(15, 120, 175, 0.9)'}
 				/>
 			)}

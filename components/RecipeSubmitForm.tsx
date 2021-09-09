@@ -27,7 +27,6 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 	}
 
 	const initialValues = {
-		//uid: '',
 		isPrivate: false,
 		name: '',
 		description: '',
@@ -38,9 +37,6 @@ export const RecipeSubmitForm = ({ ingrArray }: IngredientsProps) => {
 	}
 
 	const onSubmit = async (values: RecipeSubmittal) => {
-		//if (!session) throw Error('not logged in, cannot submit')
-		//values.uid = session.uid as string
-
 		if (values.photo) {
 			let data = new FormData()
 			data.append('photo', values.photo)

@@ -8,7 +8,7 @@ type RecipeIngredients = {
 
 export type RecipeSubmittal = {
 	uid?: string
-	isPublic?: boolean
+	isPrivate?: boolean
 	name: string
 	description: string
 	image: string
