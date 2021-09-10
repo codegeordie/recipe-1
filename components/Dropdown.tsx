@@ -36,7 +36,7 @@ export const Dropdown = ({
 		//initialSelectedItem: initialSelected,
 	})
 
-	console.log('selectedItem :>> ', selectedItem)
+	//console.log('selectedItem :>> ', selectedItem)
 
 	return (
 		<StyledDropdown {...rest}>

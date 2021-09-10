@@ -12,7 +12,7 @@ interface CalorieSliderProps {
 
 export const CalorieSlider = ({ rangeMin, rangeMax }: CalorieSliderProps) => {
 	const router = useRouter()
-	const themeContext = useContext(ThemeContext)
+	//const themeContext = useContext(ThemeContext)
 
 	let [cal_min, cal_max] = [router.query.cal_min, router.query.cal_max]
 	if (Array.isArray(cal_min)) cal_min = cal_min[0]

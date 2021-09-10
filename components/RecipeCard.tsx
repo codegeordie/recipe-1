@@ -16,7 +16,7 @@ export const RecipeCard = ({ recipe }: RecipeAsProps) => {
 	const [session] = useSession()
 
 	return (
-		<StyledRecipeCard>
+		<StyledRecipeCard data-test-id={`recipe-card`}>
 			<StyledImageWrapper>
 				<Link href={`/recipes/${recipe._id}`}>
 					<a>
@@ -28,6 +28,7 @@ export const RecipeCard = ({ recipe }: RecipeAsProps) => {
 				<StyledButtonBar>
 					{recipe.favorited && (
 						<StyledHeartButton
+							data-test-id='unsetFavoriteButton'
 							onClick={() =>
 								dispatch(
 									setFavorite({ recipeId: recipe._id, setFavBool: false })
@@ -39,6 +40,7 @@ export const RecipeCard = ({ recipe }: RecipeAsProps) => {
 					)}
 					{!recipe.favorited && session && (
 						<StyledHeartButton
+							data-test-id='setFavoriteButton'
 							onClick={() =>
 								dispatch(
 									setFavorite({ recipeId: recipe._id, setFavBool: true })

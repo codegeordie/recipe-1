@@ -90,6 +90,7 @@ export default function Home() {
 										<RecipeSubmitModal />
 									</Modal>
 									<UserMenu />
+									<div data-test-id='authenticated'></div>
 								</>
 							)}
 							{!session && (

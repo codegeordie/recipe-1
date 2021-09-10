@@ -6,6 +6,7 @@ import {
 import { setCurrency } from '../functions/api/users'
 import { Dropdown } from './Dropdown'
 import { useSession } from 'next-auth/client'
+import { memo } from 'react'
 
 export const CurrencyDropdown = () => {
 	const [session] = useSession()
@@ -24,6 +25,8 @@ export const CurrencyDropdown = () => {
 		{ id: 'MXN', value: 'Pesos' },
 		{ id: 'EUR', value: 'Euros' },
 	]
+
+	console.log('currency dropdown rerender')
 
 	return (
 		<Dropdown
