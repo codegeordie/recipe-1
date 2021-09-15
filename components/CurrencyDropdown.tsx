@@ -3,21 +3,21 @@ import {
 	changeCurrency,
 	userCurrencyPreference,
 } from '../redux/slices/userSlice'
-import { setCurrency } from '../functions/api/users'
+//import { setCurrency } from '../functions/api/users'
 import { Dropdown } from './Dropdown'
-import { useSession } from 'next-auth/client'
+//import { useSession } from 'next-auth/client'
 import { memo } from 'react'
 
-export const CurrencyDropdown = () => {
-	const [session] = useSession()
+export const CurrencyDropdown = memo(() => {
+	// const [session] = useSession()
 	const dispatch = useDispatch()
 	const selectedItem = useSelector(userCurrencyPreference)
 
 	const handleSelected = ({ selectedItem }) => {
 		dispatch(changeCurrency(selectedItem))
-		if (session) {
-			setCurrency({ currency: selectedItem })
-		}
+		// if (session) {
+		// 	setCurrency({ currency: selectedItem })
+		// }
 	}
 
 	const items = [
@@ -26,7 +26,7 @@ export const CurrencyDropdown = () => {
 		{ id: 'EUR', value: 'Euros' },
 	]
 
-	console.log('currency dropdown rerender')
+	//console.log('currency dropdown rerender')
 
 	return (
 		<Dropdown
@@ -37,4 +37,4 @@ export const CurrencyDropdown = () => {
 			initialSelected={selectedItem}
 		/>
 	)
-}
+})

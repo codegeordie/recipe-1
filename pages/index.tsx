@@ -19,7 +19,7 @@ import { UserMenu } from '../components/UserMenu'
 import { Toggle } from '../components/Toggle'
 
 import { getRecipes } from '../functions/api/recipes'
-import { getCurrency } from '../functions/api/users'
+import { getCurrency, setCurrency } from '../functions/api/users'
 
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -36,6 +36,10 @@ import {
 	recipeArray as reduxRecipeArray,
 	refreshRecipeArray,
 } from '../redux/slices/recipeListSlice'
+import { Input } from '../components/Input'
+
+import axios from 'axios'
+import { math } from 'polished'
 
 export default function Home() {
 	const router = useRouter()
@@ -71,6 +75,129 @@ export default function Home() {
 		}
 	}, [session])
 
+	useEffect(() => {
+		if (session) setCurrency({ currency: currency })
+	}, [currency])
+
+	//////////////////////////////
+	//const [testvalue, setTestvalue] = useState()
+
+	const getDups = async () => {
+		const response = await fetch(
+			`${process.env.NEXT_PUBLIC_API_URL222}/populatethestuff`
+		).then(res => res.json())
+		console.log('response :>> ', response)
+
+		response.forEach(async dup => {
+			for (let i = dup.count - 1; i > 0; i--) {
+				const idDup = dup.uniqueIds[i]
+				console.log('idDup :>> ', idDup)
+				const dbRes = await axios.delete(
+					`${process.env.NEXT_PUBLIC_API_URL222}/populatethestuff/${idDup}`
+				)
+				console.log('dbRes :>> ', dbRes)
+			}
+		})
+	}
+
+	const getMore = async () => {
+		const timer = ms => new Promise(res => setTimeout(res, ms))
+
+		const loop = async () => {
+			// const searchArray = [
+			// 	'salmon',
+			// 	'lobster',
+			// 	'chicken',
+			// 	'italian',
+			// 	'indian',
+			// 	'pizza',
+			// 	'pasta',
+			// 	'stew',
+			// 	'burger',
+			// 	'cajun',
+			// 	'vegan',
+			// 	'vegetarian',
+			// ]
+			// const searchArray = [
+			// 	'french',
+			// 	'scallops',
+			// 	'thai',
+			// 	'japanese',
+			// 	'vietnamese',
+			// 	'ham',
+			// 	'sandwich',
+			// 	'soup',
+			// 	'wrap',
+			// 	'gluten',
+			// 	'roasted',
+			// 	'german',
+			// ]
+			// const searchArray = [
+			// 	'peppers',
+			// 	'beans',
+			// 	'taco',
+			// 	'quesadilla',
+			// 	'burrito',
+			// 	'turkey',
+			// 	'sausage',
+			// 	'cheese',
+			// 	'snack',
+			// 	'cake',
+			// 	'chocolate',
+			// 	'cherry',
+			// 	'apple',
+			// 	'pie',
+			// 	'dessert',
+			// ]
+			// const searchArray = [
+			// 	'breakfast',
+			// 	'egg',
+			// 	'yogurt',
+			// 	'bacon',
+			// 	'scallops',
+			// 	'steak',
+			// 	'brie',
+			// 	'gnocchi',
+			// 	'cod',
+			// 	'tuna',
+			// 	'vanilla',
+			// 	'pear',
+			// 	'asparagus',
+			// 	'broccoli',
+			// 	'salad',
+			// 	'healthy',
+			// 	'carrot',
+			// 	'smoothie',
+			// 	'dinner',
+			// ]
+			for (const search of searchArray) {
+				const CORE_URL = `https://api.edamam.com/api/recipes/v2?type=public&q=${search}&app_id=5071a1b3&app_key=8a2f16ef67e4171a74fb7906dbe2d2ca&imageSize=LARGE`
+				let url = CORE_URL
+				for (let i = 0; i < 5; i++) {
+					const results = await fetch(url).then(res => res.json())
+					const parsedResults = results.hits.map(hit => hit.recipe)
+
+					const dbResponse = await axios.post(
+						`${process.env.NEXT_PUBLIC_API_URL222}/populatethestuff`,
+						parsedResults
+					)
+					if (dbResponse.data === 'err') break
+
+					url = results._links.next.href
+					const wait = 7000 + Math.floor(Math.random() * 5000)
+					await timer(wait)
+					console.log(
+						`${search}: page ${i}. insertedCount: ${dbResponse.data.insertedCount}`
+					)
+				}
+			}
+		}
+
+		loop()
+	}
+
+	//////////////////////////////
+
 	return (
 		<>
 			<Head>
@@ -82,6 +209,17 @@ export default function Home() {
 				<StyledPageGrid>
 					<Nav>
 						{router.isReady && <Searchbar />}
+						<form onSubmit={e => e.preventDefault()}>
+							{/* <input
+								value={testvalue}
+								onChange={e => setTestvalue(e.currentTarget.value)}
+							/> */}
+							{/* <PrimaryButton onClick={() => getMore(testvalue)}>
+								No
+							</PrimaryButton> */}
+							<PrimaryButton onClick={() => getMore()}>Start</PrimaryButton>
+							<PrimaryButton onClick={() => getDups()}>Dups</PrimaryButton>
+						</form>
 						<StyledNavFlexSpacer />
 						<StyledNavButtonsWrapper>
 							{session && (

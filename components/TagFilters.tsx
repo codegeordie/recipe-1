@@ -24,6 +24,8 @@ export const TagFilters = () => {
 		else router.push({ query: { ...rest, filters: filterString } })
 	}
 
+	console.log('tag filters render')
+
 	return (
 		<StyledTagFilters>
 			{possibleTags && router.isReady && (
