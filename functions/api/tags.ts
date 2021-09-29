@@ -5,5 +5,5 @@ export const getTags = async () => {
 		`${process.env.NEXT_PUBLIC_API_URL}/tags`
 	).then(res => res.json())
 
-	return response
+	return response.map(tag => tag._id)
 }

@@ -21,7 +21,7 @@ export type RecipeSubmittal = {
 
 export type RecipeBase = {
 	_id: string
-	name: string
+	label: string
 	description: string
 	image: string
 	servings: number
@@ -101,13 +101,16 @@ export type GetRecipesQuery = {
 // 	| MongoQ_IdMany
 // 	| undefined
 
-export interface RArrayAsProps {
+export type RArrayAsProps = {
 	recipes: Recipe[]
 	id: string
+	lastElementRef: (element: HTMLLIElement) => void
+	lastElementId: React.MutableRefObject<string | undefined>
 }
 
-export interface RecipeAsProps {
+export type RecipeAsProps = {
 	recipe: Recipe
+	lastElementRef?: (element: HTMLLIElement) => void
 }
 
 export interface IngredientsProps {

@@ -54,8 +54,6 @@ export const CalorieSlider = memo(
 			[alphaValue, betaValue]
 		)
 
-		console.log('calorieslider render')
-
 		return (
 			<>
 				{router.isReady && (

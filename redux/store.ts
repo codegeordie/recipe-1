@@ -24,13 +24,15 @@ const reducers = combineReducers({
 	recipeList: recipeListSlice.reducer,
 })
 
-const persistConfig = {
-	key: 'root',
-	version: 1,
-	storage,
-}
-
-const persistedReducer = persistReducer(persistConfig, reducers)
+const persistedReducer = persistReducer(
+	{
+		key: 'root',
+		version: 1,
+		storage,
+		whitelist: ['user'],
+	},
+	reducers
+)
 
 // const store = configureStore({
 // 	reducer: {

@@ -3,12 +3,12 @@ import styled from 'styled-components'
 import Dinero from 'dinero.js'
 import { RecipeAsProps } from '../server/interfaces'
 
-export const RecipeDetail = ({ recipe }: RecipeAsProps) => {
+export const RecipeDetail: React.FC<RecipeAsProps> = ({ recipe }) => {
 	return (
 		<StyledRecipeDetail>
 			<StyledHeroWrapper>
 				<StyledRecipeImage src={`../${recipe.image}`} />
-				<h1>{recipe.name}</h1>
+				<h1>{recipe.label}</h1>
 			</StyledHeroWrapper>
 			<StyledStatsWrapper>
 				<p>{`Makes ${recipe.servings} servings`}</p>

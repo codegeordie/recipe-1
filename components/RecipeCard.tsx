@@ -2,26 +2,27 @@ import Link from 'next/link'
 import React from 'react'
 import styled from 'styled-components'
 import { RecipeAsProps } from '../server/interfaces'
-import Dinero from 'dinero.js'
-import { deleteRecipe } from '../functions/api/recipes'
-import { SecondaryButton, TextButton } from './Button'
+//import Dinero from 'dinero.js'
+//import { deleteRecipe } from '../functions/api/recipes'
+//import { SecondaryButton, TextButton } from './Button'
 import { setFavorite } from '../functions/api/users'
-import { recipesSlice } from '../redux/slices/recipesSlice'
+//import { recipesSlice } from '../redux/slices/recipesSlice'
 import { useDispatch } from 'react-redux'
-import { signIn, useSession } from 'next-auth/client'
+import { useSession } from 'next-auth/client'
 import { Star as StarIcon, StarFilled as StarIconFilled } from '@air/icons'
 
-export const RecipeCard = ({ recipe }: RecipeAsProps) => {
+export const RecipeCard: React.FC<RecipeAsProps> = ({
+	recipe,
+	lastElementRef,
+}) => {
 	const dispatch = useDispatch()
 	const [session] = useSession()
 
 	return (
-		<StyledRecipeCard data-test-id={`recipe-card`}>
+		<StyledRecipeCard data-test-id={`recipe-card`} ref={lastElementRef}>
 			<StyledImageWrapper>
 				<Link href={`/recipes/${recipe._id}`}>
-					<a>
-						<img src={recipe.image} />
-					</a>
+					<a>{/* <img src={recipe.image} /> */}</a>
 				</Link>
 			</StyledImageWrapper>
 			<StyledInfoWrapper>
@@ -53,18 +54,18 @@ export const RecipeCard = ({ recipe }: RecipeAsProps) => {
 				</StyledButtonBar>
 				<Link href={`/recipes/${recipe._id}`}>
 					<a>
-						<StyledFoodTitle>{recipe.name}</StyledFoodTitle>
+						<StyledFoodTitle>{recipe.label}</StyledFoodTitle>
 					</a>
 				</Link>
 			</StyledInfoWrapper>
 			<StyledStatsWrapper>
 				<StyledFoodStat>{recipe.serving_cal}cal</StyledFoodStat>
-				<StyledFoodStat>
+				{/* <StyledFoodStat>
 					{Dinero({
 						amount: recipe.cost.value,
 						currency: recipe.cost.currency,
 					}).toFormat('$0,0.00')}
-				</StyledFoodStat>
+				</StyledFoodStat> */}
 			</StyledStatsWrapper>
 		</StyledRecipeCard>
 	)
@@ -128,22 +129,30 @@ const StyledHeartButton = styled.button`
 `
 
 const StyledFoodTitle = styled.h4`
-	padding: 0.5rem;
+	margin: 0.5rem;
 	text-align: center;
-	font: 700 1.6rem ${p => p.theme.font.title};
+	font: 700 1.5rem ${p => p.theme.font.title};
+	max-height: 6.1rem;
 	color: ${p => p.theme.text.dark07};
-	/* text-overflow: ellipsis;
+	display: block;
+	display: -webkit-box;
+	line-height: 1;
+	line-clamp: 3;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
 	overflow: hidden;
-	border: 1px solid red; */
+	text-overflow: ellipsis;
 	&:hover {
 		text-decoration: underline;
 	}
 	@media only screen and (min-width: 576px) {
-		font: 700 1.7rem ${p => p.theme.font.title};
-		padding: 1rem;
+		font: 700 1.5rem ${p => p.theme.font.title};
+		margin: 1rem;
+		max-height: 7.1rem;
 	}
 	@media only screen and (min-width: 768px) {
-		font: 700 1.8rem ${p => p.theme.font.title};
+		font: 700 1.6rem ${p => p.theme.font.title};
+		max-height: 7.4rem;
 	}
 `
 

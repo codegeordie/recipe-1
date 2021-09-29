@@ -20,8 +20,6 @@ export const CheckboxForm = ({
 		)
 	})
 
-	console.log('checkbox form render')
-
 	return (
 		<StyledForm>
 			<Formik

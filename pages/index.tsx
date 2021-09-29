@@ -1,70 +1,63 @@
 import Head from 'next/head'
-import Link from 'next/link'
-import { signIn, signOut, useSession } from 'next-auth/client'
+//import Link from 'next/link'
+import { signIn, useSession } from 'next-auth/client'
 import { useRouter } from 'next/dist/client/router'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import _ from 'lodash'
 
 import { Nav } from '../components/Nav'
 import { Searchbar } from '../components/Searchbar'
 import { RecipeList } from '../components/RecipeList'
 import { TagFilters } from '../components/TagFilters'
 import { CalorieSlider } from '../components/CalorieSlider'
-import { PrimaryButton, SecondaryButton } from '../components/Button'
+import { PrimaryButton } from '../components/Button'
 import { RecipeSubmitModal } from '../components/RecipeSubmitModal'
 import { Modal } from '../components/Modal'
 import { CurrencyDropdown } from '../components/CurrencyDropdown'
 import { UserMenu } from '../components/UserMenu'
 import { Toggle } from '../components/Toggle'
 
-import { getRecipes } from '../functions/api/recipes'
 import { getCurrency, setCurrency } from '../functions/api/users'
 
 import { useDispatch, useSelector } from 'react-redux'
 import {
 	createdBool,
+	showFavorites,
 	toggleShowCreated,
 	toggleShowFavorites,
 } from '../redux/slices/recipesSlice'
-import { RootState } from '../redux/store'
 import {
 	changeCurrency,
 	userCurrencyPreference,
 } from '../redux/slices/userSlice'
 import {
 	recipeArray as reduxRecipeArray,
-	refreshRecipeArray,
+	setRecipeArray,
+	appendRecipeArray,
 } from '../redux/slices/recipeListSlice'
-import { Input } from '../components/Input'
+import { useGetRecipes } from '../hooks/useGetRecipes'
 
-import axios from 'axios'
-import { math } from 'polished'
-
-export default function Home() {
+export default function Home(): JSX.Element {
 	const router = useRouter()
 	const [session, loading] = useSession()
 	const dispatch = useDispatch()
+	const { getRecipes } = useGetRecipes()
 
-	const showOnlyFavorites = useSelector(
-		(state: RootState) => state.recipes.showOnlyFavorites
-	)
+	const showOnlyFavorites = useSelector(showFavorites)
 	const showOnlyCreated = useSelector(createdBool)
 	const recipeArray = useSelector(reduxRecipeArray)
 	const currency = useSelector(userCurrencyPreference)
-	const currencyCode = currency.id
 
 	useEffect(() => {
-		if (router.isReady)
-			getRecipes({
-				...router.query,
-				showOnlyCreated,
-				showOnlyFavorites,
-				currency: currencyCode,
-			}).then(recipes => dispatch(refreshRecipeArray(recipes)))
-	}, [router.query, showOnlyCreated, showOnlyFavorites, currency])
+		const awaitGetRecipes = async () => {
+			const recipes = await getRecipes({ limit })
+			dispatch(setRecipeArray(recipes))
+		}
+		awaitGetRecipes()
+	}, [router.query, showOnlyCreated, showOnlyFavorites, currency, getRecipes])
 
 	useEffect(() => {
+		if (loading) return
 		if (session) {
 			getCurrency().then(userCurr => {
 				if (userCurr) dispatch(changeCurrency(userCurr))
@@ -73,130 +66,35 @@ export default function Home() {
 			// 	console.log('err', err)
 			// })
 		}
-	}, [session])
+	}, [session, loading])
 
 	useEffect(() => {
 		if (session) setCurrency({ currency: currency })
 	}, [currency])
 
-	//////////////////////////////
-	//const [testvalue, setTestvalue] = useState()
+	let cursor: string | undefined
+	const limit: number | undefined = 20
 
-	const getDups = async () => {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL222}/populatethestuff`
-		).then(res => res.json())
-		console.log('response :>> ', response)
+	const observer = useRef<IntersectionObserver>()
+	const lastElementId = useRef<string>()
+	const lastElementRef = useCallback(
+		(element: HTMLElement) => {
+			if (observer.current) observer.current.disconnect()
+			observer.current = new IntersectionObserver(entries => {
+				if (entries[0].isIntersecting) {
+					cursor = lastElementId.current
+					const awaitGetRecipes = async () => {
+						const recipes = await getRecipes({ cursor, limit })
+						dispatch(appendRecipeArray(recipes))
+					}
 
-		response.forEach(async dup => {
-			for (let i = dup.count - 1; i > 0; i--) {
-				const idDup = dup.uniqueIds[i]
-				console.log('idDup :>> ', idDup)
-				const dbRes = await axios.delete(
-					`${process.env.NEXT_PUBLIC_API_URL222}/populatethestuff/${idDup}`
-				)
-				console.log('dbRes :>> ', dbRes)
-			}
-		})
-	}
-
-	const getMore = async () => {
-		const timer = ms => new Promise(res => setTimeout(res, ms))
-
-		const loop = async () => {
-			// const searchArray = [
-			// 	'salmon',
-			// 	'lobster',
-			// 	'chicken',
-			// 	'italian',
-			// 	'indian',
-			// 	'pizza',
-			// 	'pasta',
-			// 	'stew',
-			// 	'burger',
-			// 	'cajun',
-			// 	'vegan',
-			// 	'vegetarian',
-			// ]
-			// const searchArray = [
-			// 	'french',
-			// 	'scallops',
-			// 	'thai',
-			// 	'japanese',
-			// 	'vietnamese',
-			// 	'ham',
-			// 	'sandwich',
-			// 	'soup',
-			// 	'wrap',
-			// 	'gluten',
-			// 	'roasted',
-			// 	'german',
-			// ]
-			// const searchArray = [
-			// 	'peppers',
-			// 	'beans',
-			// 	'taco',
-			// 	'quesadilla',
-			// 	'burrito',
-			// 	'turkey',
-			// 	'sausage',
-			// 	'cheese',
-			// 	'snack',
-			// 	'cake',
-			// 	'chocolate',
-			// 	'cherry',
-			// 	'apple',
-			// 	'pie',
-			// 	'dessert',
-			// ]
-			// const searchArray = [
-			// 	'breakfast',
-			// 	'egg',
-			// 	'yogurt',
-			// 	'bacon',
-			// 	'scallops',
-			// 	'steak',
-			// 	'brie',
-			// 	'gnocchi',
-			// 	'cod',
-			// 	'tuna',
-			// 	'vanilla',
-			// 	'pear',
-			// 	'asparagus',
-			// 	'broccoli',
-			// 	'salad',
-			// 	'healthy',
-			// 	'carrot',
-			// 	'smoothie',
-			// 	'dinner',
-			// ]
-			for (const search of searchArray) {
-				const CORE_URL = `https://api.edamam.com/api/recipes/v2?type=public&q=${search}&app_id=5071a1b3&app_key=8a2f16ef67e4171a74fb7906dbe2d2ca&imageSize=LARGE`
-				let url = CORE_URL
-				for (let i = 0; i < 5; i++) {
-					const results = await fetch(url).then(res => res.json())
-					const parsedResults = results.hits.map(hit => hit.recipe)
-
-					const dbResponse = await axios.post(
-						`${process.env.NEXT_PUBLIC_API_URL222}/populatethestuff`,
-						parsedResults
-					)
-					if (dbResponse.data === 'err') break
-
-					url = results._links.next.href
-					const wait = 7000 + Math.floor(Math.random() * 5000)
-					await timer(wait)
-					console.log(
-						`${search}: page ${i}. insertedCount: ${dbResponse.data.insertedCount}`
-					)
+					awaitGetRecipes()
 				}
-			}
-		}
-
-		loop()
-	}
-
-	//////////////////////////////
+			})
+			if (element) observer.current.observe(element)
+		},
+		[getRecipes]
+	)
 
 	return (
 		<>
@@ -209,17 +107,6 @@ export default function Home() {
 				<StyledPageGrid>
 					<Nav>
 						{router.isReady && <Searchbar />}
-						<form onSubmit={e => e.preventDefault()}>
-							{/* <input
-								value={testvalue}
-								onChange={e => setTestvalue(e.currentTarget.value)}
-							/> */}
-							{/* <PrimaryButton onClick={() => getMore(testvalue)}>
-								No
-							</PrimaryButton> */}
-							<PrimaryButton onClick={() => getMore()}>Start</PrimaryButton>
-							<PrimaryButton onClick={() => getDups()}>Dups</PrimaryButton>
-						</form>
 						<StyledNavFlexSpacer />
 						<StyledNavButtonsWrapper>
 							{session && (
@@ -305,7 +192,14 @@ export default function Home() {
 					</Aside>
 
 					<Main>
-						{recipeArray && <RecipeList id='rlist' recipes={recipeArray} />}
+						{recipeArray && (
+							<RecipeList
+								id='rlist'
+								recipes={recipeArray}
+								lastElementRef={lastElementRef}
+								lastElementId={lastElementId}
+							/>
+						)}
 					</Main>
 				</StyledPageGrid>
 			</StyledPageBackground>

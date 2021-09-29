@@ -22,3 +22,5 @@ export const recipesSlice = createSlice({
 export const { toggleShowCreated, toggleShowFavorites } = recipesSlice.actions
 
 export const createdBool = (state: RootState) => state.recipes.showOnlyCreated
+export const showFavorites = (state: RootState) =>
+	state.recipes.showOnlyFavorites

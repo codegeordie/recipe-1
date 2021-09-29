@@ -10,8 +10,14 @@ export const recipeListSlice = createSlice({
 	name: 'recipeList',
 	initialState,
 	reducers: {
-		refreshRecipeArray: (state, action) => {
+		clearRecipeArray: state => {
+			state.recipeArray = []
+		},
+		setRecipeArray: (state, action) => {
 			state.recipeArray = action.payload
+		},
+		appendRecipeArray: (state, action) => {
+			state.recipeArray = [...state.recipeArray, ...action.payload]
 		},
 		setFavoriteAction: (state, action) => {
 			state.recipeArray.forEach(recipe => {
@@ -22,6 +28,11 @@ export const recipeListSlice = createSlice({
 	},
 })
 
-export const { refreshRecipeArray, setFavoriteAction } = recipeListSlice.actions
+export const {
+	clearRecipeArray,
+	setRecipeArray,
+	appendRecipeArray,
+	setFavoriteAction,
+} = recipeListSlice.actions
 
 export const recipeArray = (state: RootState) => state.recipeList.recipeArray

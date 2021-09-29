@@ -3,9 +3,25 @@ import styled from 'styled-components'
 import { RArrayAsProps } from '../server/interfaces'
 import { RecipeCard } from './RecipeCard'
 
-export const RecipeList = ({ recipes, id }: RArrayAsProps) => {
-	const recipesOutput = recipes.map(recipe => {
-		return <RecipeCard key={id + recipe._id} recipe={recipe} />
+export const RecipeList: React.FC<RArrayAsProps> = ({
+	recipes,
+	id,
+	lastElementRef,
+	lastElementId,
+}) => {
+	const recipesOutput = recipes.map((recipe, index, { length }) => {
+		if (index === length - 1) {
+			lastElementId.current = recipe._id
+			return (
+				<RecipeCard
+					key={id + recipe._id}
+					recipe={recipe}
+					lastElementRef={lastElementRef}
+				/>
+			)
+		} else {
+			return <RecipeCard key={id + recipe._id} recipe={recipe} />
+		}
 	})
 
 	return <StyledRecipeList>{recipesOutput}</StyledRecipeList>
@@ -13,10 +29,6 @@ export const RecipeList = ({ recipes, id }: RArrayAsProps) => {
 
 const StyledRecipeList = styled.ul`
 	position: relative;
-	//padding: 0 10px;
-	/* display: flex;
-	flex-wrap: wrap;
-	justify-content: center; */
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-auto-rows: clamp(250px, 30vw, 350px);

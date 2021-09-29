@@ -24,8 +24,6 @@ export const TagFilters = () => {
 		else router.push({ query: { ...rest, filters: filterString } })
 	}
 
-	console.log('tag filters render')
-
 	return (
 		<StyledTagFilters>
 			{possibleTags && router.isReady && (
@@ -47,6 +45,5 @@ export const TagFilters = () => {
 }
 
 const StyledTagFilters = styled.div`
-	//border: 1px solid pink;
 	margin-bottom: 25px;
 `
