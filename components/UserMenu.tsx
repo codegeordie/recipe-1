@@ -1,3 +1,4 @@
+import React from 'react'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { signIn, signOut, useSession } from 'next-auth/client'
 import { useDispatch } from 'react-redux'
@@ -5,7 +6,7 @@ import styled from 'styled-components'
 import { changeCurrency } from '../redux/slices/userSlice'
 import { SecondaryButton } from './Button'
 
-export const UserMenu = ({ small = false }) => {
+export const UserMenu: React.FC<{ small?: boolean }> = ({ small = false }) => {
 	const dispatch = useDispatch()
 
 	const signUserOut = () => {
@@ -69,8 +70,8 @@ const StyledItem = styled(DropdownMenu.Item)`
 	}
 `
 
-const StyledSeparator = styled(DropdownMenu.Separator)`
-	padding-bottom: 5px;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-	margin-bottom: 5px;
-`
+// const StyledSeparator = styled(DropdownMenu.Separator)`
+// 	padding-bottom: 5px;
+// 	border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+// 	margin-bottom: 5px;
+// `

@@ -1,4 +1,6 @@
-interface RangeSliderProps {
+import React from 'react'
+
+type RangeSliderProps = {
 	onSubmit: (value: string) => void
 	params: {
 		label: string
@@ -9,7 +11,10 @@ interface RangeSliderProps {
 	}
 }
 
-export const RangeSliderSingle = ({ onSubmit, params }: RangeSliderProps) => {
+export const RangeSliderSingle: React.FC<RangeSliderProps> = ({
+	onSubmit,
+	params,
+}) => {
 	return (
 		<form onSubmit={e => e.preventDefault()}>
 			<input

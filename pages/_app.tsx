@@ -10,9 +10,9 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
 import { IdProvider } from '@radix-ui/react-id'
 
-let persistor = persistStore(store)
+const persistor = persistStore(store)
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 	return (
 		<>
 			<Head>
@@ -62,6 +62,8 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     min-height: 100vh;
+		max-height: 100vh;
+		overflow: hidden;
   }
 
   #__next {

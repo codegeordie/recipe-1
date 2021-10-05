@@ -2,14 +2,21 @@ import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 import { Recipe } from '../../server/interfaces'
 
-const initialState: { recipeArray: Recipe[] } = {
+const initialState: {
+	recipeArray: Recipe[]
+	currentRecipe: Recipe | undefined
+} = {
 	recipeArray: [],
+	currentRecipe: undefined,
 }
 
 export const recipeListSlice = createSlice({
 	name: 'recipeList',
 	initialState,
 	reducers: {
+		setCurrentRecipe: (state, action) => {
+			state.currentRecipe = action.payload
+		},
 		clearRecipeArray: state => {
 			state.recipeArray = []
 		},
@@ -29,6 +36,7 @@ export const recipeListSlice = createSlice({
 })
 
 export const {
+	setCurrentRecipe,
 	clearRecipeArray,
 	setRecipeArray,
 	appendRecipeArray,
@@ -36,3 +44,5 @@ export const {
 } = recipeListSlice.actions
 
 export const recipeArray = (state: RootState) => state.recipeList.recipeArray
+export const currentRecipe = (state: RootState) =>
+	state.recipeList.currentRecipe

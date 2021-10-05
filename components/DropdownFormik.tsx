@@ -1,8 +1,8 @@
-import _ from 'lodash'
+import React from 'react'
+//import _ from 'lodash'
 import styled from 'styled-components'
 import { useSelect } from 'downshift'
 import { useField } from 'formik'
-import { SecondaryButton } from './Button'
 
 type DropdownFormik = {
 	label: string
@@ -11,12 +11,12 @@ type DropdownFormik = {
 	initialSelectedItem?: { id: string; value: string }
 }
 
-export const DropdownFormik = ({
+export const DropdownFormik: React.FC<DropdownFormik> = ({
 	label,
 	items,
 	initialSelectedItem,
 	...rest
-}: DropdownFormik) => {
+}) => {
 	const [field, meta, { setValue }] = useField(rest)
 
 	const {

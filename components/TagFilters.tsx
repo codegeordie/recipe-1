@@ -46,4 +46,5 @@ export const TagFilters = () => {
 
 const StyledTagFilters = styled.div`
 	margin-bottom: 25px;
+	overflow: auto;
 `

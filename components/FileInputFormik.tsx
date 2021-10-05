@@ -1,3 +1,4 @@
+import React from 'react'
 import { useField, useFormikContext } from 'formik'
 import styled from 'styled-components'
 
@@ -9,13 +10,13 @@ type FileInputFormik = {
 	required?: boolean
 }
 
-export const FileInputFormik = ({
+export const FileInputFormik: React.FC<FileInputFormik> = ({
 	label,
 	formik,
 	autoComplete = 'off',
 	required = true,
 	...props
-}: FileInputFormik) => {
+}) => {
 	const [field, meta] = useField(props)
 
 	return (

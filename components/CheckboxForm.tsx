@@ -1,17 +1,18 @@
+import React from 'react'
 import styled from 'styled-components'
 import { Formik, Field, Form } from 'formik'
 import _ from 'lodash'
 import { CheckboxFormProps } from '../server/interfaces'
 import { HiddenButton } from './Button'
 
-export const CheckboxForm = ({
+export const CheckboxForm: React.FC<CheckboxFormProps> = ({
 	options,
 	initialChecked = [],
 	onSubmit,
-}: CheckboxFormProps) => {
+}) => {
 	const checkboxes = options.map(option => {
 		return (
-			<label key={option.id}>
+			<label key={option.label}>
 				<Field type='checkbox' name='checked' value={option.label} />
 				<span>
 					{option.label[0].toUpperCase() + option.label.slice(1).toLowerCase()}

@@ -35,8 +35,36 @@ export type RecipeBase = {
 	updatedAt: Date
 }
 
-export type Recipe = RecipeBase & {
-	ingredients_full: Ingredient[]
+// export type Recipe = RecipeBase & {
+// 	ingredients_full: Ingredient[]
+// 	serving_cal: number
+// 	favorited: boolean
+// }
+
+export type Recipe = {
+	_id: string
+	uri: string
+	label: string
+	image: string
+	source: string
+	url: string
+	shareAs: string
+	yield: number
+	dietLabels: any[]
+	healthLabels: any[]
+	cautions: any[]
+	ingredientLines: string[]
+	ingredients: any[]
+	calories: number
+	totalWeight: number
+	totalTime: number
+	cuisineType: string[]
+	mealType: string[]
+	dishType: string[]
+	totalNutrients: any
+	totalDaily: any
+	digest: any[]
+	///////
 	serving_cal: number
 	favorited: boolean
 }
@@ -101,11 +129,12 @@ export type GetRecipesQuery = {
 // 	| MongoQ_IdMany
 // 	| undefined
 
-export type RArrayAsProps = {
+export type RecipeListProps = {
 	recipes: Recipe[]
 	id: string
 	lastElementRef: (element: HTMLLIElement) => void
 	lastElementId: React.MutableRefObject<string | undefined>
+	cardHeight: number
 }
 
 export type RecipeAsProps = {

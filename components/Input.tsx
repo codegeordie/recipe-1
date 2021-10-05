@@ -1,3 +1,4 @@
+import React from 'react'
 import styled from 'styled-components'
 
 type Input = {
@@ -6,7 +7,7 @@ type Input = {
 	placeholder?: never
 }
 
-export const Input = ({ required = false, label }: Input) => {
+export const Input: React.FC<Input> = ({ required = false, label }) => {
 	const intentionallyBlank = 'x'
 	return (
 		<StyledInputWrapper>

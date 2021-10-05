@@ -1,11 +1,11 @@
-import _ from 'lodash'
-import { useRouter } from 'next/dist/client/router'
-import { useEffect, useState } from 'react'
-import styled, { keyframes } from 'styled-components'
+import React from 'react'
+//import _ from 'lodash'
+//import { useRouter } from 'next/dist/client/router'
+//import { useEffect, useState } from 'react'
+import styled from 'styled-components'
 import { useSelect } from 'downshift'
-import { SecondaryButton } from './Button'
 
-interface DropdownItems {
+type DropdownItems = {
 	label: string
 	items: { id: string; value: string }[]
 	selectedItem: any
@@ -13,14 +13,14 @@ interface DropdownItems {
 	initialSelected?: any
 }
 
-export const Dropdown = ({
+export const Dropdown: React.FC<DropdownItems> = ({
 	label,
 	items,
 	selectedItem,
 	handleSelected,
 	initialSelected,
 	...rest
-}: DropdownItems) => {
+}) => {
 	const {
 		isOpen,
 		//selectedItem,
@@ -33,10 +33,8 @@ export const Dropdown = ({
 		items,
 		selectedItem,
 		onSelectedItemChange: handleSelected,
-		//initialSelectedItem: initialSelected,
+		initialSelectedItem: initialSelected,
 	})
-
-	//console.log('selectedItem :>> ', selectedItem)
 
 	return (
 		<StyledDropdown {...rest}>
@@ -119,45 +117,45 @@ const StyledLabel = styled.label`
 
 // >>>>>>>>>>>>>>>
 
-export const OldDropdown = () => {
-	const router = useRouter()
-	const [currCode, setCurrCode] = useState(router.query.curr ?? 'USD')
+// export const OldDropdown = () => {
+// 	const router = useRouter()
+// 	const [currCode, setCurrCode] = useState(router.query.curr ?? 'USD')
 
-	useEffect(() => {
-		if (!router.query.curr) setCurrCode('USD')
-	}, [router.query])
+// 	useEffect(() => {
+// 		if (!router.query.curr) setCurrCode('USD')
+// 	}, [router.query])
 
-	useEffect(() => {
-		const { curr, ...rest } = router.query
-		if (currCode === 'USD') {
-			if (_.isEmpty(rest)) router.push('/', undefined, { shallow: true })
-			else router.push({ query: rest })
-		} else {
-			router.push({ query: { ...rest, curr: currCode } })
-		}
-	}, [currCode])
+// 	useEffect(() => {
+// 		const { curr, ...rest } = router.query
+// 		if (currCode === 'USD') {
+// 			if (_.isEmpty(rest)) router.push('/', undefined, { shallow: true })
+// 			else router.push({ query: rest })
+// 		} else {
+// 			router.push({ query: { ...rest, curr: currCode } })
+// 		}
+// 	}, [currCode])
 
-	const choiceArray = [
-		{ code: 'USD', desc: 'USD' },
-		{ code: 'EUR', desc: 'Euros' },
-		{ code: 'MXN', desc: 'Pesos' },
-	]
+// 	const choiceArray = [
+// 		{ code: 'USD', desc: 'USD' },
+// 		{ code: 'EUR', desc: 'Euros' },
+// 		{ code: 'MXN', desc: 'Pesos' },
+// 	]
 
-	const options = choiceArray.map(({ code, desc }) => (
-		<option key={code} value={code}>
-			{desc}
-		</option>
-	))
+// 	const options = choiceArray.map(({ code, desc }) => (
+// 		<option key={code} value={code}>
+// 			{desc}
+// 		</option>
+// 	))
 
-	return (
-		<>
-			<select
-				id='currency'
-				onChange={e => setCurrCode(e.currentTarget.value)}
-				value={currCode}
-			>
-				{options}
-			</select>
-		</>
-	)
-}
+// 	return (
+// 		<>
+// 			<select
+// 				id='currency'
+// 				onChange={e => setCurrCode(e.currentTarget.value)}
+// 				value={currCode}
+// 			>
+// 				{options}
+// 			</select>
+// 		</>
+// 	)
+// }

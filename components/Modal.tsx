@@ -2,12 +2,14 @@ import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import { AnimatePresence, motion } from 'framer-motion'
-import { PrimaryButton, SecondaryButton } from './Button'
+import { SecondaryButton } from './Button'
 
 interface ModalProps {
 	children: React.ReactNode
 	buttonText: string
 	small?: boolean
+	isOpen?: boolean
+	onCloseModal?: () => void
 	// onCancelModal: () => void
 	// onAcceptModal: () => void
 	// acceptEnabled: boolean
@@ -19,12 +21,17 @@ export const Modal: React.FC<ModalProps> = ({
 	children,
 	buttonText,
 	small = false,
+	isOpen = false,
+	onCloseModal,
 }) => {
-	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [isModalOpen, setIsModalOpen] = useState(isOpen)
 	const openModal = () => setIsModalOpen(true)
-	const closeModal = () => setIsModalOpen(false)
+	const closeModal = () => {
+		setIsModalOpen(false)
+		if (onCloseModal) onCloseModal()
+	}
 
-	let containerRef = useRef<HTMLDivElement | null>(null)
+	const containerRef = useRef<HTMLDivElement | null>(null)
 
 	useEffect(() => {
 		const rootContainer = document.createElement('div')
@@ -52,8 +59,8 @@ export const Modal: React.FC<ModalProps> = ({
 									exit={{ opacity: 0 }}
 									transition={{ duration: 0.2 }}
 								>
-									<Backdrop onClick={closeModal} />
-									<Wrapper>
+									<StyledBackdrop onClick={closeModal} />
+									<StyledWrapper>
 										<StyledModal>
 											<FlexRow>
 												<SecondaryButton small onClick={closeModal}>
@@ -62,11 +69,12 @@ export const Modal: React.FC<ModalProps> = ({
 											</FlexRow>
 											<StyledModalContent>{children}</StyledModalContent>
 										</StyledModal>
-									</Wrapper>
+									</StyledWrapper>
 								</motion.div>
 							)}
 						</AnimatePresence>,
 						containerRef.current
+						// eslint-disable-next-line no-mixed-spaces-and-tabs
 				  )
 				: null}
 		</>
@@ -99,7 +107,7 @@ export const Modal: React.FC<ModalProps> = ({
 // 		: null
 // }
 
-const Backdrop = styled.div`
+const StyledBackdrop = styled.div`
 	width: 100%;
 	height: 100vh;
 	background: rgba(0, 0, 0, 0.65);
@@ -109,22 +117,36 @@ const Backdrop = styled.div`
 	top: 0;
 `
 
-const Wrapper = styled.div`
+const StyledWrapper = styled.div`
 	position: fixed;
-	width: 90%;
-	left: 5%;
-	top: 20vh;
+	width: 100%;
+	height: 100vh;
+	left: 0;
+	top: 0;
+	padding: 5vh 5vh 0 5vh;
+	/* display: grid;
+	grid-template:
+		'x x x' 1fr
+		'x modal x' auto
+		'x x x' 3fr / minmax(0, 1fr) auto minmax(0, 1fr);
+	grid-auto-columns: min-content;
+	grid-auto-rows: min-content; */
 	display: flex;
 	justify-content: center;
-	align-items: center;
+	align-items: flex-start;
+	pointer-events: none;
 `
 
 const StyledModal = styled.div`
+	//grid-area: 'modal';
+	//max-width: 100%;
 	display: flex;
+	//flex-shrink: 1;
 	flex-direction: column;
 	padding: 10px;
 	background: white;
 	border-radius: 9px;
+	pointer-events: auto;
 `
 
 const FlexRow = styled.div`

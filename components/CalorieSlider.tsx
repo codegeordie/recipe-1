@@ -1,9 +1,9 @@
+import React from 'react'
 import _ from 'lodash'
 import { useRouter } from 'next/dist/client/router'
-import { useEffect, useRef, useState, useContext, memo } from 'react'
+import { useEffect, useState, memo } from 'react'
 import { useDebounce } from 'react-use'
-import { RangeSlider, RangeSliderProps } from './RangeSlider'
-import { ThemeContext } from 'styled-components'
+import { RangeSlider } from './RangeSlider'
 
 interface CalorieSliderProps {
 	rangeMin: number
@@ -13,7 +13,6 @@ interface CalorieSliderProps {
 export const CalorieSlider = memo(
 	({ rangeMin, rangeMax }: CalorieSliderProps) => {
 		const router = useRouter()
-		//const themeContext = useContext(ThemeContext)
 
 		let [cal_min, cal_max] = [router.query.cal_min, router.query.cal_max]
 		if (Array.isArray(cal_min)) cal_min = cal_min[0]
@@ -41,6 +40,7 @@ export const CalorieSlider = memo(
 						? [alphaValue, betaValue]
 						: [betaValue, alphaValue]
 
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const { cal_min, cal_max, ...rest } = router.query
 
 				if (min === rangeMin && max === rangeMax) {
@@ -74,3 +74,4 @@ export const CalorieSlider = memo(
 		)
 	}
 )
+CalorieSlider.displayName = 'CalorieSlider'

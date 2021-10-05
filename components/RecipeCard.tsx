@@ -1,4 +1,4 @@
-import Link from 'next/link'
+//import Link from 'next/link'
 import React from 'react'
 import styled from 'styled-components'
 import { RecipeAsProps } from '../server/interfaces'
@@ -10,6 +10,7 @@ import { setFavorite } from '../functions/api/users'
 import { useDispatch } from 'react-redux'
 import { useSession } from 'next-auth/client'
 import { Star as StarIcon, StarFilled as StarIconFilled } from '@air/icons'
+import { useRouter } from 'next/dist/client/router'
 
 export const RecipeCard: React.FC<RecipeAsProps> = ({
 	recipe,
@@ -17,13 +18,18 @@ export const RecipeCard: React.FC<RecipeAsProps> = ({
 }) => {
 	const dispatch = useDispatch()
 	const [session] = useSession()
+	const router = useRouter()
+	const query = router.query
+	const pushWithQuery = () => {
+		router.push({ pathname: `/r/${recipe._id}/`, query: { ...query } })
+	}
 
 	return (
 		<StyledRecipeCard data-test-id={`recipe-card`} ref={lastElementRef}>
 			<StyledImageWrapper>
-				<Link href={`/recipes/${recipe._id}`}>
-					<a>{/* <img src={recipe.image} /> */}</a>
-				</Link>
+				<StyledLinkButton onClick={pushWithQuery}>
+					<img src={recipe.image} />
+				</StyledLinkButton>
 			</StyledImageWrapper>
 			<StyledInfoWrapper>
 				<StyledButtonBar>
@@ -52,11 +58,9 @@ export const RecipeCard: React.FC<RecipeAsProps> = ({
 						</StyledHeartButton>
 					)}
 				</StyledButtonBar>
-				<Link href={`/recipes/${recipe._id}`}>
-					<a>
-						<StyledFoodTitle>{recipe.label}</StyledFoodTitle>
-					</a>
-				</Link>
+				<StyledLinkButton onClick={pushWithQuery}>
+					<StyledFoodTitle>{recipe.label}</StyledFoodTitle>
+				</StyledLinkButton>
 			</StyledInfoWrapper>
 			<StyledStatsWrapper>
 				<StyledFoodStat>{recipe.serving_cal}cal</StyledFoodStat>
@@ -72,6 +76,7 @@ export const RecipeCard: React.FC<RecipeAsProps> = ({
 }
 
 const StyledRecipeCard = styled.li`
+	height: 100%;
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-template-rows: 6fr minmax(0, 3fr) 1fr;
@@ -83,6 +88,10 @@ const StyledRecipeCard = styled.li`
 		//box-shadow: 1px 1px 15px -5px ${p => p.theme.color.delta};
 		//border: 3px solid ${p => p.theme.color.delta};
 	}
+`
+
+const StyledLinkButton = styled.button`
+	all: unset;
 `
 
 const StyledImageWrapper = styled.div`

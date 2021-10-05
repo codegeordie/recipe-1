@@ -1,25 +1,25 @@
 import React from 'react'
 import styled from 'styled-components'
-import Dinero from 'dinero.js'
+//import Dinero from 'dinero.js'
 import { RecipeAsProps } from '../server/interfaces'
 
 export const RecipeDetail: React.FC<RecipeAsProps> = ({ recipe }) => {
 	return (
 		<StyledRecipeDetail>
 			<StyledHeroWrapper>
-				<StyledRecipeImage src={`../${recipe.image}`} />
+				<StyledRecipeImage src={recipe.image} />
 				<h1>{recipe.label}</h1>
 			</StyledHeroWrapper>
 			<StyledStatsWrapper>
-				<p>{`Makes ${recipe.servings} servings`}</p>
+				<p>{`Makes ${recipe.yield} servings`}</p>
 				<p>
-					{recipe.calories}
+					{Math.round(recipe.calories)}
 					{`cal and `}
-					{Dinero({
+					{/* {Dinero({
 						amount: recipe.cost.value,
 						currency: recipe.cost.currency,
 					}).toFormat('$0,0.00')}
-					{` per serving`}
+					{` per serving`} */}
 				</p>
 			</StyledStatsWrapper>
 		</StyledRecipeDetail>

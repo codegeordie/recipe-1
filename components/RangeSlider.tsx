@@ -1,3 +1,4 @@
+import React from 'react'
 import styled, { CSSProperties } from 'styled-components'
 
 type RangeSliderCSSProps = {
@@ -30,7 +31,7 @@ export interface RangeSliderProps extends RangeSliderCSSProps {
 	highlightWidth?: number
 }
 
-export const RangeSlider = ({
+export const RangeSlider: React.FC<RangeSliderProps> = ({
 	onAlphaChange,
 	onBetaChange,
 	alphaValue,
@@ -44,7 +45,7 @@ export const RangeSlider = ({
 	trackColor = '#6839394c',
 	highlightColor = 'blue',
 	handleColor = 'blue',
-}: RangeSliderProps) => {
+}) => {
 	const styleProps: RangeSliderCSSProps = {
 		trackWidth,
 		trackHeight,

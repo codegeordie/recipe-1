@@ -32,11 +32,14 @@ import {
 } from '../redux/slices/userSlice'
 import {
 	recipeArray as reduxRecipeArray,
+	currentRecipe as reduxCurrentRecipe,
 	setRecipeArray,
 	appendRecipeArray,
+	setCurrentRecipe,
 } from '../redux/slices/recipeListSlice'
 import { useGetRecipes } from '../hooks/useGetRecipes'
 import { RecipeMain } from '../components/RecipeMain'
+import { Recipe } from '../server/interfaces'
 
 export default function Home(): JSX.Element {
 	const router = useRouter()
@@ -48,6 +51,31 @@ export default function Home(): JSX.Element {
 	const showOnlyCreated = useSelector(createdBool)
 	const recipeArray = useSelector(reduxRecipeArray)
 	const currency = useSelector(userCurrencyPreference)
+
+	const currentRecipe = useSelector(reduxCurrentRecipe)
+	const { slug, ...rest } = router.query
+
+	const onCloseModal = () => {
+		if (Object.keys(rest).length !== 0) {
+			router.push({ pathname: `/`, query: rest })
+		} else router.push('/')
+	}
+	///fix this lol
+	let modalParam: Recipe | undefined
+
+	if (slug?.includes('r')) {
+		//check if slug[1] is a recipe?
+		//404 if it isn't or just don't show modal?
+
+		const curRec = recipeArray.find(x => x._id === slug[1])
+		if (curRec) {
+			dispatch(setCurrentRecipe(curRec))
+			modalParam = currentRecipe
+		}
+		//if (curRec) console.log('curRec :>> ', curRec)
+
+		// this action should set from available array if possible, while fetching and refreshing
+	}
 
 	useEffect(() => {
 		const awaitGetRecipes = async () => {
@@ -105,6 +133,11 @@ export default function Home(): JSX.Element {
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 			<StyledPageBackground>
+				{modalParam && (
+					<Modal isOpen={true} onCloseModal={onCloseModal} buttonText='blank'>
+						<RecipeMain recipe={modalParam} />
+					</Modal>
+				)}
 				<StyledPageGrid>
 					<Nav>
 						{router.isReady && <Searchbar />}

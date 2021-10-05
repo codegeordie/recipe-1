@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { useDebounce } from 'react-use'
 import _ from 'lodash'
 
-export const Searchbar = () => {
+export const Searchbar: React.FC = () => {
 	const router = useRouter()
 	const [searchTerm, setSearchTerm] = useState(router.query.search ?? '')
 
@@ -22,6 +22,7 @@ export const Searchbar = () => {
 
 	useDebounce(
 		() => {
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const { search, ...rest } = router.query
 			if (!searchTerm) {
 				if (_.isEmpty(rest)) router.push('/', undefined, { shallow: true })

@@ -1,3 +1,4 @@
+import React from 'react'
 import { useField } from 'formik'
 import styled from 'styled-components'
 
@@ -9,13 +10,13 @@ type InputFormik = {
 	required?: boolean
 }
 
-export const InputFormik = ({
+export const InputFormik: React.FC<InputFormik> = ({
 	label,
 	formik,
 	autoComplete = 'off',
 	required = true,
 	...props
-}: InputFormik) => {
+}) => {
 	const [field, meta] = useField(props)
 	const intentionallyBlank = 'x'
 
