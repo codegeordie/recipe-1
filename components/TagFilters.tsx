@@ -1,48 +1,52 @@
-import _, { isString } from 'lodash'
-import { useRouter } from 'next/dist/client/router'
-import React, { useState, useEffect } from 'react'
+import _ from 'lodash'
+import Router from 'next/router'
+import React, { memo, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
-import { getTags } from '../functions/api/tags'
 import { Tag, Option } from '../server/interfaces'
 import { CheckboxForm } from './CheckboxForm'
+import { useSelector } from 'react-redux'
+import { possibleTags as reduxPossibleTags } from '../redux/slices/recipeListSlice'
+import { useQueryFilters } from '../hooks/useQueryFilters'
 
-export const TagFilters = () => {
-	const router = useRouter()
-	const [possibleTags, setPossibleTags] = useState<Tag[]>()
+export const TagFilters: React.FC = memo(() => {
+	const { filters } = useQueryFilters()
+	const possibleTags = useSelector(reduxPossibleTags)
 
-	useEffect(() => {
-		getTags().then(res => setPossibleTags(res))
-	}, [])
+	const memoizedTags = useMemo(
+		() =>
+			possibleTags.map((tag: Tag) => ({
+				id: tag.tag_name,
+				label: tag.tag_name,
+			})),
+		[possibleTags]
+	)
 
-	const onSubmit = (filterArray: Option[]) => {
+	const onSubmit = useCallback((filterArray: Option[]) => {
 		const filterString = filterArray.map(tag => tag.label)
-		const { filters, ...rest } = router.query
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { filters, ...rest } = Router.query
 
 		if (_.isEmpty(filterString))
-			if (_.isEmpty(rest)) router.push('/', undefined, { shallow: true })
-			else router.push({ query: rest })
-		else router.push({ query: { ...rest, filters: filterString } })
-	}
+			if (_.isEmpty(rest)) Router.push('/', undefined, { shallow: true })
+			else Router.push({ query: rest })
+		else Router.push({ query: { ...rest, filters: filterString } })
+	}, [])
+
+	console.log('filters')
 
 	return (
 		<StyledTagFilters>
-			{possibleTags && router.isReady && (
+			{possibleTags && (
 				<CheckboxForm
-					options={possibleTags.map(tag => ({
-						id: tag._id,
-						label: tag.tag_name,
-					}))}
-					initialChecked={
-						isString(router.query.filters)
-							? [router.query.filters]
-							: router.query.filters
-					}
+					options={memoizedTags}
+					initialChecked={filters}
 					onSubmit={onSubmit}
 				/>
 			)}
 		</StyledTagFilters>
 	)
-}
+})
+TagFilters.displayName = 'TagFilters'
 
 const StyledTagFilters = styled.div`
 	margin-bottom: 25px;

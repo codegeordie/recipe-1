@@ -1,19 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../store'
-import { Recipe } from '../../server/interfaces'
+import { Recipe, Tag } from '../../server/interfaces'
+import { isEqual } from 'lodash'
 
 const initialState: {
 	recipeArray: Recipe[]
 	currentRecipe: Recipe | undefined
+	possibleTags: Tag[]
 } = {
 	recipeArray: [],
 	currentRecipe: undefined,
+	possibleTags: [],
 }
 
 export const recipeListSlice = createSlice({
 	name: 'recipeList',
 	initialState,
 	reducers: {
+		setPossibleTags: (state, action) => {
+			if (!isEqual(state.possibleTags, action.payload)) {
+				state.possibleTags = action.payload
+			}
+		},
 		setCurrentRecipe: (state, action) => {
 			state.currentRecipe = action.payload
 		},
@@ -36,6 +44,7 @@ export const recipeListSlice = createSlice({
 })
 
 export const {
+	setPossibleTags,
 	setCurrentRecipe,
 	clearRecipeArray,
 	setRecipeArray,
@@ -46,3 +55,4 @@ export const {
 export const recipeArray = (state: RootState) => state.recipeList.recipeArray
 export const currentRecipe = (state: RootState) =>
 	state.recipeList.currentRecipe
+export const possibleTags = (state: RootState) => state.recipeList.possibleTags

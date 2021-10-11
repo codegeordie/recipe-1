@@ -1,57 +1,57 @@
-import React from 'react'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 import { Formik, Field, Form } from 'formik'
 import _ from 'lodash'
 import { CheckboxFormProps } from '../server/interfaces'
 import { HiddenButton } from './Button'
 
-export const CheckboxForm: React.FC<CheckboxFormProps> = ({
-	options,
-	initialChecked = [],
-	onSubmit,
-}) => {
-	const checkboxes = options.map(option => {
+export const CheckboxForm = memo(
+	({ options, initialChecked = [], onSubmit }: CheckboxFormProps) => {
+		const checkboxes = options.map(option => {
+			return (
+				<label key={option.id}>
+					<Field type='checkbox' name='checked' value={option.label} />
+					<span>
+						{option.label[0].toUpperCase() +
+							option.label.slice(1).toLowerCase()}
+					</span>
+				</label>
+			)
+		})
+
 		return (
-			<label key={option.label}>
-				<Field type='checkbox' name='checked' value={option.label} />
-				<span>
-					{option.label[0].toUpperCase() + option.label.slice(1).toLowerCase()}
-				</span>
-			</label>
+			<StyledForm>
+				<Formik
+					initialValues={{ checked: initialChecked }}
+					enableReinitialize={true}
+					onSubmit={values => {
+						const selectedOptions = _.intersectionWith(
+							options,
+							values.checked,
+							({ label }, checked) => label === checked
+						)
+						onSubmit(selectedOptions)
+					}}
+				>
+					{({ handleSubmit }) => (
+						<Form onChangeCapture={() => handleSubmit()}>
+							{/* <h4 id='checkbox-group'>Show only:</h4> */}
+							<StyledCheckboxWrapper
+								role='group'
+								aria-labelledby='checkbox-group'
+							>
+								{checkboxes}
+							</StyledCheckboxWrapper>
+
+							<HiddenButton type='submit'>Filter</HiddenButton>
+						</Form>
+					)}
+				</Formik>
+			</StyledForm>
 		)
-	})
-
-	return (
-		<StyledForm>
-			<Formik
-				initialValues={{ checked: initialChecked }}
-				enableReinitialize={true}
-				onSubmit={values => {
-					const selectedOptions = _.intersectionWith(
-						options,
-						values.checked,
-						({ label }, checked) => label === checked
-					)
-					onSubmit(selectedOptions)
-				}}
-			>
-				{({ handleSubmit }) => (
-					<Form onChangeCapture={() => handleSubmit()}>
-						{/* <h4 id='checkbox-group'>Show only:</h4> */}
-						<StyledCheckboxWrapper
-							role='group'
-							aria-labelledby='checkbox-group'
-						>
-							{checkboxes}
-						</StyledCheckboxWrapper>
-
-						<HiddenButton type='submit'>Filter</HiddenButton>
-					</Form>
-				)}
-			</Formik>
-		</StyledForm>
-	)
-}
+	}
+)
+CheckboxForm.displayName = 'CheckboxForm'
 
 const StyledForm = styled.div`
 	display: flex;

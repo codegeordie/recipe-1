@@ -1,5 +1,4 @@
 import Head from 'next/head'
-//import Link from 'next/link'
 import { signIn, useSession } from 'next-auth/client'
 import { useRouter } from 'next/dist/client/router'
 import React, { useCallback, useEffect, useRef } from 'react'
@@ -36,10 +35,13 @@ import {
 	setRecipeArray,
 	appendRecipeArray,
 	setCurrentRecipe,
+	setPossibleTags,
 } from '../redux/slices/recipeListSlice'
 import { useGetRecipes } from '../hooks/useGetRecipes'
 import { RecipeMain } from '../components/RecipeMain'
 import { Recipe } from '../server/interfaces'
+
+import { getTags } from '../functions/api/tags'
 
 export default function Home(): JSX.Element {
 	const router = useRouter()
@@ -52,6 +54,7 @@ export default function Home(): JSX.Element {
 	const recipeArray = useSelector(reduxRecipeArray)
 	const currency = useSelector(userCurrencyPreference)
 
+	/////////// start all the modal shit	///////////////////
 	const currentRecipe = useSelector(reduxCurrentRecipe)
 	const { slug, ...rest } = router.query
 
@@ -60,7 +63,7 @@ export default function Home(): JSX.Element {
 			router.push({ pathname: `/`, query: rest })
 		} else router.push('/')
 	}
-	///fix this lol
+	///fix this
 	let modalParam: Recipe | undefined
 
 	if (slug?.includes('r')) {
@@ -73,14 +76,20 @@ export default function Home(): JSX.Element {
 			modalParam = currentRecipe
 		}
 		//if (curRec) console.log('curRec :>> ', curRec)
-
 		// this action should set from available array if possible, while fetching and refreshing
 	}
+	/////////// end modal shit //////////////////
 
 	useEffect(() => {
+		getTags().then(res => dispatch(setPossibleTags(res)))
+	}, [])
+
+	let hasMoreResults = false
+	useEffect(() => {
 		const awaitGetRecipes = async () => {
-			const recipes = await getRecipes({ limit })
-			dispatch(setRecipeArray(recipes))
+			const { data, hasMore } = await getRecipes({ limit })
+			dispatch(setRecipeArray(data))
+			hasMoreResults = hasMore
 		}
 		awaitGetRecipes()
 	}, [router.query, showOnlyCreated, showOnlyFavorites, currency, getRecipes])
@@ -110,11 +119,11 @@ export default function Home(): JSX.Element {
 		(element: HTMLElement) => {
 			if (observer.current) observer.current.disconnect()
 			observer.current = new IntersectionObserver(entries => {
-				if (entries[0].isIntersecting) {
+				if (entries[0].isIntersecting && hasMoreResults) {
 					cursor = lastElementId.current
 					const awaitGetRecipes = async () => {
-						const recipes = await getRecipes({ cursor, limit })
-						dispatch(appendRecipeArray(recipes))
+						const { data } = await getRecipes({ cursor, limit })
+						dispatch(appendRecipeArray(data))
 					}
 
 					awaitGetRecipes()
@@ -180,7 +189,7 @@ export default function Home(): JSX.Element {
 										</StyledToggleWrapper>
 									</>
 								)}
-								<TagFilters />
+								{router.isReady && <TagFilters />}
 								<CalorieSlider rangeMin={0} rangeMax={800} />
 								<StyledDropdownWrapper>
 									<CurrencyDropdown />

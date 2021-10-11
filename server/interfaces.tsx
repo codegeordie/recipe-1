@@ -81,7 +81,7 @@ export type Ingredient = {
 }
 
 export type Tag = {
-	_id: string
+	_id?: string
 	tag_name: string
 }
 

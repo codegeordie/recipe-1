@@ -10,7 +10,7 @@ import { setFavorite } from '../functions/api/users'
 import { useDispatch } from 'react-redux'
 import { useSession } from 'next-auth/client'
 import { Star as StarIcon, StarFilled as StarIconFilled } from '@air/icons'
-import { useRouter } from 'next/dist/client/router'
+import Router from 'next/router'
 
 export const RecipeCard: React.FC<RecipeAsProps> = ({
 	recipe,
@@ -18,10 +18,8 @@ export const RecipeCard: React.FC<RecipeAsProps> = ({
 }) => {
 	const dispatch = useDispatch()
 	const [session] = useSession()
-	const router = useRouter()
-	const query = router.query
 	const pushWithQuery = () => {
-		router.push({ pathname: `/r/${recipe._id}/`, query: { ...query } })
+		Router.push({ pathname: `/r/${recipe._id}/`, query: { ...Router.query } })
 	}
 
 	return (
@@ -92,6 +90,7 @@ const StyledRecipeCard = styled.li`
 
 const StyledLinkButton = styled.button`
 	all: unset;
+	width: 100%;
 `
 
 const StyledImageWrapper = styled.div`
@@ -105,7 +104,7 @@ const StyledImageWrapper = styled.div`
 
 const StyledInfoWrapper = styled.div`
 	position: relative;
-	padding-top: 10px;
+	display: flex;
 `
 
 const StyledButtonBar = styled.div`
@@ -151,6 +150,7 @@ const StyledFoodTitle = styled.h4`
 	-webkit-box-orient: vertical;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	word-break: break-word;
 	&:hover {
 		text-decoration: underline;
 	}
