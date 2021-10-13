@@ -32,7 +32,7 @@ export const TagFilters: React.FC = memo(() => {
 		else Router.push({ query: { ...rest, filters: filterString } })
 	}, [])
 
-	console.log('filters')
+	//console.log('filters')
 
 	return (
 		<StyledTagFilters>

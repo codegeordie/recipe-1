@@ -1,6 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
-import { useRouter } from 'next/dist/client/router'
+import Router from 'next/router'
+//import { useRouter } from 'next/dist/client/router'
 import { useEffect, useState, memo } from 'react'
 import { useDebounce } from 'react-use'
 import { RangeSlider } from './RangeSlider'
@@ -12,9 +13,9 @@ interface CalorieSliderProps {
 
 export const CalorieSlider = memo(
 	({ rangeMin, rangeMax }: CalorieSliderProps) => {
-		const router = useRouter()
+		//const router = useRouter()
 
-		let [cal_min, cal_max] = [router.query.cal_min, router.query.cal_max]
+		let [cal_min, cal_max] = [Router.query.cal_min, Router.query.cal_max]
 		if (Array.isArray(cal_min)) cal_min = cal_min[0]
 		if (Array.isArray(cal_max)) cal_max = cal_max[0]
 		const valueMin = cal_min ? parseInt(cal_min) : rangeMin
@@ -41,13 +42,13 @@ export const CalorieSlider = memo(
 						: [betaValue, alphaValue]
 
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				const { cal_min, cal_max, ...rest } = router.query
+				const { cal_min, cal_max, ...rest } = Router.query
 
 				if (min === rangeMin && max === rangeMax) {
-					if (_.isEmpty(rest)) router.push('/', undefined, { shallow: true })
-					else router.push({ query: rest })
+					if (_.isEmpty(rest)) Router.push('/', undefined, { shallow: true })
+					else Router.push({ query: rest })
 				} else {
-					router.push({ query: { ...rest, cal_min: min, cal_max: max } })
+					Router.push({ query: { ...rest, cal_min: min, cal_max: max } })
 				}
 			},
 			350,
@@ -56,7 +57,7 @@ export const CalorieSlider = memo(
 
 		return (
 			<>
-				{router.isReady && (
+				{Router.isReady && (
 					<RangeSlider
 						onAlphaChange={setAlphaValue}
 						onBetaChange={setBetaValue}

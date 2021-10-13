@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { signIn, useSession } from 'next-auth/client'
 import { useRouter } from 'next/dist/client/router'
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { memo, useCallback, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import { Nav } from '../components/Nav'
@@ -42,6 +42,8 @@ import { RecipeMain } from '../components/RecipeMain'
 import { Recipe } from '../server/interfaces'
 
 import { getTags } from '../functions/api/tags'
+import { ModalClean } from '../components/ModalClean'
+import { MemoPrimaryButton, MemoSecondaryButton } from '../components/Button'
 
 export default function Home(): JSX.Element {
 	const router = useRouter()
@@ -134,6 +136,8 @@ export default function Home(): JSX.Element {
 		[getRecipes]
 	)
 
+	console.log('index rendered')
+
 	return (
 		<>
 			<Head>
@@ -143,9 +147,9 @@ export default function Home(): JSX.Element {
 			</Head>
 			<StyledPageBackground>
 				{modalParam && (
-					<Modal isOpen={true} onCloseModal={onCloseModal} buttonText='blank'>
+					<ModalClean isOpen={true} onCloseModal={onCloseModal}>
 						<RecipeMain recipe={modalParam} />
-					</Modal>
+					</ModalClean>
 				)}
 				<StyledPageGrid>
 					<Nav>
@@ -172,7 +176,7 @@ export default function Home(): JSX.Element {
 						</StyledNavButtonsWrapper>
 					</Nav>
 
-					<MobileAside>
+					{/* <MobileAside>
 						<Modal buttonText='Filters' small={true}>
 							<StyledFiltersModal>
 								{session && (
@@ -213,16 +217,16 @@ export default function Home(): JSX.Element {
 								</>
 							)}
 						</StyledMobileNavButtonsWrapper>
-					</MobileAside>
+					</MobileAside> */}
 
 					<Aside>
 						{session && (
 							<>
 								<StyledToggleWrapper>
-									<Toggle
+									{/* <Toggle
 										label='Only My Recipes'
 										onChange={() => dispatch(toggleShowCreated())}
-									/>
+									/> */}
 									<Toggle
 										label='Only My Favorites'
 										onChange={() => dispatch(toggleShowFavorites())}
@@ -232,6 +236,7 @@ export default function Home(): JSX.Element {
 						)}
 						<TagFilters />
 						<CalorieSlider rangeMin={0} rangeMax={800} />
+
 						<StyledDropdownWrapper>
 							<CurrencyDropdown />
 						</StyledDropdownWrapper>
@@ -347,7 +352,7 @@ const StyledToggleWrapper = styled.div`
 	margin-bottom: 15px;
 `
 
-const StyledDropdownWrapper = styled.div`
+const StyledDropdownWrapper = memo(styled.div`
 	margin-top: 40px;
 	width: 100%;
-`
+`)

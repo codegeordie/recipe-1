@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import styled, { css } from 'styled-components'
 
 type ToggleProps = {
@@ -7,7 +7,7 @@ type ToggleProps = {
 	onChange?: () => void
 }
 
-export const Toggle: React.FC<ToggleProps> = ({ label, onChange }) => {
+export const Toggle: React.FC<ToggleProps> = memo(({ label, onChange }) => {
 	return (
 		<StyledWrapper>
 			<StyledCheckbox type='checkbox' onChange={onChange}></StyledCheckbox>
@@ -17,7 +17,8 @@ export const Toggle: React.FC<ToggleProps> = ({ label, onChange }) => {
 			{label && <StyledLabel>{label}</StyledLabel>}
 		</StyledWrapper>
 	)
-}
+})
+Toggle.displayName = 'Toggle'
 
 export const ToggleFormik: React.FC<ToggleProps> = ({
 	label,

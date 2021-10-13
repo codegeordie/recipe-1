@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 //import _ from 'lodash'
 //import { useRouter } from 'next/dist/client/router'
 //import { useEffect, useState } from 'react'
@@ -13,50 +13,56 @@ type DropdownItems = {
 	initialSelected?: any
 }
 
-export const Dropdown: React.FC<DropdownItems> = ({
-	label,
-	items,
-	selectedItem,
-	handleSelected,
-	initialSelected,
-	...rest
-}) => {
-	const {
-		isOpen,
-		//selectedItem,
-		getToggleButtonProps,
-		getMenuProps,
-		getLabelProps,
-		highlightedIndex,
-		getItemProps,
-	} = useSelect({
+export const Dropdown: React.FC<DropdownItems> = memo(
+	({
+		label,
 		items,
 		selectedItem,
-		onSelectedItemChange: handleSelected,
-		initialSelectedItem: initialSelected,
-	})
+		handleSelected,
+		initialSelected,
+		...rest
+	}) => {
+		const {
+			isOpen,
+			//selectedItem,
+			getToggleButtonProps,
+			getMenuProps,
+			getLabelProps,
+			highlightedIndex,
+			getItemProps,
+		} = useSelect({
+			items,
+			selectedItem,
+			onSelectedItemChange: handleSelected,
+			initialSelectedItem: initialSelected,
+		})
 
-	return (
-		<StyledDropdown {...rest}>
-			<StyledLabel {...getLabelProps()}>{label}</StyledLabel>
-			<StyledButton type='button' isOpen={isOpen} {...getToggleButtonProps()}>
-				{(selectedItem && selectedItem.value) || label}
-			</StyledButton>
-			<StyledList isOpen={isOpen} {...getMenuProps()}>
-				{isOpen &&
-					items.map((item, index) => (
-						<StyledItem
-							isHighlighted={highlightedIndex === index}
-							key={`${item.id}${index}`}
-							{...getItemProps({ item, index })}
-						>
-							{item.value}
-						</StyledItem>
-					))}
-			</StyledList>
-		</StyledDropdown>
-	)
-}
+		console.log('dropdown')
+		console.log('initialSelected :>> ', initialSelected)
+
+		return (
+			<StyledDropdown {...rest}>
+				<StyledLabel {...getLabelProps()}>{label}</StyledLabel>
+				<StyledButton type='button' isOpen={isOpen} {...getToggleButtonProps()}>
+					{(selectedItem && selectedItem.value) || label}
+				</StyledButton>
+				<StyledList isOpen={isOpen} {...getMenuProps()}>
+					{isOpen &&
+						items.map((item, index) => (
+							<StyledItem
+								isHighlighted={highlightedIndex === index}
+								key={`${item.id}${index}`}
+								{...getItemProps({ item, index })}
+							>
+								{item.value}
+							</StyledItem>
+						))}
+				</StyledList>
+			</StyledDropdown>
+		)
+	}
+)
+Dropdown.displayName = 'Dropdown'
 
 const StyledDropdown = styled.div`
 	position: relative;

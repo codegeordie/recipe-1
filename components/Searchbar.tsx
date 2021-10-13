@@ -1,40 +1,43 @@
-import { useRouter } from 'next/dist/client/router'
-import React, { useState, useEffect } from 'react'
+//import { useRouter } from 'next/dist/client/router'
+import Router from 'next/router'
+import React, { useState, useEffect, memo } from 'react'
 import styled from 'styled-components'
 import { useDebounce } from 'react-use'
 import _ from 'lodash'
 
-export const Searchbar: React.FC = () => {
-	const router = useRouter()
-	const [searchTerm, setSearchTerm] = useState(router.query.search ?? '')
+export const Searchbar: React.FC = memo(() => {
+	//const router = useRouter()
+	const [searchTerm, setSearchTerm] = useState(Router.query.search ?? '')
 
 	useEffect(() => {
-		if (router.query.search) {
+		if (Router.query.search) {
 			setSearchTerm(
-				Array.isArray(router.query.search)
-					? router.query.search[0]
-					: router.query.search
+				Array.isArray(Router.query.search)
+					? Router.query.search[0]
+					: Router.query.search
 			)
 		} else {
 			setSearchTerm('')
 		}
-	}, [router.query])
+	}, [])
+	//	}, [Router.query])
 
 	useDebounce(
 		() => {
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			const { search, ...rest } = router.query
+			const { search, ...rest } = Router.query
 			if (!searchTerm) {
-				if (_.isEmpty(rest)) router.push('/', undefined, { shallow: true })
-				else router.push({ query: rest })
+				if (_.isEmpty(rest)) Router.push('/', undefined, { shallow: true })
+				else Router.push({ query: rest })
 			} else {
-				router.push({ query: { ...rest, search: searchTerm } })
+				Router.push({ query: { ...rest, search: searchTerm } })
 			}
 		},
 		250,
 		[searchTerm]
 	)
 
+	console.log('searchTerm, Router.query :>> ', searchTerm, Router.query)
 	return (
 		<StyledSearchbar onSubmit={e => e.preventDefault()}>
 			<StyledInput
@@ -48,7 +51,8 @@ export const Searchbar: React.FC = () => {
 			<StyledSearchLabel htmlFor='SearchBarInput'>Search</StyledSearchLabel>
 		</StyledSearchbar>
 	)
-}
+})
+Searchbar.displayName = 'Searchbar'
 
 const StyledSearchbar = styled.form`
 	position: relative;
