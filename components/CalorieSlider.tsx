@@ -1,7 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
 import Router from 'next/router'
-//import { useRouter } from 'next/dist/client/router'
 import { useEffect, useState, memo } from 'react'
 import { useDebounce } from 'react-use'
 import { RangeSlider } from './RangeSlider'
@@ -13,8 +12,6 @@ interface CalorieSliderProps {
 
 export const CalorieSlider = memo(
 	({ rangeMin, rangeMax }: CalorieSliderProps) => {
-		//const router = useRouter()
-
 		let [cal_min, cal_max] = [Router.query.cal_min, Router.query.cal_max]
 		if (Array.isArray(cal_min)) cal_min = cal_min[0]
 		if (Array.isArray(cal_max)) cal_max = cal_max[0]
@@ -57,20 +54,18 @@ export const CalorieSlider = memo(
 
 		return (
 			<>
-				{Router.isReady && (
-					<RangeSlider
-						onAlphaChange={setAlphaValue}
-						onBetaChange={setBetaValue}
-						alphaValue={alphaValue}
-						betaValue={betaValue}
-						label={'calories'}
-						rangeMin={rangeMin}
-						rangeMax={rangeMax}
-						step={5}
-						handleColor={'rgba(15, 120, 175, 0.9)'}
-						highlightColor={'rgba(15, 120, 175, 0.9)'}
-					/>
-				)}
+				<RangeSlider
+					onAlphaChange={setAlphaValue}
+					onBetaChange={setBetaValue}
+					alphaValue={alphaValue}
+					betaValue={betaValue}
+					label={'calories'}
+					rangeMin={rangeMin}
+					rangeMax={rangeMax}
+					step={5}
+					handleColor={'rgba(15, 120, 175, 0.9)'}
+					highlightColor={'rgba(15, 120, 175, 0.9)'}
+				/>
 			</>
 		)
 	}

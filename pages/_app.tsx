@@ -36,9 +36,7 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 				<NextAuthProvider session={pageProps.session}>
 					<IdProvider>
 						<ReduxProvider store={store}>
-							<PersistGate loading={null} persistor={persistor}>
-								<Component {...pageProps} />
-							</PersistGate>
+							<Component {...pageProps} />
 						</ReduxProvider>
 					</IdProvider>
 				</NextAuthProvider>

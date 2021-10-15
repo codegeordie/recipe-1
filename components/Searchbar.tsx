@@ -1,13 +1,11 @@
-//import { useRouter } from 'next/dist/client/router'
-import Router from 'next/router'
 import React, { useState, useEffect, memo } from 'react'
+import Router from 'next/router'
+import _ from 'lodash'
 import styled from 'styled-components'
 import { useDebounce } from 'react-use'
-import _ from 'lodash'
 
 export const Searchbar: React.FC = memo(() => {
-	//const router = useRouter()
-	const [searchTerm, setSearchTerm] = useState(Router.query.search ?? '')
+	const [searchTerm, setSearchTerm] = useState('')
 
 	useEffect(() => {
 		if (Router.query.search) {
@@ -16,11 +14,9 @@ export const Searchbar: React.FC = memo(() => {
 					? Router.query.search[0]
 					: Router.query.search
 			)
-		} else {
-			setSearchTerm('')
 		}
 	}, [])
-	//	}, [Router.query])
+	//	}, [router.query])
 
 	useDebounce(
 		() => {
@@ -37,7 +33,6 @@ export const Searchbar: React.FC = memo(() => {
 		[searchTerm]
 	)
 
-	console.log('searchTerm, Router.query :>> ', searchTerm, Router.query)
 	return (
 		<StyledSearchbar onSubmit={e => e.preventDefault()}>
 			<StyledInput

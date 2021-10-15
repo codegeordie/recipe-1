@@ -7,7 +7,7 @@ type ToggleProps = {
 	onChange?: () => void
 }
 
-export const Toggle: React.FC<ToggleProps> = memo(({ label, onChange }) => {
+export const Toggle = memo(({ label, onChange }: ToggleProps) => {
 	return (
 		<StyledWrapper>
 			<StyledCheckbox type='checkbox' onChange={onChange}></StyledCheckbox>
@@ -22,7 +22,7 @@ Toggle.displayName = 'Toggle'
 
 export const ToggleFormik: React.FC<ToggleProps> = ({
 	label,
-	onChange,
+	//onChange,
 	...props
 }) => {
 	return (

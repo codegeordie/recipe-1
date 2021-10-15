@@ -1,39 +1,13 @@
 import React, { memo } from 'react'
 import styled from 'styled-components'
+import { FixedSizeGrid, GridChildComponentProps } from 'react-window'
+import AutoSizer from 'react-virtualized-auto-sizer'
 import { RecipeListProps } from '../server/interfaces'
 import { RecipeCard } from './RecipeCard'
 
-import { FixedSizeGrid, GridChildComponentProps } from 'react-window'
-import AutoSizer from 'react-virtualized-auto-sizer'
-
-// export const RecipeList2: React.FC<RArrayAsProps> = ({
-// 	recipes,
-// 	id,
-// 	lastElementRef,
-// 	lastElementId,
-// }) => {
-// 	const recipesOutput = recipes.map((recipe, index, { length }) => {
-// 		if (index === length - 1) {
-// 			lastElementId.current = recipe._id
-// 			return (
-// 				<RecipeCard
-// 					key={id + recipe._id}
-// 					recipe={recipe}
-// 					lastElementRef={lastElementRef}
-// 				/>
-// 			)
-// 		} else {
-// 			return <RecipeCard key={id + recipe._id} recipe={recipe} />
-// 		}
-// 	})
-
-// 	return <StyledRecipeList>{recipesOutput}</StyledRecipeList>
-// }
-/////////////////////////////
-
 export const RecipeList: React.FC<RecipeListProps> = ({
 	recipes,
-	id,
+	listTitle,
 	lastElementRef,
 	lastElementId,
 	cardHeight,
@@ -43,13 +17,13 @@ export const RecipeList: React.FC<RecipeListProps> = ({
 			lastElementId.current = recipe._id
 			return (
 				<RecipeCard
-					key={id + recipe._id}
+					key={listTitle + recipe._id}
 					recipe={recipe}
 					lastElementRef={lastElementRef}
 				/>
 			)
 		} else {
-			return <RecipeCard key={id + recipe._id} recipe={recipe} />
+			return <RecipeCard key={listTitle + recipe._id} recipe={recipe} />
 		}
 	})
 

@@ -130,8 +130,8 @@ export type GetRecipesQuery = {
 // 	| undefined
 
 export type RecipeListProps = {
+	listTitle: string
 	recipes: Recipe[]
-	id: string
 	lastElementRef: (element: HTMLLIElement) => void
 	lastElementId: React.MutableRefObject<string | undefined>
 	cardHeight: number

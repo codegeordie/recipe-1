@@ -1,5 +1,5 @@
 //import Link from 'next/link'
-import React from 'react'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 import { RecipeAsProps } from '../server/interfaces'
 //import Dinero from 'dinero.js'
@@ -12,12 +12,10 @@ import { useSession } from 'next-auth/client'
 import { Star as StarIcon, StarFilled as StarIconFilled } from '@air/icons'
 import Router from 'next/router'
 
-export const RecipeCard: React.FC<RecipeAsProps> = ({
-	recipe,
-	lastElementRef,
-}) => {
+export const RecipeCard = memo(({ recipe, lastElementRef }: RecipeAsProps) => {
 	const dispatch = useDispatch()
 	const [session] = useSession()
+
 	const pushWithQuery = () => {
 		Router.push({ pathname: `/r/${recipe._id}/`, query: { ...Router.query } })
 	}
@@ -71,7 +69,8 @@ export const RecipeCard: React.FC<RecipeAsProps> = ({
 			</StyledStatsWrapper>
 		</StyledRecipeCard>
 	)
-}
+})
+RecipeCard.displayName = 'RecipeCard'
 
 const StyledRecipeCard = styled.li`
 	height: 100%;

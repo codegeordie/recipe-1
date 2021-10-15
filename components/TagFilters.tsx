@@ -1,16 +1,25 @@
 import _ from 'lodash'
 import Router from 'next/router'
-import React, { memo, useCallback, useMemo } from 'react'
+import React, { memo, useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 import { Tag, Option } from '../server/interfaces'
 import { CheckboxForm } from './CheckboxForm'
-import { useSelector } from 'react-redux'
-import { possibleTags as reduxPossibleTags } from '../redux/slices/recipeListSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+	possibleTags as reduxPossibleTags,
+	setPossibleTags,
+} from '../redux/slices/recipeListSlice'
 import { useQueryFilters } from '../hooks/useQueryFilters'
+import { getTags } from '../functions/api/tags'
 
 export const TagFilters: React.FC = memo(() => {
+	const dispatch = useDispatch()
 	const { filters } = useQueryFilters()
 	const possibleTags = useSelector(reduxPossibleTags)
+
+	useEffect(() => {
+		getTags().then(res => dispatch(setPossibleTags(res)))
+	}, [])
 
 	const memoizedTags = useMemo(
 		() =>
