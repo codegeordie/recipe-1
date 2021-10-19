@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { combineReducers } from 'redux'
 import {
-	persistStore,
+	//persistStore,
 	persistReducer,
 	FLUSH,
 	REHYDRATE,
@@ -12,13 +12,11 @@ import {
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
-import { testSlice } from './slices/testSlice'
 import { recipesSlice } from './slices/recipesSlice'
 import { userSlice } from './slices/userSlice'
 import { recipeListSlice } from './slices/recipeListSlice'
 
 const reducers = combineReducers({
-	test: testSlice.reducer,
 	recipes: recipesSlice.reducer,
 	user: userSlice.reducer,
 	recipeList: recipeListSlice.reducer,
@@ -33,15 +31,6 @@ const persistedReducer = persistReducer(
 	},
 	reducers
 )
-
-// const store = configureStore({
-// 	reducer: {
-// 		test: testSlice.reducer,
-// 		recipes: recipesSlice.reducer,
-// 		user: userSlice.reducer,
-// 	},
-// 	devTools: true,
-// })
 
 const store = configureStore({
 	reducer: persistedReducer,
