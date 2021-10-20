@@ -24,4 +24,8 @@ This pattern also seemed to create structure and code that was concise and easy 
 
 Wherever possible dumb components are memoized and smart components only recieve the exact data they need. Because of this, only the parts of the page that are actively changing re-render, keeping the user experience incredibly smooth.
 
+| Before                                              | After                                               |
+| --------------------------------------------------- | --------------------------------------------------- |
+| ![Slow and Clunky](https://i.imgur.com/gHQbWFP.gif) | ![Fast and Smooth](https://i.imgur.com/32s0ya7.gif) |
+
 The recipe results are also both paginated and virtualized, ensuring resources are used only for exactly the information needed. This ensures infinte scroll is seamless and smooth even through thousands of results.
