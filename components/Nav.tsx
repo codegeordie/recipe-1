@@ -18,7 +18,7 @@ export const Nav: React.FC = () => {
 			<StyledNavButtonsWrapper>
 				{session && (
 					<>
-						<RecipeSubmitModal />
+						{/* <RecipeSubmitModal /> */}
 						<UserMenu />
 					</>
 				)}
