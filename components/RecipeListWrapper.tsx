@@ -7,6 +7,7 @@ import {
 	appendRecipeArray,
 } from '../redux/slices/recipeListSlice'
 import { RecipeList } from './RecipeList'
+import { RecipeTable } from './RecipeTable'
 
 export const RecipeListWrapper: React.FC = () => {
 	const dispatch = useDispatch()
@@ -51,13 +52,21 @@ export const RecipeListWrapper: React.FC = () => {
 
 	return (
 		<>
-			{recipeArray && (
+			{/* {recipeArray && (
 				<RecipeList
 					listTitle='rlist'
 					recipes={recipeArray}
 					lastElementRef={lastElementRef}
 					lastElementId={lastElementId}
 					cardHeight={300}
+				/>
+			)} */}
+			{recipeArray && (
+				<RecipeTable
+					listTitle='rlist'
+					recipes={recipeArray}
+					lastElementRef={lastElementRef}
+					lastElementId={lastElementId}
 				/>
 			)}
 		</>
