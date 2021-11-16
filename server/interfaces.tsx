@@ -137,6 +137,13 @@ export type RecipeListProps = {
 	cardHeight: number
 }
 
+export type RecipeTableProps = {
+	tableTitle: string
+	recipes: Recipe[]
+	lastElementRef: (element: HTMLTableCellElement) => void
+	lastElementId: React.MutableRefObject<string | undefined>
+}
+
 export type RecipeAsProps = {
 	recipe: Recipe
 	lastElementRef?: (element: HTMLLIElement) => void

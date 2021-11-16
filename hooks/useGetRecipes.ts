@@ -1,15 +1,17 @@
 import { useRouter } from 'next/dist/client/router'
 import { useCallback } from 'react'
 import { useSelector } from 'react-redux'
+import axios from 'axios'
 import { createdBool, showFavorites } from '../redux/slices/recipesSlice'
 import { userCurrencyPreference } from '../redux/slices/userSlice'
-import axios from 'axios'
+import { recipeSort as recipeSortRedux } from '../redux/slices/recipeListSlice'
 
 export const useGetRecipes = (): { getRecipes: typeof getRecipes } => {
 	const router = useRouter()
 	const showOnlyFavorites = useSelector(showFavorites)
 	const showOnlyCreated = useSelector(createdBool)
 	const currency = useSelector(userCurrencyPreference)
+	const recipeSort = useSelector(recipeSortRedux)
 
 	type getRecipesProps = {
 		cursor?: string
@@ -26,12 +28,13 @@ export const useGetRecipes = (): { getRecipes: typeof getRecipes } => {
 					...router.query,
 					showOnlyFavorites,
 					currency: currency.id,
+					recipeSort,
 					cursor,
 					limit,
 				},
 			}).then(res => res.data)
 		},
-		[router.query, showOnlyCreated, showOnlyFavorites, currency]
+		[router.query, showOnlyCreated, showOnlyFavorites, currency, recipeSort]
 	)
 
 	return {

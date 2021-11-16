@@ -1,27 +1,44 @@
-import React, { memo } from 'react'
+import React, { memo, ReactChild, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { FixedSizeList } from 'react-window'
+import { FixedSizeList, ListChildComponentProps } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
-import { RecipeListProps } from '../server/interfaces'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+	recipeSort as reduxRecipeSort,
+	setRecipeSort,
+} from '../redux/slices/recipeListSlice'
+import { Recipe, RecipeTableProps } from '../server/interfaces'
+import { useMount } from 'react-use'
+import _ from 'lodash'
 
-const RecipeRow = memo(({ recipe, lastElementRef }) => {
+type RecipeRow = {
+	recipe: Recipe
+	lastElementRef?: (element: HTMLTableCellElement) => void
+}
+
+const RecipeRow = memo(({ recipe, lastElementRef }: RecipeRow) => {
 	return (
 		<>
-			<StyledTD key={recipe._id} ref={lastElementRef}>
+			<StyledTD key={'label' + recipe._id} ref={lastElementRef}>
 				{recipe.label}
 			</StyledTD>
-			<StyledTD key={recipe._id}>{recipe.calories}</StyledTD>
-			<StyledTD key={recipe._id}>{recipe.totalTime}</StyledTD>
+			<StyledTD key={'cals' + recipe._id}>
+				{Math.round(recipe.calories)}
+			</StyledTD>
+			<StyledTD key={'time' + recipe._id}>{recipe.totalTime}</StyledTD>
 		</>
 	)
 })
+RecipeRow.displayName = 'RecipeRow'
 
-export const RecipeTable: React.FC<RecipeListProps> = ({
+export const RecipeTable: React.FC<RecipeTableProps> = ({
 	recipes,
-	listTitle,
+	tableTitle,
 	lastElementRef,
 	lastElementId,
 }) => {
+	const dispatch = useDispatch()
+
 	const recipesOutput = recipes.map((recipe, index, { length }) => {
 		if (index === length - 1) {
 			lastElementId.current = recipe._id
@@ -29,32 +46,15 @@ export const RecipeTable: React.FC<RecipeListProps> = ({
 				<RecipeRow
 					recipe={recipe}
 					lastElementRef={lastElementRef}
-					key={recipe._id}
+					key={tableTitle + recipe._id}
 				/>
-				// <RecipeCard
-				// 	key={listTitle + recipe._id}
-				// 	recipe={recipe}
-				// 	lastElementRef={lastElementRef}
-				// />
 			)
 		} else {
-			return <RecipeRow recipe={recipe} key={recipe._id} />
+			return <RecipeRow recipe={recipe} key={tableTitle + recipe._id} />
 		}
 	})
 
-	// const Card = memo(
-	// 	({ columnIndex, rowIndex, style }: GridChildComponentProps) => {
-	// 		const i = rowIndex * 4 + columnIndex
-	// 		return (
-	// 			<tr style={style} key={i}>
-	// 				{recipesOutput[i]}
-	// 			</tr>
-	// 		)
-	// 	}
-	// )
-	// Card.displayName = 'Card'
-
-	const Row = ({ index, style }) => (
+	const Row = ({ index, style }: ListChildComponentProps) => (
 		<StyledTR
 			//className={index % 2 ? 'ListItemOdd' : 'ListItemEven'}
 			style={style}
@@ -63,12 +63,39 @@ export const RecipeTable: React.FC<RecipeListProps> = ({
 		</StyledTR>
 	)
 
+	type HeaderButton = {
+		sortLabel: string
+		children?: React.ReactNode
+	}
+	const HeaderButton = memo(({ sortLabel, children }: HeaderButton) => {
+		const recipeSort = useSelector(reduxRecipeSort)
+
+		const sortFunction = () => {
+			if (_.isEqual(recipeSort, { [sortLabel]: 1 })) {
+				dispatch(setRecipeSort({ [sortLabel]: -1 }))
+			} else if (_.isEqual(recipeSort, { [sortLabel]: -1 })) {
+				dispatch(setRecipeSort(undefined))
+			} else {
+				dispatch(setRecipeSort({ [sortLabel]: 1 }))
+			}
+		}
+
+		return <button onClick={sortFunction}>{children}</button>
+	})
+	HeaderButton.displayName = 'HeaderButton'
+
 	return (
 		<>
 			<StyledTableHeader>
-				<div>Recipe</div>
-				<div>Calories</div>
-				<div>Cooktime</div>
+				<div>
+					<HeaderButton sortLabel='label'>Recipe</HeaderButton>
+				</div>
+				<div>
+					<HeaderButton sortLabel='calories'>Calories</HeaderButton>
+				</div>
+				<div>
+					<HeaderButton sortLabel='totalTime'>Cooktime</HeaderButton>
+				</div>
 			</StyledTableHeader>
 			<AutoSizer>
 				{({ height, width }) => (
@@ -93,10 +120,6 @@ export const RecipeTable: React.FC<RecipeListProps> = ({
 		</>
 	)
 }
-
-// const StyledCardWrapper = styled.div`
-// 	padding: 5px;
-// `
 
 const StyledTR = styled.tr`
 	border-bottom: 1px solid black;

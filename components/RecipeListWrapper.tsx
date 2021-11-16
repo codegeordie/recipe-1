@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useGetRecipes } from '../hooks/useGetRecipes'
 import {
@@ -12,6 +12,8 @@ import { RecipeTable } from './RecipeTable'
 export const RecipeListWrapper: React.FC = () => {
 	const dispatch = useDispatch()
 	const { getRecipes } = useGetRecipes()
+
+	const [recipeView, setRecipeView] = useState<'list' | 'table'>('table')
 
 	const recipeArray = useSelector(reduxRecipeArray)
 
@@ -52,7 +54,7 @@ export const RecipeListWrapper: React.FC = () => {
 
 	return (
 		<>
-			{/* {recipeArray && (
+			{recipeArray && recipeView === 'list' && (
 				<RecipeList
 					listTitle='rlist'
 					recipes={recipeArray}
@@ -60,10 +62,10 @@ export const RecipeListWrapper: React.FC = () => {
 					lastElementId={lastElementId}
 					cardHeight={300}
 				/>
-			)} */}
-			{recipeArray && (
+			)}
+			{recipeArray && recipeView === 'table' && (
 				<RecipeTable
-					listTitle='rlist'
+					tableTitle='rtable'
 					recipes={recipeArray}
 					lastElementRef={lastElementRef}
 					lastElementId={lastElementId}
