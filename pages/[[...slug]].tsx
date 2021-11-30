@@ -7,8 +7,6 @@ import { RecipeListWrapper } from '../components/RecipeListWrapper'
 import { RecipeDetailModal } from '../components/RecipeDetailModal'
 
 export default function Home(): JSX.Element {
-	console.log('index rendered')
-
 	return (
 		<>
 			<Head>
@@ -41,6 +39,7 @@ const StyledPageGrid = styled.div`
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
 	grid-template-rows: 75px 50px minmax(calc(100vh - 125px), auto);
+	//grid-template-rows: 75px 50px calc(100vh - 355px);
 	@media only screen and (min-width: 576px) {
 		//grid-template-rows: 100px minmax(calc(100vh - 100px), auto);
 		grid-template-rows: 100px calc(100vh - 100px);

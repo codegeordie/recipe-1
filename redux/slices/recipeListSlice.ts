@@ -7,12 +7,14 @@ const initialState: {
 	recipeArray: Recipe[]
 	currentRecipe: Recipe | undefined
 	possibleTags: Tag[]
-	recipeSort: string | undefined
+	recipeSortField: string | undefined
+	recipeSortDirection: 'ascending' | 'descending' | undefined
 } = {
 	recipeArray: [],
 	currentRecipe: undefined,
 	possibleTags: [],
-	recipeSort: undefined,
+	recipeSortField: undefined,
+	recipeSortDirection: undefined,
 }
 
 export const recipeListSlice = createSlice({
@@ -42,8 +44,11 @@ export const recipeListSlice = createSlice({
 					recipe.favorited = action.payload.setFavBool
 			})
 		},
-		setRecipeSort: (state, action) => {
-			state.recipeSort = action.payload
+		setRecipeSortField: (state, action) => {
+			state.recipeSortField = action.payload
+		},
+		setRecipeSortDirection: (state, action) => {
+			state.recipeSortDirection = action.payload
 		},
 	},
 })
@@ -55,11 +60,15 @@ export const {
 	setRecipeArray,
 	appendRecipeArray,
 	setFavoriteAction,
-	setRecipeSort,
+	setRecipeSortField,
+	setRecipeSortDirection,
 } = recipeListSlice.actions
 
 export const recipeArray = (state: RootState) => state.recipeList.recipeArray
 export const currentRecipe = (state: RootState) =>
 	state.recipeList.currentRecipe
 export const possibleTags = (state: RootState) => state.recipeList.possibleTags
-export const recipeSort = (state: RootState) => state.recipeList.recipeSort
+export const recipeSortField = (state: RootState) =>
+	state.recipeList.recipeSortField
+export const recipeSortDirection = (state: RootState) =>
+	state.recipeList.recipeSortDirection
