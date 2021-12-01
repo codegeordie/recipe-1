@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { memo } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ModalClean } from './ModalClean'
 import { RecipeMain } from './RecipeMain'
@@ -9,7 +9,7 @@ import {
 	currentRecipe as reduxCurrentRecipe,
 	setCurrentRecipe,
 } from '../redux/slices/recipeListSlice'
-import { Recipe } from '../server/interfaces'
+import { getRecipeById } from '../functions/api/recipes'
 
 export const RecipeDetailModal = memo(() => {
 	const dispatch = useDispatch()
@@ -19,32 +19,35 @@ export const RecipeDetailModal = memo(() => {
 	const currentRecipe = useSelector(reduxCurrentRecipe)
 	const { slug, ...rest } = router.query
 
-	const onCloseModal = () => {
+	const [isModalOpen, setIsModalOpen] = useState(false)
+
+	const closeModal = () => {
+		setIsModalOpen(false)
 		if (Object.keys(rest).length !== 0) {
 			router.push({ pathname: `/`, query: rest })
 		} else router.push('/')
 	}
-	///fix this
-	let modalParam: Recipe | undefined
 
-	if (slug?.includes('r')) {
-		//check if slug[1] is a recipe?
-		//404 if it isn't or just don't show modal?
+	const recipeIdParam = slug?.includes('r') ? slug[1] : null
 
-		const curRec = recipeArray.find(x => x._id === slug[1])
-		if (curRec) {
-			dispatch(setCurrentRecipe(curRec))
-			modalParam = currentRecipe
+	useEffect(() => {
+		if (recipeIdParam) {
+			const getModalRecipe = async () => {
+				const recipe =
+					recipeArray.find(r => r._id === recipeIdParam) ??
+					(await getRecipeById(recipeIdParam))
+				dispatch(setCurrentRecipe(recipe))
+			}
+			getModalRecipe()
+			setIsModalOpen(true)
 		}
-		//if (curRec) console.log('curRec :>> ', curRec)
-		// this action should set from available array if possible, while fetching and refreshing
-	}
+	}, [recipeIdParam])
 
 	return (
 		<>
-			{modalParam && (
-				<ModalClean isOpen={true} onCloseModal={onCloseModal}>
-					<RecipeMain recipe={modalParam} />
+			{isModalOpen && (
+				<ModalClean closeModal={closeModal}>
+					{currentRecipe && <RecipeMain recipe={currentRecipe} />}
 				</ModalClean>
 			)}
 		</>

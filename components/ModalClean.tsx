@@ -8,8 +8,8 @@ interface ModalProps {
 	children: React.ReactNode
 	//buttonText: string
 	//small?: boolean
-	isOpen?: boolean
-	onCloseModal?: () => void
+	isModalOpen?: boolean
+	closeModal: () => void
 	// onCancelModal: () => void
 	// onAcceptModal: () => void
 	// acceptEnabled: boolean
@@ -17,17 +17,8 @@ interface ModalProps {
 	// title: string
 }
 
-export const ModalClean: React.FC<ModalProps> = ({
-	children,
-	isOpen,
-	onCloseModal,
-}) => {
-	const [isModalOpen, setIsModalOpen] = useState(isOpen)
-	//const openModal = () => setIsModalOpen(true)
-	const closeModal = () => {
-		setIsModalOpen(false)
-		if (onCloseModal) onCloseModal()
-	}
+export const ModalClean: React.FC<ModalProps> = ({ children, closeModal }) => {
+	const [, forceComponentUpdate] = useState(0)
 
 	const containerRef = useRef<HTMLDivElement | null>(null)
 
@@ -41,32 +32,34 @@ export const ModalClean: React.FC<ModalProps> = ({
 		return () => rootContainer.remove()
 	}, [])
 
+	useEffect(() => {
+		forceComponentUpdate(num => num + 1)
+	}, [])
+
 	return (
 		<>
 			{containerRef.current
 				? ReactDOM.createPortal(
 						<AnimatePresence>
-							{isModalOpen && (
-								<motion.div
-									key='modal'
-									initial={{ opacity: 0 }}
-									animate={{ opacity: 1 }}
-									exit={{ opacity: 0 }}
-									transition={{ duration: 0.2 }}
-								>
-									<StyledBackdrop onClick={closeModal} />
-									<StyledWrapper>
-										<StyledModal>
-											<FlexRow>
-												<SecondaryButton small onClick={closeModal}>
-													Close
-												</SecondaryButton>
-											</FlexRow>
-											<StyledModalContent>{children}</StyledModalContent>
-										</StyledModal>
-									</StyledWrapper>
-								</motion.div>
-							)}
+							<motion.div
+								key='modal'
+								initial={{ opacity: 0 }}
+								animate={{ opacity: 1 }}
+								exit={{ opacity: 0 }}
+								transition={{ duration: 0.2 }}
+							>
+								<StyledBackdrop onClick={closeModal} />
+								<StyledWrapper>
+									<StyledModal>
+										<FlexRow>
+											<SecondaryButton small onClick={closeModal}>
+												Close
+											</SecondaryButton>
+										</FlexRow>
+										<StyledModalContent>{children}</StyledModalContent>
+									</StyledModal>
+								</StyledWrapper>
+							</motion.div>
 						</AnimatePresence>,
 						containerRef.current
 						// eslint-disable-next-line no-mixed-spaces-and-tabs
