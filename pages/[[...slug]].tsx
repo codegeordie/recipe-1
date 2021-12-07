@@ -5,6 +5,7 @@ import { Nav } from '../components/Nav'
 import { Aside } from '../components/Aside'
 import { RecipeListWrapper } from '../components/RecipeListWrapper'
 import { RecipeDetailModal } from '../components/RecipeDetailModal'
+import { WelcomeModal } from '../components/WelcomeModal'
 
 export default function Home(): JSX.Element {
 	return (
@@ -16,6 +17,7 @@ export default function Home(): JSX.Element {
 			</Head>
 			<StyledPageBackground>
 				<StyledPageGrid>
+					<WelcomeModal />
 					<Nav />
 					<Aside />
 					<StyledMain>
