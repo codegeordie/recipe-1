@@ -67,6 +67,7 @@ export type Recipe = {
 	///////
 	serving_cal: number
 	favorited: boolean
+	cost: { value: number; currency: Currency }
 }
 
 export type Ingredient = {

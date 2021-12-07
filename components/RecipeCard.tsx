@@ -2,7 +2,7 @@
 import React, { memo } from 'react'
 import styled from 'styled-components'
 import { RecipeAsProps } from '../server/interfaces'
-//import Dinero from 'dinero.js'
+import Dinero from 'dinero.js'
 //import { deleteRecipe } from '../functions/api/recipes'
 //import { SecondaryButton, TextButton } from './Button'
 import { setFavorite } from '../functions/api/users'
@@ -60,12 +60,12 @@ export const RecipeCard = memo(({ recipe, lastElementRef }: RecipeAsProps) => {
 			</StyledInfoWrapper>
 			<StyledStatsWrapper>
 				<StyledFoodStat>{recipe.serving_cal}cal</StyledFoodStat>
-				{/* <StyledFoodStat>
+				<StyledFoodStat>
 					{Dinero({
-						amount: recipe.cost.value,
+						amount: Math.round(recipe.cost.value / recipe.yield),
 						currency: recipe.cost.currency,
 					}).toFormat('$0,0.00')}
-				</StyledFoodStat> */}
+				</StyledFoodStat>
 			</StyledStatsWrapper>
 		</StyledRecipeCard>
 	)
