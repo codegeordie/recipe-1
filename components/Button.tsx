@@ -12,16 +12,13 @@ export const Button = styled.button<ButtonProps>`
 	outline: none;
 	border: none;
 	background: none;
-	border-radius: 5px;
-	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
-
-	border: 1px solid transparent;
-
+	border-radius: 7px;
+	border: thin solid rgba(0, 0, 0, 0.2);
 	font: 700 1.4rem ${p => p.theme.font.button};
 	line-height: 1.5;
 	padding: 0.75rem 1.5rem;
-	//color: white;
 	transition: 0.25s;
+	//display: flex;
 	${p =>
 		p.small &&
 		`
@@ -34,34 +31,22 @@ export const Button = styled.button<ButtonProps>`
 		font: 700 1.6rem ${p.theme.font.button};
 		padding: 1.2rem 2rem;
 	`}
-	&:hover {
-		//transform: scale(1.02) translateZ(0);
-		//${p => `padding: ${darken(0.1, p.theme.color.white)}`}
-		//${p => `background-color: ${darken(0.1, p.theme.color.white)}`}
-	}
 `
 
 export const PrimaryButton = styled(Button)`
 	color: ${p => p.theme.color.white};
-	background-color: ${p => p.theme.color.alpha};
+	background-color: ${p => p.theme.color.delta};
 
 	&:hover {
-		${p => `background-color: ${darken(0.1, p.theme.color.alpha)}`}
+		${p => `background-color: ${darken(0.1, p.theme.color.delta)}`}
 	}
 `
 
 export const SecondaryButton = styled(Button)`
 	color: ${p => p.theme.text.dark07};
 	background-color: ${p => p.theme.color.white};
-	/* box-shadow: inset 0 0 0 1px ${p => p.theme.color.alpha},
-		0px 2px 5px rgba(0, 0, 0, 0.3); */
-
 	&:hover {
-		/* box-shadow: inset 0 0 0 1px ${p => p.theme.color.alpha},
-			0px 3px 6px rgba(0, 0, 0, 0.3); */
-		/* box-shadow: inset 0 0 0 1px ${p => p.theme.color.delta},
-			0px 1px 4px rgba(0, 0, 0, 0.3); */
-		border: 1px solid ${p => p.theme.color.delta};
+		border: thin solid ${p => p.theme.color.delta};
 		//${p => `background-color: ${lighten(0.4, p.theme.color.alpha)}`}
 	}
 `

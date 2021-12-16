@@ -26,7 +26,15 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 					rel='stylesheet'
 				/> */}
 				<link
-					href='https://fonts.googleapis.com/css2?family=Rubik&display=swap'
+					href='https://fonts.googleapis.com/css2?family=Rubik:wght@300;600&display=swap'
+					rel='stylesheet'
+				/>
+				<link
+					href='https://fonts.googleapis.com/css2?family=Meow+Script&display=swap'
+					rel='stylesheet'
+				/>
+				<link
+					href='https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap'
 					rel='stylesheet'
 				/>
 			</Head>

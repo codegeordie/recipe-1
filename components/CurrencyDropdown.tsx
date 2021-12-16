@@ -15,9 +15,9 @@ export const CurrencyDropdown = memo(() => {
 	}
 
 	const items = [
-		{ id: 'USD', value: 'US Dollars' },
-		{ id: 'MXN', value: 'Pesos' },
-		{ id: 'EUR', value: 'Euros' },
+		{ id: 'USD', value: '$ Dollars' },
+		{ id: 'MXN', value: 'MX$ Pesos' },
+		{ id: 'EUR', value: '€ Euros' },
 	]
 
 	return (

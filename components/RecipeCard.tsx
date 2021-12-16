@@ -38,7 +38,7 @@ export const RecipeCard = memo(({ recipe, lastElementRef }: RecipeAsProps) => {
 								)
 							}
 						>
-							<StarIconFilled width='30' fill='white' />
+							<StarIconFilled width='30' fill='#0fb3a2' />
 						</StyledHeartButton>
 					)}
 					{!recipe.favorited && session && (
@@ -78,18 +78,15 @@ const StyledRecipeCard = styled.li`
 	grid-template-columns: 1fr;
 	grid-template-rows: 6fr minmax(0, 3fr) 1fr;
 	background-color: ${p => p.theme.color.white};
-	border: 3px solid ${p => p.theme.color.white};
-	transition: 0.3s;
-	box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.2);
-	&:hover {
-		//box-shadow: 1px 1px 15px -5px ${p => p.theme.color.delta};
-		//border: 3px solid ${p => p.theme.color.delta};
-	}
+	border: thin solid rgba(0, 0, 0, 0.2);
+	border-radius: 7px;
+	overflow: hidden;
 `
 
 const StyledLinkButton = styled.button`
 	all: unset;
 	width: 100%;
+	cursor: pointer;
 `
 
 const StyledImageWrapper = styled.div`
@@ -116,9 +113,6 @@ const StyledButtonBar = styled.div`
 `
 
 const StyledHeartButton = styled.button`
-	/* font-size: 2.5rem;
-	padding: 5px;
-	border-radius: 50%; */
 	background: none;
 	outline: none;
 	border: none;
@@ -138,7 +132,7 @@ const StyledHeartButton = styled.button`
 const StyledFoodTitle = styled.h4`
 	margin: 0.5rem;
 	text-align: center;
-	font: 700 1.5rem ${p => p.theme.font.title};
+	font: 700 1.4rem ${p => p.theme.font.title};
 	max-height: 6.1rem;
 	color: ${p => p.theme.text.dark07};
 	display: block;
@@ -154,12 +148,11 @@ const StyledFoodTitle = styled.h4`
 		text-decoration: underline;
 	}
 	@media only screen and (min-width: 576px) {
-		font: 700 1.5rem ${p => p.theme.font.title};
 		margin: 1rem;
 		max-height: 7.1rem;
 	}
 	@media only screen and (min-width: 768px) {
-		font: 700 1.6rem ${p => p.theme.font.title};
+		font: 700 1.5rem ${p => p.theme.font.title};
 		max-height: 7.4rem;
 	}
 `
@@ -170,7 +163,8 @@ const StyledStatsWrapper = styled.div`
 	column-gap: 5px;
 	place-content: center;
 	padding: 0.5rem;
-	border-top: 1px solid ${p => p.theme.text.dark03};
+	border-top: thin solid rgba(0, 0, 0, 0.1);
+	background-color: rgba(0, 0, 0, 0.07);
 `
 
 const StyledFoodStat = styled.p`
@@ -178,10 +172,7 @@ const StyledFoodStat = styled.p`
 	text-align: center;
 	font: 200 1.3rem ${p => p.theme.font.body};
 	color: ${p => p.theme.text.dark07};
-	@media only screen and (min-width: 576px) {
-		font: 200 1.4rem ${p => p.theme.font.body};
-	}
 	@media only screen and (min-width: 768px) {
-		font: 200 1.5rem ${p => p.theme.font.body};
+		font: 200 1.4rem ${p => p.theme.font.body};
 	}
 `

@@ -12,7 +12,8 @@ import {
 import { Recipe, RecipeTableProps } from '../server/interfaces'
 import _ from 'lodash'
 import Router from 'next/router'
-import { transparentize } from 'polished'
+import Dinero from 'dinero.js'
+import { ChevronDown, ChevronUp } from '@air/icons'
 
 type RecipeRow = {
 	recipe: Recipe
@@ -35,10 +36,13 @@ const RecipeRow = memo(({ recipe, lastElementRef }: RecipeRow) => {
 				</StyledRecipeLabelButton>
 			</StyledTD>
 			<StyledTD key={'cals' + recipe._id} flexWidth={1}>
-				{Math.round(recipe.calories)}
+				{Math.round(recipe.serving_cal)}
 			</StyledTD>
-			<StyledTD key={'time' + recipe._id} flexWidth={1}>
-				{recipe.totalTime}
+			<StyledTD key={'cost' + recipe._id} flexWidth={1}>
+				{Dinero({
+					amount: Math.round(recipe.cost.value / recipe.yield),
+					currency: recipe.cost.currency,
+				}).toFormat('$0,0.00')}
 			</StyledTD>
 		</>
 	)
@@ -102,8 +106,15 @@ export const RecipeTable: React.FC<RecipeTableProps> = ({
 				sortSelected={recipeSortField === sortLabel}
 			>
 				{children}
+				{recipeSortField !== sortLabel && (
+					<ChevronUp width='25' fill='transparent' />
+				)}
 				{recipeSortField === sortLabel &&
-					(recipeSortDirection === 'ascending' ? '⬆️' : '⬇️')}
+					(recipeSortDirection === 'ascending' ? (
+						<ChevronUp width='25' fill='#0fb3a2' />
+					) : (
+						<ChevronDown width='25' fill='#0fb3a2' />
+					))}
 			</StyledSortButton>
 		)
 	})
@@ -119,7 +130,7 @@ export const RecipeTable: React.FC<RecipeTableProps> = ({
 					<TableHeaderButton sortLabel='calories'>Calories</TableHeaderButton>
 				</StyledHeaderCell>
 				<StyledHeaderCell flexWidth={1}>
-					<TableHeaderButton sortLabel='totalTime'>Cooktime</TableHeaderButton>
+					<TableHeaderButton sortLabel='cost'>Cost</TableHeaderButton>
 				</StyledHeaderCell>
 			</StyledTableHeader>
 			<AutoSizer>
@@ -131,12 +142,7 @@ export const RecipeTable: React.FC<RecipeTableProps> = ({
 						itemSize={50}
 						outerElementType='table'
 						innerElementType='tbody'
-						style={{
-							display: 'block',
-							//borderTop: '1px solid black',
-							//borderLeft: '1px solid black',
-							//borderCollapse: 'collapse',
-						}}
+						style={{ display: 'block' }}
 					>
 						{Row}
 					</FixedSizeList>
@@ -147,12 +153,10 @@ export const RecipeTable: React.FC<RecipeTableProps> = ({
 }
 
 const StyledTR = styled.tr`
-	//border-bottom: 1px solid black;
 	display: flex;
 	flex-direction: row;
-
 	&.rowOdd {
-		background: rgba(0, 0, 0, 0.1);
+		background: rgba(0, 0, 0, 0.06);
 	}
 `
 
@@ -162,19 +166,23 @@ const StyledTD = styled.td<{ flexWidth: number }>`
 	min-width: 0;
 	align-items: center;
 	padding: 5px;
-	font: 1.3rem ${p => p.theme.font.title};
-	border-right: 1px solid rgba(0, 0, 0, 0.2);
+	font: 1.2rem ${p => p.theme.font.title};
+	border-right: thin solid rgba(0, 0, 0, 0.2);
 	&:last-child {
 		border-right: none;
+	}
+	@media (min-width: 576px) {
+		font: 1.3rem ${p => p.theme.font.title};
 	}
 `
 
 const StyledTableImage = styled.div`
 	overflow: hidden;
-	aspect-ratio: 1/1;
+	aspect-ratio: 3/2;
 	width: 44px;
-	min-width: 44px;
+	min-width: 66px;
 	margin-right: 10px;
+	border-radius: 3px;
 	img {
 		height: 100%;
 		width: 100%;
@@ -195,10 +203,9 @@ const StyledRecipeLabelButton = styled.button`
 `
 
 const StyledTableHeader = styled.div`
-	//border-bottom: 1px solid black;
 	display: flex;
 	flex-direction: row;
-	height: 40px;
+	height: 4rem;
 	overflow-y: scroll;
 `
 
@@ -206,26 +213,23 @@ const StyledHeaderCell = styled.div<{ flexWidth: number }>`
 	flex: ${p => p.flexWidth};
 	display: flex;
 	align-items: center;
-	padding: 5px;
-	//justify-content: center;
+	padding: 0.5rem;
 	font: 1.5rem ${p => p.theme.font.title};
-	border-bottom: 1px solid grey;
+	border-bottom: thin solid rgba(0, 0, 0, 0.5);
 `
 
 const StyledSortButton = styled.button<{ sortSelected: boolean }>`
 	outline: none;
 	border: none;
-	display: block;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	height: 100%;
 	width: 100%;
 	cursor: pointer;
-	/* background-color: ${p =>
-		p.sortSelected
-			? [transparentize(0.5, p.theme.color.delta)]
-			: [p.theme.color.gamma]}; */
 	background-color: ${p => p.theme.color.gamma};
-	border: 1px solid
-		${p => (p.sortSelected ? [p.theme.color.delta] : 'transparent')};
+	color: ${p =>
+		p.sortSelected ? [p.theme.color.delta] : [p.theme.text.dark09]};
 	&:hover {
 		text-decoration: underline;
 	}

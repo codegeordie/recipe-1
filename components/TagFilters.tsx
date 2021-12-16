@@ -41,8 +41,6 @@ export const TagFilters: React.FC = memo(() => {
 		else Router.push({ query: { ...rest, filters: filterString } })
 	}, [])
 
-	//console.log('filters')
-
 	return (
 		<StyledTagFilters>
 			{possibleTags && (
@@ -58,6 +56,8 @@ export const TagFilters: React.FC = memo(() => {
 TagFilters.displayName = 'TagFilters'
 
 const StyledTagFilters = styled.div`
-	margin-bottom: 25px;
+	padding: 1rem 1.5rem;
 	overflow: auto;
+	border: thin solid rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1);
 `

@@ -1,3 +1,4 @@
+import { darken, lighten, transparentize } from 'polished'
 import React, { memo } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -54,27 +55,33 @@ const StyledLabel = styled.span`
 const StyledHandle = styled.div``
 
 const StyledToggle = styled.div`
-	width: 40px;
-	min-width: 40px;
-	height: 20px;
+	width: 38px;
+	min-width: 38px;
+	height: 6px;
 	border-radius: 10px;
-	background-color: rgba(0, 0, 0, 0.1);
+	background-color: rgba(0, 0, 0, 0.2);
 	cursor: pointer;
+	display: flex;
+	align-items: center;
 	${StyledHandle} {
-		width: 20px;
-		height: 20px;
+		width: 18px;
+		height: 18px;
 		border-radius: 50%;
-		border: 1px solid grey;
+		//border: 1px solid grey;
+		border: 3px solid white;
 		background-color: white;
-		box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.25),
-			inset 0 0 0 1px rgba(0, 0, 0, 0);
+		//box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.25),
+		//	inset 0 0 0 1px rgba(0, 0, 0, 0);
+		box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.2);
 		transform: translateX(0);
 		transition: 0.15s;
 	}
 `
 
 const checkedStyles = css`
-	background-color: lightblue;
+	transition: 0.25s 0.1s;
+	//${p => `background-color: ${transparentize(0.5, p.theme.color.delta)}`};
+	background-color: ${p => p.theme.color.delta};
 	${StyledHandle} {
 		transform: translateX(20px);
 	}

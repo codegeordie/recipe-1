@@ -4,20 +4,12 @@ import styled from 'styled-components'
 import { AnimatePresence, motion } from 'framer-motion'
 import { SecondaryButton } from './Button'
 
-interface ModalProps {
+type ModalClean = {
 	children: React.ReactNode
-	//buttonText: string
-	//small?: boolean
-	isModalOpen?: boolean
 	closeModal: () => void
-	// onCancelModal: () => void
-	// onAcceptModal: () => void
-	// acceptEnabled: boolean
-	// isLoading?: boolean
-	// title: string
 }
 
-export const ModalClean: React.FC<ModalProps> = ({ children, closeModal }) => {
+export const ModalClean: React.FC<ModalClean> = ({ children, closeModal }) => {
 	const [, forceComponentUpdate] = useState(0)
 
 	const containerRef = useRef<HTMLDivElement | null>(null)
@@ -86,13 +78,6 @@ const StyledWrapper = styled.div`
 	left: 0;
 	top: 0;
 	padding: 5vh 5vh 0 5vh;
-	/* display: grid;
-	grid-template:
-		'x x x' 1fr
-		'x modal x' auto
-		'x x x' 3fr / minmax(0, 1fr) auto minmax(0, 1fr);
-	grid-auto-columns: min-content;
-	grid-auto-rows: min-content; */
 	display: flex;
 	justify-content: center;
 	align-items: flex-start;
@@ -100,10 +85,8 @@ const StyledWrapper = styled.div`
 `
 
 const StyledModal = styled.div`
-	//grid-area: 'modal';
-	//max-width: 100%;
+	max-height: 90%;
 	display: flex;
-	//flex-shrink: 1;
 	flex-direction: column;
 	padding: 10px;
 	background: white;
@@ -114,39 +97,10 @@ const StyledModal = styled.div`
 const FlexRow = styled.div`
 	display: flex;
 	justify-content: flex-end;
-	//padding: 1rem;
+	padding-bottom: 1rem;
 `
 
 const StyledModalContent = styled.div`
-	//padding: 0.5rem;
+	max-height: 100%;
+	overflow: auto;
 `
-
-// .modal__header {
-//   border-bottom: 2px solid #3b0062;
-// }
-
-// .modal__header h1 {
-//   font-size: 1.5rem;
-//   color: #3b0062;
-//   margin: 1rem;
-// }
-
-// .modal__content {
-//   padding: 1rem;
-// }
-
-// .modal__actions {
-//   padding: 1rem;
-//   text-align: right;
-// }
-
-// .modal__actions button {
-//   margin: 0 0.5rem;
-// }
-
-// @media (min-width: 768px) {
-//   .modal {
-//     width: 40rem;
-//     left: calc((100% - 40rem) / 2);
-//   }
-// }

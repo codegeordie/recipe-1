@@ -4,6 +4,11 @@ import { FixedSizeGrid, GridChildComponentProps } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { RecipeListProps } from '../server/interfaces'
 import { RecipeCard } from './RecipeCard'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+	recipeListColumns,
+	setRecipeListColumns,
+} from '../redux/slices/recipeListSlice'
 
 export const RecipeList: React.FC<RecipeListProps> = ({
 	recipes,
@@ -12,6 +17,8 @@ export const RecipeList: React.FC<RecipeListProps> = ({
 	lastElementId,
 	cardHeight,
 }) => {
+	const dispatch = useDispatch()
+
 	const recipesOutput = recipes.map((recipe, index, { length }) => {
 		if (index === length - 1) {
 			lastElementId.current = recipe._id
@@ -29,9 +36,16 @@ export const RecipeList: React.FC<RecipeListProps> = ({
 
 	const Card = memo(
 		({ columnIndex, rowIndex, style }: GridChildComponentProps) => {
-			const i = rowIndex * 4 + columnIndex
+			const cols = useSelector(recipeListColumns) ?? 1
+			const i = rowIndex * cols + columnIndex
 			return (
-				<StyledCardWrapper style={style} key={i}>
+				<StyledCardWrapper
+					style={{
+						...style,
+						top: `${parseFloat(style.top) + 20}px`,
+					}}
+					key={i}
+				>
 					{recipesOutput[i]}
 				</StyledCardWrapper>
 			)
@@ -41,24 +55,32 @@ export const RecipeList: React.FC<RecipeListProps> = ({
 
 	return (
 		<AutoSizer>
-			{({ height, width }) => (
-				<FixedSizeGrid
-					columnCount={4}
-					columnWidth={(width - 20) / 4}
-					height={height}
-					rowCount={recipes.length / 4 + 1}
-					rowHeight={cardHeight}
-					width={width}
-				>
-					{Card}
-				</FixedSizeGrid>
-			)}
+			{({ height, width }) => {
+				let cols = 1
+				if (width > 768) cols = 4
+				else if (width > 420) cols = 2
+				dispatch(setRecipeListColumns(cols))
+
+				return (
+					<FixedSizeGrid
+						columnCount={cols}
+						columnWidth={(width - 20) / cols}
+						height={height}
+						rowCount={recipes.length / cols + 1}
+						rowHeight={cardHeight}
+						width={width}
+					>
+						{Card}
+					</FixedSizeGrid>
+				)
+			}}
 		</AutoSizer>
 	)
 }
 
 const StyledCardWrapper = styled.div`
-	padding: 5px;
+	//padding: 5px;
+	padding: 8px;
 `
 
 // const StyledRecipeList = styled.ul`

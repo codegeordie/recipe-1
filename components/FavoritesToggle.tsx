@@ -14,7 +14,7 @@ export const FavoritesToggle = memo(() => {
 			{session && (
 				<StyledToggleWrapper>
 					<Toggle
-						label='Only My Favorites'
+						label='Show Only Favorites'
 						onChange={() => dispatch(toggleShowFavorites())}
 					/>
 				</StyledToggleWrapper>
@@ -27,5 +27,5 @@ FavoritesToggle.displayName = 'FavoritesToggle'
 const StyledToggleWrapper = styled.div`
 	display: grid;
 	row-gap: 15px;
-	margin-bottom: 15px;
+	margin-bottom: 2rem;
 `

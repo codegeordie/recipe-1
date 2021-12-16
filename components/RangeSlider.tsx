@@ -1,3 +1,4 @@
+import { transparentize } from 'polished'
 import React from 'react'
 import styled, { CSSProperties } from 'styled-components'
 
@@ -22,7 +23,7 @@ export interface RangeSliderProps extends RangeSliderCSSProps {
 	onBetaChange: (alpha: number) => void
 	alphaValue: number
 	betaValue: number
-	label: string
+	label?: string
 	rangeMin: number
 	rangeMax: number
 	step?: number
@@ -42,7 +43,7 @@ export const RangeSlider: React.FC<RangeSliderProps> = ({
 	step = undefined,
 	trackWidth = '100%',
 	trackHeight = '6px',
-	trackColor = '#6839394c',
+	trackColor = 'rgba(0,0,0,0.2)',
 	highlightColor = 'blue',
 	handleColor = 'blue',
 }) => {
@@ -126,6 +127,7 @@ export const RangeSlider: React.FC<RangeSliderProps> = ({
 const StyledForm = styled.form<RangeSliderCSSProps>`
 	display: flex;
 	flex-direction: column;
+	margin-bottom: calc(${p => p.trackHeight} * 3);
 	/* margin: 1.5rem 0 1rem; */
 	svg {
 		pointer-events: none;
@@ -152,7 +154,6 @@ const StyledRangeTrack = styled.div<RangeSliderCSSProps>`
 	position: relative;
 	width: ${p => p.trackWidth};
 	height: ${p => p.trackHeight};
-	background: ${p => p.trackColor};
 	border-radius: calc(${p => p.trackHeight} / 2);
 	z-index: 1;
 `
@@ -205,7 +206,8 @@ const StyledRange = styled.input<RangeSliderCSSProps>`
 		height: calc(${p => p.trackHeight} * 2);
 		border-radius: 50%;
 		border: 3px solid white;
-		background: ${p => p.handleColor};
+		//background: ${p => p.handleColor};
+		background: white;
 		box-shadow: 0 0 1px 1px ${p => p.highlightColor};
 		cursor: grab;
 		pointer-events: auto;
@@ -213,9 +215,13 @@ const StyledRange = styled.input<RangeSliderCSSProps>`
 		&:active {
 			box-shadow: 0 0 4px 1px ${p => p.highlightColor};
 			cursor: grabbing;
+			border: 3px solid white;
+			background: ${p => p.handleColor};
 		}
 		&:focus {
 			box-shadow: 0 0 4px 1px ${p => p.highlightColor};
+			border: 3px solid white;
+			background: ${p => p.handleColor};
 		}
 	}
 
@@ -226,14 +232,18 @@ const StyledRange = styled.input<RangeSliderCSSProps>`
 		height: calc(${p => p.trackHeight} * 3);
 		border-radius: 50%;
 		border: 3px solid white;
-		background: ${p => p.handleColor};
-		box-shadow: 0 0 1px 1px ${p => p.highlightColor};
+		//background: ${p => p.handleColor};
+		background: white;
+		//box-shadow: 0 0 1px 2px ${p => p.highlightColor};
+		box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.2);
 		cursor: grab;
 		pointer-events: auto;
 		transition: 0.1s;
 		&:active {
 			box-shadow: 0 0 4px 1px ${p => p.highlightColor};
 			cursor: grabbing;
+			border: 3px solid white;
+			background: ${p => p.handleColor};
 		}
 	}
 `

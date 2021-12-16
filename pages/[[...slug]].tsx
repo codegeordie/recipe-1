@@ -6,6 +6,8 @@ import { Aside } from '../components/Aside'
 import { RecipeListWrapper } from '../components/RecipeListWrapper'
 import { RecipeDetailModal } from '../components/RecipeDetailModal'
 import { WelcomeModal } from '../components/WelcomeModal'
+import { darken } from 'polished'
+import { Logo } from '../components/Logo'
 
 export default function Home(): JSX.Element {
 	return (
@@ -18,12 +20,18 @@ export default function Home(): JSX.Element {
 			<StyledPageBackground>
 				<StyledPageGrid>
 					<WelcomeModal />
+					<Logo />
 					<Nav />
-					<Aside />
+					<Aside isMenu={false} />
 					<StyledMain>
 						<RecipeDetailModal />
 						<RecipeListWrapper />
 					</StyledMain>
+					<FooterPlaceholder>
+						Footer placeholder text
+						{/* A React playground project from
+						<a href='http://geordiemoore.com'>geordiemoore.com</a> */}
+					</FooterPlaceholder>
 				</StyledPageGrid>
 			</StyledPageBackground>
 		</>
@@ -31,29 +39,40 @@ export default function Home(): JSX.Element {
 }
 
 const StyledPageBackground = styled.div`
-	background-color: ${p => p.theme.color.gamma};
+	background-color: ${p => darken(0.1, p.theme.color.gamma)};
 `
 
 const StyledPageGrid = styled.div`
 	max-width: 1300px;
 	margin: 0 auto;
-	padding: 0 10px;
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
-	grid-template-rows: 75px 50px minmax(calc(100vh - 125px), auto);
-	//grid-template-rows: 75px 50px calc(100vh - 355px);
+	grid-template-rows: 5rem 6rem calc(100vh - 11rem);
+	box-shadow: 0 0 15px 1px ${p => darken(0.2, p.theme.color.gamma)};
 	@media only screen and (min-width: 576px) {
-		//grid-template-rows: 100px minmax(calc(100vh - 100px), auto);
-		grid-template-rows: 100px calc(100vh - 100px);
+		grid-template-rows: 8rem calc(100vh - 10rem) 2rem;
 	}
 `
 
 const StyledMain = styled.main`
+	box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
 	grid-column: 1 / 13;
 	@media only screen and (min-width: 576px) {
+		grid-column: 6 / 13;
+	}
+	@media only screen and (min-width: 768px) {
+		grid-column: 5 / 13;
+	}
+	@media only screen and (min-width: 992px) {
 		grid-column: 4 / 13;
 	}
-	/* @media only screen and (min-width: 992px) {
-		grid-column: 3 / 13;
-	} */
+`
+
+const FooterPlaceholder = styled.div`
+	background-color: ${p => p.theme.color.delta};
+	grid-column: 1 / 13;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `

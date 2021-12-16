@@ -62,19 +62,13 @@ const StyledInput = styled.input`
 	width: 100%;
 	padding: 0 1.5rem;
 	outline: none;
-	border: none;
-	border-radius: 5px;
-	font: 400 2.2rem ${p => p.theme.font.title};
+	border-radius: 7px;
+	font: 400 1.8rem ${p => p.theme.font.title};
 	color: ${p => p.theme.text.dark07};
-	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+	border: thin solid rgba(0, 0, 0, 0.2);
 	transition: 0.25s;
-	&:hover {
-		box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3),
-			inset 0 0 0 1px ${p => p.theme.color.gamma};
-	}
 	&:focus {
-		box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3),
-			inset 0 0 0 1px ${p => p.theme.color.delta};
+		border: thin solid ${p => p.theme.color.delta};
 	}
 `
 

@@ -8,11 +8,11 @@ export const theme = {
 	color: {
 		alpha: '#FF9F1C',
 		beta: '#FFD399',
-		neutral: '#FFFDF9',
 		gamma: '#EBF3F0',
 		delta: '#0fb3a2',
 		omega: '#0B0D27',
 		white: '#FFFFFF',
+		neutral: '#FFFDF9',
 	},
 	text: {
 		dark03: 'rgba(0,0,0,.3)',
@@ -31,5 +31,6 @@ export const theme = {
 		body: 'Rubik',
 		title: 'Rubik',
 		button: 'Rubik',
+		logo: 'Meow Script',
 	},
 }

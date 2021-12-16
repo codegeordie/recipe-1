@@ -20,9 +20,6 @@ export const IndexCurrencyDropdown = memo(() => {
 			getCurrency().then(userCurr => {
 				if (userCurr) dispatch(changeCurrency(userCurr))
 			})
-			// .catch(err => {
-			// 	console.log('err', err)
-			// })
 		}
 	}, [session, loading])
 
@@ -39,7 +36,7 @@ export const IndexCurrencyDropdown = memo(() => {
 IndexCurrencyDropdown.displayName = 'IndexCurrencyDropdown'
 
 const StyledDropdownWrapper = styled.div`
-	margin-top: 40px;
-	margin-bottom: 25px;
+	//margin-top: 4rem;
+	margin-bottom: 2rem;
 	width: 100%;
 `

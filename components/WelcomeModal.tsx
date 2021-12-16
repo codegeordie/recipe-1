@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+import { darken } from 'polished'
 import React, { memo, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { ModalClean } from './ModalClean'
@@ -12,8 +14,6 @@ export const WelcomeModal = memo(() => {
 			setShowWelcomeModal(false)
 		}
 	}, [])
-
-	console.log('showWelcomeModal :>> ', showWelcomeModal)
 
 	const toggleNeverShowModal = () => {
 		if (window.localStorage.getItem('showWelcomeModal') === 'false') {
@@ -95,16 +95,26 @@ const StyledSubheading = styled.p`
 const StyledWelcomeList = styled.ul`
 	display: flex;
 	margin-top: 25px;
+	@media (max-width: 767px) {
+		flex-direction: column;
+		align-items: center;
+		padding: 0 3rem;
+	}
+	@media (max-width: 576px) {
+		padding: 0 1rem;
+	}
 `
 
 const StyledWelcomeCard = styled.li`
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-	padding: 10px;
-	margin: 10px;
-	box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.3);
-	border-radius: 5px;
+	max-width: 350px;
+	padding: 1rem;
+	margin: 1rem;
+	border: thin solid rgba(0, 0, 0, 0.2);
+	border-radius: 7px;
+	background-color: ${p => darken(0.1, p.theme.color.gamma)};
 	img {
 		object-fit: cover;
 		height: 50%;

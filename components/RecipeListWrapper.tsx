@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { useGetRecipes } from '../hooks/useGetRecipes'
@@ -6,8 +6,8 @@ import {
 	recipeArray as reduxRecipeArray,
 	setRecipeArray,
 	appendRecipeArray,
+	recipeListView as reduxRecipeListView,
 } from '../redux/slices/recipeListSlice'
-import { SecondaryButton } from './Button'
 import { RecipeList } from './RecipeList'
 import { RecipeTable } from './RecipeTable'
 
@@ -15,9 +15,8 @@ export const RecipeListWrapper: React.FC = () => {
 	const dispatch = useDispatch()
 	const { getRecipes } = useGetRecipes()
 
-	const [recipeView, setRecipeView] = useState<'list' | 'table'>('table')
-
 	const recipeArray = useSelector(reduxRecipeArray)
+	const recipeListView = useSelector(reduxRecipeListView)
 
 	let cursor: string | undefined
 	let hasMoreResults = false
@@ -62,25 +61,17 @@ export const RecipeListWrapper: React.FC = () => {
 	)
 
 	return (
-		<>
-			<StyledButtonWrapper>
-				<SecondaryButton small onClick={() => setRecipeView('list')}>
-					List View
-				</SecondaryButton>
-				<SecondaryButton small onClick={() => setRecipeView('table')}>
-					Table View
-				</SecondaryButton>
-			</StyledButtonWrapper>
-			{recipeArray && recipeView === 'list' && (
+		<StyledRecipeListWrapper>
+			{recipeArray && recipeListView === 'card' && (
 				<RecipeList
 					listTitle='rlist'
 					recipes={recipeArray}
 					lastElementRef={lastElementRef}
 					lastElementId={lastElementId}
-					cardHeight={300}
+					cardHeight={280}
 				/>
 			)}
-			{recipeArray && recipeView === 'table' && (
+			{recipeArray && recipeListView === 'table' && (
 				<RecipeTable
 					tableTitle='rtable'
 					recipes={recipeArray}
@@ -88,12 +79,13 @@ export const RecipeListWrapper: React.FC = () => {
 					lastElementId={lastElementId}
 				/>
 			)}
-		</>
+		</StyledRecipeListWrapper>
 	)
 }
 
-const StyledButtonWrapper = styled.div`
-	padding: 5px;
-	display: flex;
-	justify-content: center;
+const StyledRecipeListWrapper = styled.div`
+	padding-left: 2rem;
+	height: 100%;
+	width: 100%;
+	background-color: ${p => p.theme.color.gamma};
 `

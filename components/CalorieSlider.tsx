@@ -4,6 +4,7 @@ import Router from 'next/router'
 import { useEffect, useState, memo } from 'react'
 import { useDebounce } from 'react-use'
 import { RangeSlider } from './RangeSlider'
+import styled from 'styled-components'
 
 interface CalorieSliderProps {
 	rangeMin: number
@@ -53,21 +54,25 @@ export const CalorieSlider = memo(
 		)
 
 		return (
-			<>
+			<StyledCalorieSlider>
 				<RangeSlider
 					onAlphaChange={setAlphaValue}
 					onBetaChange={setBetaValue}
 					alphaValue={alphaValue}
 					betaValue={betaValue}
-					label={'calories'}
+					//label={'calories'}
 					rangeMin={rangeMin}
 					rangeMax={rangeMax}
 					step={5}
-					handleColor={'rgba(15, 120, 175, 0.9)'}
-					highlightColor={'rgba(15, 120, 175, 0.9)'}
+					handleColor={'#0fb3a2'}
+					highlightColor={'#0fb3a2'}
 				/>
-			</>
+			</StyledCalorieSlider>
 		)
 	}
 )
 CalorieSlider.displayName = 'CalorieSlider'
+
+const StyledCalorieSlider = styled.div`
+	margin-bottom: 2rem;
+`
