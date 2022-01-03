@@ -10,7 +10,6 @@ export const WelcomeModal = memo(() => {
 
 	useEffect(() => {
 		if (window.localStorage.getItem('showWelcomeModal') === 'false') {
-			console.log('localstorage true')
 			setShowWelcomeModal(false)
 		}
 	}, [])

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useSelect } from 'downshift'
 
 type DropdownItems = {
+	id: string
 	label: string
 	items: { id: string; value: string }[]
 	selectedItem: any
@@ -11,6 +12,7 @@ type DropdownItems = {
 }
 
 export const Dropdown: React.FC<DropdownItems> = ({
+	id,
 	label,
 	items,
 	selectedItem,
@@ -27,6 +29,7 @@ export const Dropdown: React.FC<DropdownItems> = ({
 		highlightedIndex,
 		getItemProps,
 	} = useSelect({
+		id,
 		items,
 		selectedItem,
 		onSelectedItemChange: handleSelected,

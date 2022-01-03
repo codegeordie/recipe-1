@@ -22,6 +22,7 @@ export const CurrencyDropdown = memo(() => {
 
 	return (
 		<Dropdown
+			id='currency-dropdown'
 			label='Currency'
 			items={items}
 			selectedItem={selectedItem}

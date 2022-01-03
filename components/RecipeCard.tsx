@@ -1,16 +1,12 @@
-//import Link from 'next/link'
 import React, { memo } from 'react'
+import Router from 'next/router'
 import styled from 'styled-components'
 import { RecipeAsProps } from '../server/interfaces'
 import Dinero from 'dinero.js'
-//import { deleteRecipe } from '../functions/api/recipes'
-//import { SecondaryButton, TextButton } from './Button'
 import { setFavorite } from '../functions/api/users'
-//import { recipesSlice } from '../redux/slices/recipesSlice'
 import { useDispatch } from 'react-redux'
 import { useSession } from 'next-auth/client'
 import { Star as StarIcon, StarFilled as StarIconFilled } from '@air/icons'
-import Router from 'next/router'
 
 export const RecipeCard = memo(({ recipe, lastElementRef }: RecipeAsProps) => {
 	const dispatch = useDispatch()
