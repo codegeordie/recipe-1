@@ -28,9 +28,8 @@ export default function Home(): JSX.Element {
 						<RecipeListWrapper />
 					</StyledMain>
 					<FooterPlaceholder>
-						Footer placeholder text
-						{/* A React playground project from
-						<a href='http://geordiemoore.com'>geordiemoore.com</a> */}
+						A React project by&nbsp;
+						<a href='http://geordiemoore.com'>geordiemoore.com</a>
 					</FooterPlaceholder>
 				</StyledPageGrid>
 			</StyledPageBackground>
@@ -75,4 +74,7 @@ const FooterPlaceholder = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	a {
+		text-decoration: underline;
+	}
 `
