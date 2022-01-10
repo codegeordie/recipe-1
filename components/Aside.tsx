@@ -15,7 +15,6 @@ export const Aside: React.FC<{ isMenu: boolean }> = ({ isMenu }) => {
 		<StyledAside isMenu={isMenu}>
 			<StyledAsideLabel>View</StyledAsideLabel>
 			<RecipeViewSelector />
-			<StyledAsideLabel>Favorites</StyledAsideLabel>
 			{router.isReady && <FavoritesToggle />}
 			<StyledAsideLabel>Calories</StyledAsideLabel>
 			{router.isReady && <CalorieSlider rangeMin={0} rangeMax={1000} />}
